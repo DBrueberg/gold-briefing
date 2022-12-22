@@ -1,23 +1,19 @@
-import logo from './logo.svg';
+// Initially Created by: Devin Brueberg
+// 2022 Side Project
+// Gold-Briefing - App.js
+// December 22, 2022
+// Last Edited (Initials, Date, Edits):
+//  (DAB, 12/22/2022, Added in Router for SPA page navigation)
+
+import { Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>
+        Future Home of Gold-Briefing!
+      </h1>
     </div>
   );
 }
