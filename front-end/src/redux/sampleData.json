@@ -1,0 +1,59 @@
+{
+    "general": {
+        "userName": "Mike Heyer",
+        "date": "12/12/2022",
+        "time": "0700",
+        "physLocation": "3138 3rd Ave NE, Minneapolis, MN 55418",
+        "lat": "testLat",
+        "long": "testLong"
+    },
+    "jobBriefing": {
+        "EIC": "Mike Heyer",
+        "conductedBy": "Devin Brueberg",
+        "placeOfSaftey": "off track",
+        "taskDetails": "Inspecting North Town yards tracks",
+        "taskRules": "Alert and Attentive",
+        "primaryExposures": {
+            "lifeSaving": "Watch for trains in the area",
+            "lineOfFire": "Expect a train any direction any time.",
+            "pinchPoints": "Watch for throwing switches, truck doors, and tape measures",
+            "ascDesc": "Stay alert when getting in/out of trucks and climbing the crest",
+            "pathOfTravel": "Watch footing at all times. Cribbed out switches can't be seen under snow"
+        },
+        "acknowledgement": {
+            "0": {
+                "employeeName": "Mike Heyer",
+                "employeePhoneNumber": "(222)222-2222"
+            },
+            "1": {
+                "employeeName": "Devin Brueberg",
+                "employeePhoneNumber": "(111)111-1111"
+            }
+        },
+        "briefed": true,
+        "deBrief": {
+            "outriggers": true,
+            "flags": true,
+            "switches": true,
+            "workgroups": false
+        }
+    },
+    "weather": {
+        "alerts": [
+            "rainy",
+            "hot"
+        ]
+    },
+    "emergencyPlan": {
+        "nearestHospital": "Mercy",
+        "accessPoint": "central ave and 694 behind Home Depot",
+        "evacRoute": "clear tracks and head to Home Depot",
+        "caller": "Devin Brueberg",
+        "CPR": "Mike Heyer",
+        "medInfo": {
+            "0": [
+                "allergic to bees"
+            ]
+        }
+    }
+}
