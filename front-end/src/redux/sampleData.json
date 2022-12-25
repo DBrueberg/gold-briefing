@@ -1,6 +1,14 @@
 {
+    "user": {
+        "id": 1,
+        "firstName": "Michael",
+        "lastName": "Heyer",
+        "phoneNumber": "(222)222-2222",
+        "email": "michael.heyer@bnsf.com",
+        "permission": 1,
+        "isLoggedIn": true
+    },
     "general": {
-        "userName": "Mike Heyer",
         "date": "12/12/2022",
         "time": "0700",
         "physLocation": "3138 3rd Ave NE, Minneapolis, MN 55418",
