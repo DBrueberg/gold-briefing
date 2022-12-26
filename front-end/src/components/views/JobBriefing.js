@@ -7,7 +7,7 @@
 // Using React library in order to build components 
 // for the app and importing needed components
 import React from 'react';
-import General from '../subComponent/General';
+import JobBriefingForm from '../form/JobBriefingForm';
 
 /**
  * The JobBriefing View will display a completed job briefing that will need 
@@ -23,7 +23,7 @@ function JobBriefing(props) {
             <h1>
                 Job Safety Briefing
             </h1>
-            <General />
+            <JobBriefingForm />
         </div>
     )
 }
