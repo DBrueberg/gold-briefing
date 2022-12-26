@@ -7,6 +7,7 @@
 
 import { Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
+import JobBriefing from './components/views/JobBriefing';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <h1>
         Future Home of Gold-Briefing!
       </h1>
+      <JobBriefing />
     </div>
   );
 }
