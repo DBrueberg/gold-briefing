@@ -7,9 +7,16 @@
 // Using React library in order to build components
 // for the app and importing needed components
 import React, { useState } from "react";
-import { Box, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import { DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
+import moment from "moment";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import sampleData from "../../redux/sampleData.json";
+
+/** DOWNLOAD AND CHANGE THE CURRENT
+ * DATE INPUT TO DATE PICKER
+ * https://mui.com/x/react-date-pickers/getting-started/
+ */
 
 /**
  * The General View will display the who, when, and where the actual job will
@@ -20,6 +27,7 @@ import sampleData from "../../redux/sampleData.json";
  */
 function General(props) {
     const { user } = sampleData;
+    const [time, setTime] = useState(moment()); 
     const userFullName = `${user.firstName} ${user.lastName}` || "";
     // **** GPS EXPERIMENTS
     const [lat, setLat] = useState(null);
@@ -43,65 +51,87 @@ function General(props) {
         }
     });
 
+    const handleChange = (newTime) => {
+        setTime(newTime);
+    };
+
     return (
         <Box>
             <Grid container>
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} sm={6} md={4}>
                     <TextField
                         sx={{ display: "flex", flexGrow: 1, minWidth: "10rem" }}
+                        size="small"
                         id="conductedBy"
                         label="Conducted By"
                         defaultValue={userFullName}
                     />
                 </Grid>
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} sm={6} md={4}>
                     <TextField
                         sx={{ display: "flex", flex: "1", minWidth: "10rem" }}
+                        size="small"
                         id="eic"
                         label="EIC"
                         defaultValue={userFullName}
                     />
                 </Grid>
-                <Grid item xs={12} md={6} lg={2}>
-                    <TextField
-                        sx={{ display: "flex", flex: "1" }}
+                <Grid item xs={12} sm={6} md={2} lg={2} >
+                    <TimePicker
                         id="time"
                         label="Time"
-                        InputLabelProps={{ shrink: true }}
-                        type="time"
-                        defaultValue={currentTime}
+                        value={time}
+                        onChange={handleChange}
+                        renderInput={(params) => (
+                            <TextField
+                                sx={{ display: "flex", flex: "1" }}
+                                size="small"
+                                {...params}
+                            />
+                        )}
+                        ampm={false}
                     />
                 </Grid>
-                <Grid item xs={12} md={6} lg={2}>
-                    <TextField
-                        sx={{ display: "flex", flex: "1" }}
+                <Grid item xs={12} sm={6} md={2} lg={2} >
+                    <DesktopDatePicker
                         id="date"
                         label="Date"
-                        InputLabelProps={{ shrink: true }}
-                        type="date"
-                        defaultValue={currentDay}
+                        inputFormat="MM/DD/YYYY"
+                        value={time}
+                        onChange={handleChange}
+                        renderInput={(params) => (
+                            <TextField
+                                sx={{ display: "flex", flex: "1" }}
+                                size="small"
+                                {...params}
+                            />
+                        )}
                     />
                 </Grid>
             </Grid>
             {lat && console.log(`GPS latitude:${lat}, longitude:${lng}`)}
+            {console.log(time)}
             <Grid container>
                 <Grid item xs={12} md={6}>
                     <TextField
-                        sx={{ display: "flex", flex:"1", minWidth: "10rem" }}
+                        sx={{ display: "flex", flex: "1", minWidth: "10rem" }}
+                        size="small"
                         id="location"
                         label="Physical Loc"
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Box sx={{ display:"flex", flex:"1" }}>
-                        <LocationOnIcon sx={{ alignSelf:"center" }} />
+                    <Box sx={{ display: "flex", flex: "1" }}>
+                        <LocationOnIcon sx={{ alignSelf: "center" }} />
                         <TextField
-                            sx={{ flex:"1", minWidth: "5rem" }}
+                            sx={{ flex: "1", minWidth: "5rem" }}
+                            size="small"
                             id="lat"
                             label="Lat"
                         />
                         <TextField
-                            sx={{ flex:"1", minWidth: "5rem" }}
+                            sx={{ flex: "1", minWidth: "5rem" }}
+                            size="small"
                             id="lng"
                             label="Long"
                         />
@@ -112,6 +142,7 @@ function General(props) {
                 <Grid item xs={12}>
                     <TextField
                         sx={{ display: "flex", flex: "1", minWidth: "10rem" }}
+                        size="small"
                         id="placeOfSafety"
                         label="Place of Safety"
                     />
