@@ -28,13 +28,13 @@ const lightTheme = createTheme({
 function App() {
     return (
         <LocalizationProvider dateAdapter={AdapterMoment}>
-            <ThemeProvider theme={lightTheme}>
-                <CssBaseline />
+            {/* <ThemeProvider theme={lightTheme}>
+                <CssBaseline /> */}
                 <div className="App">
                     <h1>Future Home of Gold-Briefing!</h1>
                     <JobBriefing />
                 </div>
-            </ThemeProvider>
+            {/* </ThemeProvider> */}
         </LocalizationProvider>
     );
 }

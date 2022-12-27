@@ -9,14 +9,8 @@
 import React, { useState } from "react";
 import { Box, Button, Grid, TextField } from "@mui/material";
 import { DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
-import moment from "moment";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import sampleData from "../../redux/sampleData.json";
-
-/** DOWNLOAD AND CHANGE THE CURRENT
- * DATE INPUT TO DATE PICKER
- * https://mui.com/x/react-date-pickers/getting-started/
- */
 
 /**
  * The General View will display the who, when, and where the actual job will
@@ -27,11 +21,18 @@ import sampleData from "../../redux/sampleData.json";
  */
 function General(props) {
     const { user } = sampleData;
-    const [time, setTime] = useState(moment()); 
+    const {
+        onChangeConductedBy,
+        onChangeEIC,
+        onChangeDateTime,
+        onChangePhysLoc,
+        onChangeLat,
+        onChangeLng,
+        onChangePlaceOfSafety,
+    } = props;
+    const { conductedBy, eIC, dateTime, physLoc, lat, lng, placeOfSafety} = props;
     const userFullName = `${user.firstName} ${user.lastName}` || "";
     // **** GPS EXPERIMENTS
-    const [lat, setLat] = useState(null);
-    const [lng, setLng] = useState(null);
     const [status, setStatus] = useState(null);
     const currentDate = new Date();
     const currentDay =
@@ -46,14 +47,11 @@ function General(props) {
             setStatus("Geolocation is not enabled");
         } else {
             setStatus(null);
-            setLng(position.coords.longitude);
-            setLat(position.coords.setLat);
+            // setLng(position.coords.longitude);
+            // setLat(position.coords.setLat);
         }
     });
 
-    const handleChange = (newTime) => {
-        setTime(newTime);
-    };
 
     return (
         <Box>
@@ -64,7 +62,8 @@ function General(props) {
                         size="small"
                         id="conductedBy"
                         label="Conducted By"
-                        defaultValue={userFullName}
+                        value={conductedBy}
+                        onChange={onChangeConductedBy}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
@@ -73,15 +72,16 @@ function General(props) {
                         size="small"
                         id="eic"
                         label="EIC"
-                        defaultValue={userFullName}
+                        value={eIC}
+                        onChange={onChangeEIC}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6} md={2} lg={2} >
+                <Grid item xs={12} sm={6} md={2} lg={2}>
                     <TimePicker
                         id="time"
                         label="Time"
-                        value={time}
-                        onChange={handleChange}
+                        value={dateTime}
+                        onChange={(newDateTime) => onChangeDateTime(newDateTime)}
                         renderInput={(params) => (
                             <TextField
                                 sx={{ display: "flex", flex: "1" }}
@@ -92,13 +92,13 @@ function General(props) {
                         ampm={false}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6} md={2} lg={2} >
+                <Grid item xs={12} sm={6} md={2} lg={2}>
                     <DesktopDatePicker
                         id="date"
                         label="Date"
                         inputFormat="MM/DD/YYYY"
-                        value={time}
-                        onChange={handleChange}
+                        value={dateTime}
+                        onChange={(newDateTime) => onChangeDateTime(newDateTime)}
                         renderInput={(params) => (
                             <TextField
                                 sx={{ display: "flex", flex: "1" }}
@@ -110,7 +110,7 @@ function General(props) {
                 </Grid>
             </Grid>
             {lat && console.log(`GPS latitude:${lat}, longitude:${lng}`)}
-            {console.log(time)}
+            {console.log(dateTime)}
             <Grid container>
                 <Grid item xs={12} md={6}>
                     <TextField
@@ -118,22 +118,31 @@ function General(props) {
                         size="small"
                         id="location"
                         label="Physical Loc"
+                        value={physLoc}
+                        onChange={onChangePhysLoc}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Box sx={{ display: "flex", flex: "1" }}>
-                        <LocationOnIcon sx={{ alignSelf: "center" }} />
+                        <Button>
+                            <LocationOnIcon sx={{ alignSelf: "center" }} />
+                        </Button>
+                        
                         <TextField
                             sx={{ flex: "1", minWidth: "5rem" }}
                             size="small"
                             id="lat"
                             label="Lat"
+                            value={lat}
+                            onChange={onChangeLat}
                         />
                         <TextField
                             sx={{ flex: "1", minWidth: "5rem" }}
                             size="small"
                             id="lng"
                             label="Long"
+                            value={lng}
+                            onChange={onChangeLng}
                         />
                     </Box>
                 </Grid>
@@ -145,6 +154,8 @@ function General(props) {
                         size="small"
                         id="placeOfSafety"
                         label="Place of Safety"
+                        value={placeOfSafety}
+                        onChange={onChangePlaceOfSafety}
                     />
                 </Grid>
             </Grid>
