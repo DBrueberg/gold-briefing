@@ -6,11 +6,10 @@
 
 // Using React library in order to build components
 // for the app and importing needed components
-import React, { useState } from "react";
-import { Box, Button, Grid, TextField } from "@mui/material";
+import React from "react";
+import { Box, Grid, IconButton, TextField } from "@mui/material";
 import { DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import sampleData from "../../redux/sampleData.json";
 
 /**
  * The General View will display the who, when, and where the actual job will
@@ -20,7 +19,6 @@ import sampleData from "../../redux/sampleData.json";
  * @returns
  */
 function General(props) {
-    const { user } = sampleData;
     const {
         onChangeConductedBy,
         onChangeEIC,
@@ -29,29 +27,10 @@ function General(props) {
         onChangeLat,
         onChangeLng,
         onChangePlaceOfSafety,
+        onLocFindClick,
     } = props;
-    const { conductedBy, eIC, dateTime, physLoc, lat, lng, placeOfSafety} = props;
-    const userFullName = `${user.firstName} ${user.lastName}` || "";
-    // **** GPS EXPERIMENTS
-    const [status, setStatus] = useState(null);
-    const currentDate = new Date();
-    const currentDay =
-        currentDate.getFullYear() +
-        "-" +
-        currentDate.getMonth() +
-        "-" +
-        currentDate.getDate();
-    const currentTime = currentDate.getHours() + ":" + currentDate.getMinutes();
-    const location = navigator.geolocation.getCurrentPosition((position) => {
-        if (!navigator.geolocation) {
-            setStatus("Geolocation is not enabled");
-        } else {
-            setStatus(null);
-            // setLng(position.coords.longitude);
-            // setLat(position.coords.setLat);
-        }
-    });
-
+    const { conductedBy, eIC, dateTime, physLoc, lat, lng, placeOfSafety 
+    } = props;
 
     return (
         <Box>
@@ -81,7 +60,9 @@ function General(props) {
                         id="time"
                         label="Time"
                         value={dateTime}
-                        onChange={(newDateTime) => onChangeDateTime(newDateTime)}
+                        onChange={(newDateTime) =>
+                            onChangeDateTime(newDateTime)
+                        }
                         renderInput={(params) => (
                             <TextField
                                 sx={{ display: "flex", flex: "1" }}
@@ -98,7 +79,9 @@ function General(props) {
                         label="Date"
                         inputFormat="MM/DD/YYYY"
                         value={dateTime}
-                        onChange={(newDateTime) => onChangeDateTime(newDateTime)}
+                        onChange={(newDateTime) =>
+                            onChangeDateTime(newDateTime)
+                        }
                         renderInput={(params) => (
                             <TextField
                                 sx={{ display: "flex", flex: "1" }}
@@ -109,8 +92,6 @@ function General(props) {
                     />
                 </Grid>
             </Grid>
-            {lat && console.log(`GPS latitude:${lat}, longitude:${lng}`)}
-            {console.log(dateTime)}
             <Grid container>
                 <Grid item xs={12} md={6}>
                     <TextField
@@ -124,10 +105,13 @@ function General(props) {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Box sx={{ display: "flex", flex: "1" }}>
-                        <Button>
-                            <LocationOnIcon sx={{ alignSelf: "center" }} />
-                        </Button>
-                        
+                        <IconButton
+                            color="primary"
+                            size="small"
+                            onClick={onLocFindClick}
+                        >
+                            <LocationOnIcon />
+                        </IconButton>
                         <TextField
                             sx={{ flex: "1", minWidth: "5rem" }}
                             size="small"

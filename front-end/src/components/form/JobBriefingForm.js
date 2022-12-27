@@ -8,9 +8,9 @@
 // for the app and importing needed components
 import React, { useState } from "react";
 import General from "../subComponent/General";
-import { Box } from "@mui/material";
+import { Box, Snackbar } from "@mui/material";
 import moment from "moment";
-import sampleData from '../../redux/sampleData.json';
+import sampleData from "../../redux/sampleData.json";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -21,17 +21,52 @@ import sampleData from '../../redux/sampleData.json';
  */
 function JobBriefingForm(props) {
     const { user } = sampleData;
-    const [conductedBy, setConductedBy] = useState(`${user.firstName} ${user.lastName}` || "");
+    const [conductedBy, setConductedBy] = useState(
+        `${user.firstName} ${user.lastName}` || ""
+    );
     const [eIC, setEIC] = useState(`${user.firstName} ${user.lastName}` || "");
     const [dateTime, setDateTime] = useState(moment());
     const [physLoc, setPhysLoc] = useState("");
     const [lat, setLat] = useState("");
     const [lng, setLng] = useState("");
     const [placeOfSafety, setPlaceOfSafety] = useState("");
+
+
+
+    const [snackbarMessage, setSnackbarMessage] = useState(null);
+    const geoSuccess = (position) => {
+        setLng(position.coords.longitude);
+        setLat(position.coords.latitude);
+    }
+
+    const geoError = () => {
+        setSnackbarMessage("Error retrieving geolocation");
+        handleSnackbarClick();
+    }
+    const location = async() => {
+        if (!navigator.geolocation) {
+            setSnackbarMessage("Geolocation is not supported by your browser");
+            handleSnackbarClick();
+        }
+        else {
+            navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+        }
+    };
+
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const handleSnackbarClick = () => {
+        setOpenSnackbar(true);
+    }
+
+    const handleSnackbarClose = (event, reason) => {
+        setOpenSnackbar(false);
+        setSnackbarMessage(null);
+    }
+
     const onChangeConductedBy = (e) => {
         const { value } = e.target;
         setConductedBy(value);
-        console.log(`Conducted by is now ${conductedBy}`)
+        console.log(`Conducted by is now ${conductedBy}`);
     };
     const onChangeEIC = (e) => {
         const { value } = e.target;
@@ -58,6 +93,12 @@ function JobBriefingForm(props) {
         setPlaceOfSafety(value);
     };
 
+    const onLocFindClick = () => {
+        console.log("Location Button Clicked");
+        location();
+        console.log(snackbarMessage);
+    };
+
     return (
         <Box
             component="form"
@@ -73,6 +114,7 @@ function JobBriefingForm(props) {
                 onChangeLat={onChangeLat}
                 onChangeLng={onChangeLng}
                 onChangePlaceOfSafety={onChangePlaceOfSafety}
+                onLocFindClick={onLocFindClick}
                 conductedBy={conductedBy}
                 eIC={eIC}
                 dateTime={dateTime}
@@ -81,6 +123,7 @@ function JobBriefingForm(props) {
                 lng={lng}
                 placeOfSafety={placeOfSafety}
             />
+            <Snackbar open={openSnackbar} autoHideDuration={6000} message={snackbarMessage} onClose={handleSnackbarClose}/>
         </Box>
     );
 }
