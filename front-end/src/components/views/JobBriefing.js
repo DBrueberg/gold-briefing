@@ -6,6 +6,7 @@
 
 // Using React library in order to build components 
 // for the app and importing needed components
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import JobBriefingForm from '../form/JobBriefingForm';
 
@@ -19,12 +20,12 @@ import JobBriefingForm from '../form/JobBriefingForm';
 function JobBriefing(props) {
 
     return (
-        <div>
-            <h1>
+        <Box>
+            <Typography variant="h3">
                 Job Safety Briefing
-            </h1>
+            </ Typography>
             <JobBriefingForm />
-        </div>
+        </Box>
     )
 }
 

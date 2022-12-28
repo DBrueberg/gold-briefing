@@ -20,7 +20,10 @@ import sampleData from "../../redux/sampleData.json";
  * @returns
  */
 function JobBriefingForm(props) {
+    // Loading in the sample data, this is only temporary
     const { user } = sampleData;
+
+    // Defining default settings for the local state
     const [conductedBy, setConductedBy] = useState(
         `${user.firstName} ${user.lastName}` || ""
     );
@@ -30,73 +33,112 @@ function JobBriefingForm(props) {
     const [lat, setLat] = useState("");
     const [lng, setLng] = useState("");
     const [placeOfSafety, setPlaceOfSafety] = useState("");
-
-
-
     const [snackbarMessage, setSnackbarMessage] = useState(null);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+
+    // The function called if the geolocation request was successful
     const geoSuccess = (position) => {
+        // Setting latitude and longitude to their correct form fields
         setLng(position.coords.longitude);
         setLat(position.coords.latitude);
-    }
+    };
 
+    // The function called if the geolocation request was unsuccessful
     const geoError = () => {
+        // Setting and calling the snackbar to notify the user of the
+        // error
         setSnackbarMessage("Error retrieving geolocation");
         handleSnackbarClick();
-    }
-    const location = async() => {
+    };
+
+    // Function that will use geolocation to retrieve the users geolocation
+    // data
+    const location = () => {
+        // If geolocation is not supported
         if (!navigator.geolocation) {
+            // Setting and calling the snackbar to notify the user of the
+            // error
             setSnackbarMessage("Geolocation is not supported by your browser");
             handleSnackbarClick();
-        }
-        else {
+        } else {
+            // If geolocation is supported the request for geo data is sent and
+            // the appropriate action is taken on success or failure
             navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
         }
     };
 
-    const [openSnackbar, setOpenSnackbar] = useState(false);
+    // Function will open the snackbar
     const handleSnackbarClick = () => {
+        // Setting the snackbar open variable to true
         setOpenSnackbar(true);
-    }
+    };
 
+    // Function will close the snackbar
     const handleSnackbarClose = (event, reason) => {
+        // Setting the snackbar open variable to false and
+        // nulling out the current snackbar message
         setOpenSnackbar(false);
         setSnackbarMessage(null);
-    }
+    };
 
+    // Function that will handle changes to the conductedBy field
     const onChangeConductedBy = (e) => {
+        // Destructuring the form field value to a variable
         const { value } = e.target;
+        // Setting the new form field value to local state
         setConductedBy(value);
-        console.log(`Conducted by is now ${conductedBy}`);
     };
-    const onChangeEIC = (e) => {
-        const { value } = e.target;
-        setEIC(value);
-        console.log(`EIC is now ${eIC}`);
-    };
+
+    // Function that will handle changes to the date and time fields
     const onChangeDateTime = (newDateTime) => {
+        // Setting the new form field value to local state
         setDateTime(newDateTime);
     };
-    const onChangePhysLoc = (e) => {
+
+    // Function that will handle changes to the eIC field
+    const onChangeEIC = (e) => {
+        // Destructuring the form field value to a variable
         const { value } = e.target;
-        setPhysLoc(value);
+        // Setting the new form field value to local state
+        setEIC(value);
     };
+
+    // Function that will handle changes to the lat field
     const onChangeLat = (e) => {
+        // Destructuring the form field value to a variable
         const { value } = e.target;
+        // Setting the new form field value to local state
         setLat(value);
     };
+
+    // Function that will handle changes to the lng field
     const onChangeLng = (e) => {
+        // Destructuring the form field value to a variable
         const { value } = e.target;
+        // Setting the new form field value to local state
         setLng(value);
     };
-    const onChangePlaceOfSafety = (e) => {
+
+    // Function that will handle changes to the physLoc field
+    const onChangePhysLoc = (e) => {
+        // Destructuring the form field value to a variable
         const { value } = e.target;
+        // Setting the new form field value to local state
+        setPhysLoc(value);
+    };
+
+    // Function that will handle changes to the placeOfSafety field
+    const onChangePlaceOfSafety = (e) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+        // Setting the new form field value to local state
         setPlaceOfSafety(value);
     };
 
+    // Function that will handle actions for a location button click
     const onLocFindClick = () => {
-        console.log("Location Button Clicked");
+        // Calling the location function to get the users geolocation
         location();
-        console.log(snackbarMessage);
     };
 
     return (
@@ -123,7 +165,12 @@ function JobBriefingForm(props) {
                 lng={lng}
                 placeOfSafety={placeOfSafety}
             />
-            <Snackbar open={openSnackbar} autoHideDuration={6000} message={snackbarMessage} onClose={handleSnackbarClose}/>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={2000}
+                message={snackbarMessage}
+                onClose={handleSnackbarClose}
+            />
         </Box>
     );
 }

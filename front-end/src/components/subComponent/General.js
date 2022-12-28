@@ -19,6 +19,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
  * @returns
  */
 function General(props) {
+    // Destructuring the needed methods from props
     const {
         onChangeConductedBy,
         onChangeEIC,
@@ -29,15 +30,16 @@ function General(props) {
         onChangePlaceOfSafety,
         onLocFindClick,
     } = props;
-    const { conductedBy, eIC, dateTime, physLoc, lat, lng, placeOfSafety 
-    } = props;
+    // Destructuring the needed variable from props
+    const { conductedBy, eIC, dateTime, physLoc, lat, lng, placeOfSafety } =
+        props;
 
     return (
         <Box>
             <Grid container>
                 <Grid item xs={12} sm={6} md={4}>
                     <TextField
-                        sx={{ display: "flex", flexGrow: 1, minWidth: "10rem" }}
+                        sx={{ display: "flex" }}
                         size="small"
                         id="conductedBy"
                         label="Conducted By"
@@ -47,7 +49,7 @@ function General(props) {
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                     <TextField
-                        sx={{ display: "flex", flex: "1", minWidth: "10rem" }}
+                        sx={{ display: "flex" }}
                         size="small"
                         id="eic"
                         label="EIC"
@@ -55,7 +57,7 @@ function General(props) {
                         onChange={onChangeEIC}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6} md={2} lg={2}>
+                <Grid item xs={12} sm={6} md={1.7} lg={2}>
                     <TimePicker
                         id="time"
                         label="Time"
@@ -65,7 +67,7 @@ function General(props) {
                         }
                         renderInput={(params) => (
                             <TextField
-                                sx={{ display: "flex", flex: "1" }}
+                                sx={{ display: "flex" }}
                                 size="small"
                                 {...params}
                             />
@@ -73,7 +75,7 @@ function General(props) {
                         ampm={false}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6} md={2} lg={2}>
+                <Grid item xs={12} sm={6} md={2.3} lg={2}>
                     <DesktopDatePicker
                         id="date"
                         label="Date"
@@ -84,7 +86,7 @@ function General(props) {
                         }
                         renderInput={(params) => (
                             <TextField
-                                sx={{ display: "flex", flex: "1" }}
+                                sx={{ display: "flex" }}
                                 size="small"
                                 {...params}
                             />
@@ -95,7 +97,7 @@ function General(props) {
             <Grid container>
                 <Grid item xs={12} md={6}>
                     <TextField
-                        sx={{ display: "flex", flex: "1", minWidth: "10rem" }}
+                        sx={{ display: "flex" }}
                         size="small"
                         id="location"
                         label="Physical Loc"
@@ -104,37 +106,52 @@ function General(props) {
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Box sx={{ display: "flex", flex: "1" }}>
-                        <IconButton
-                            color="primary"
-                            size="small"
-                            onClick={onLocFindClick}
-                        >
-                            <LocationOnIcon />
-                        </IconButton>
-                        <TextField
-                            sx={{ flex: "1", minWidth: "5rem" }}
-                            size="small"
-                            id="lat"
-                            label="Lat"
-                            value={lat}
-                            onChange={onChangeLat}
-                        />
-                        <TextField
-                            sx={{ flex: "1", minWidth: "5rem" }}
-                            size="small"
-                            id="lng"
-                            label="Long"
-                            value={lng}
-                            onChange={onChangeLng}
-                        />
-                    </Box>
+                    <Grid container>
+                        <Grid item xs={12} sm={1} sx={{ m: "auto" }}>
+                            <IconButton
+                                sx={{}}
+                                color="primary"
+                                size="small"
+                                onClick={onLocFindClick}
+                            >
+                                <LocationOnIcon />
+                            </IconButton>
+                        </Grid>
+                        <Grid item xs={12} sm={5.5}>
+                            <TextField
+                                sx={{
+                                    display: "flex",
+                                    flexGrow: "1",
+                                    minWidth: "5rem",
+                                }}
+                                size="small"
+                                id="lat"
+                                label="Lat"
+                                value={lat}
+                                onChange={onChangeLat}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={5.5}>
+                            <TextField
+                                sx={{
+                                    display: "flex",
+                                    flexGrow: "1",
+                                    minWidth: "5rem",
+                                }}
+                                size="small"
+                                id="lng"
+                                label="Long"
+                                value={lng}
+                                onChange={onChangeLng}
+                            />
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid container>
                 <Grid item xs={12}>
                     <TextField
-                        sx={{ display: "flex", flex: "1", minWidth: "10rem" }}
+                        sx={{ display: "flex", flex: "1" }}
                         size="small"
                         id="placeOfSafety"
                         label="Place of Safety"
