@@ -3,6 +3,7 @@
 // Gold-Briefing - JobBriefingForm.js
 // December 23, 2022
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 12/28/2022, Added in the Task Component)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -11,6 +12,7 @@ import General from "../subComponent/General";
 import { Box, Snackbar } from "@mui/material";
 import moment from "moment";
 import sampleData from "../../redux/sampleData.json";
+import Task from "../subComponent/Task";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -27,14 +29,16 @@ function JobBriefingForm(props) {
     const [conductedBy, setConductedBy] = useState(
         `${user.firstName} ${user.lastName}` || ""
     );
-    const [eIC, setEIC] = useState(`${user.firstName} ${user.lastName}` || "");
     const [dateTime, setDateTime] = useState(moment());
-    const [physLoc, setPhysLoc] = useState("");
+    const [eIC, setEIC] = useState(`${user.firstName} ${user.lastName}` || "");
     const [lat, setLat] = useState("");
     const [lng, setLng] = useState("");
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [physLoc, setPhysLoc] = useState("");
     const [placeOfSafety, setPlaceOfSafety] = useState("");
     const [snackbarMessage, setSnackbarMessage] = useState(null);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [taskDetails, setTaskDetails] = useState("");
+    const [taskRules, setTaskRules] = useState("");
 
     // The function called if the geolocation request was successful
     const geoSuccess = (position) => {
@@ -135,6 +139,22 @@ function JobBriefingForm(props) {
         setPlaceOfSafety(value);
     };
 
+    // Function that will handle changes to the taskDetails field
+    const onChangeTaskDetails = (e) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+        // Setting the new form field value to local state
+        setTaskDetails(value);
+    }
+
+    // Function that will handle changes to the taskRules field
+    const onChangeTaskRules = (e) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+        // Setting the new form field value to local state
+        setTaskRules(value);
+    }
+
     // Function that will handle actions for a location button click
     const onLocFindClick = () => {
         // Calling the location function to get the users geolocation
@@ -164,6 +184,12 @@ function JobBriefingForm(props) {
                 lat={lat}
                 lng={lng}
                 placeOfSafety={placeOfSafety}
+            />
+            <Task
+                onChangeTaskDetails={onChangeTaskDetails}
+                onChangeTaskRules={onChangeTaskRules}
+                taskDetails={taskDetails}
+                taskRules={taskRules}
             />
             <Snackbar
                 open={openSnackbar}
