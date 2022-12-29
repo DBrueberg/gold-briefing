@@ -13,6 +13,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "./App.css";
 import JobBriefing from "./components/views/JobBriefing";
 import { Box, CssBaseline } from "@mui/material";
+import MainNav from "./components/subComponent/MainNav";
 
 // MUI Settings to use a dark style theme
 const darkTheme = createTheme({
@@ -40,6 +41,7 @@ function App() {
             <ThemeProvider theme={lightTheme}>
                 <CssBaseline />
                 <Box className="App">
+                    <MainNav />
                     <JobBriefing />
                 </Box>
             </ThemeProvider>
