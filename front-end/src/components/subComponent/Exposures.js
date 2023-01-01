@@ -20,14 +20,14 @@ function Exposures(props) {
     // Destructuring the needed methods from props
     const { onChangeRiskExposure, onChangeProtMitigation } = props;
     // Destructuring the needed variable from props
-    const { exposures } = props;
+    const { primaryExposures } = props;
 
     return (
         <Box>
             <Typography variant="h5" component="h2" sx={{ fontWeight: 400 }}>
                 Primary Exposures
             </Typography>
-            {exposures.length > 0 && exposures.map((exposure, index) => (
+            {primaryExposures.length > 0 && primaryExposures.map((exposure, index) => (
                 <Exposure
                     exposure={exposure}
                     key={index}
