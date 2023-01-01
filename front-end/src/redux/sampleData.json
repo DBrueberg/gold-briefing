@@ -48,16 +48,18 @@
                 "protMitigation": "Watch footing at all times. Cribbed out switches can't be seen under snow"
             }
         ],
-        "acknowledgement": {
-            "0": {
+        "acknowledgement": [
+            {
+                "sessionId": "0",
                 "employeeName": "Mike Heyer",
                 "employeePhoneNumber": "(222)222-2222"
             },
-            "1": {
+            {
+                "sessionId": "1",
                 "employeeName": "Devin Brueberg",
                 "employeePhoneNumber": "(111)111-1111"
             }
-        },
+        ],
         "briefed": true,
         "deBrief": {
             "outriggers": true,
@@ -75,8 +77,6 @@
         "evacRoute": "clear tracks and head to Home Depot",
         "caller": "Devin Brueberg",
         "CPR": "Mike Heyer",
-        "medInfo": {
-            "0": ["allergic to bees"]
-        }
+        "medInfo": "Mike is allergic to bees"
     }
 }

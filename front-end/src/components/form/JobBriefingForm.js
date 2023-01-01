@@ -15,6 +15,7 @@ import moment from "moment";
 import sampleData from "../../redux/sampleData.json";
 import Task from "../subComponent/Task";
 import Exposures from "../subComponent/Exposures";
+import Emergency from "../subComponent/Emergency";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -28,13 +29,19 @@ function JobBriefingForm(props) {
     const { user } = sampleData;
 
     // Defining default settings for the local state
+    const [accessPoint, setAccessPoint] = useState("");
+    const [caller, setCaller] = useState("");
     const [conductedBy, setConductedBy] = useState(
         `${user.firstName} ${user.lastName}` || ""
     );
+    const [cPR, setCPR] = useState("");
     const [dateTime, setDateTime] = useState(moment());
     const [eIC, setEIC] = useState(`${user.firstName} ${user.lastName}` || "");
+    const [evacRoute, setEvacRoute] = useState("");
     const [lat, setLat] = useState("");
     const [lng, setLng] = useState("");
+    const [medInfo, setMedInfo] = useState("");
+    const [nearestHospital, setNearestHospital] = useState("");
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [physLoc, setPhysLoc] = useState("");
     const [placeOfSafety, setPlaceOfSafety] = useState("");
@@ -114,12 +121,44 @@ function JobBriefingForm(props) {
         setSnackbarMessage(null);
     };
 
+    // Function that will handle changes to the accessPoint field
+    const onChangeAccessPoint = (e) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+        // Setting the new form field value to local state
+        setAccessPoint(value);
+    };
+
+    // Function that will handle changes to the caller field
+    const onChangeCaller = (e) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+        // Setting the new form field value to local state
+        setCaller(value);
+    };
+
     // Function that will handle changes to the conductedBy field
     const onChangeConductedBy = (e) => {
         // Destructuring the form field value to a variable
         const { value } = e.target;
         // Setting the new form field value to local state
         setConductedBy(value);
+    };
+
+    // Function that will handle changes to the cPR field
+    const onChangeCPR = (e) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+        // Setting the new form field value to local state
+        setCPR(value);
+    };
+
+    // Function that will handle changes to the evacRoute field
+    const onChangeEvacRoute = (e) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+        // Setting the new form field value to local state
+        setEvacRoute(value);
     };
 
     // Function that will handle changes to the date and time fields
@@ -150,6 +189,22 @@ function JobBriefingForm(props) {
         const { value } = e.target;
         // Setting the new form field value to local state
         setLng(value);
+    };
+
+    // Function that will handle changes to the medInfo field
+    const onChangeMedInfo = (e) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+        // Setting the new form field value to local state
+        setMedInfo(value);
+    };
+
+    // Function that will handle changes to the nearestHospital field
+    const onChangeNearestHospital = (e) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+        // Setting the new form field value to local state
+        setNearestHospital(value);
     };
 
     // Function that will handle changes to the physLoc field
@@ -273,9 +328,23 @@ function JobBriefingForm(props) {
                 taskRules={taskRules}
             />
             <Exposures
-                exposures={primaryExposures}
+                primaryExposures={primaryExposures}
                 onChangeRiskExposure={onChangeRiskExposure}
                 onChangeProtMitigation={onChangeProtMitigation}
+            />
+            <Emergency
+                onChangeNearestHospital={onChangeNearestHospital}
+                onChangeCPR={onChangeCPR}
+                onChangeAccessPoint={onChangeAccessPoint}
+                onChangeCaller={onChangeCaller}
+                onChangeEvacRoute={onChangeEvacRoute}
+                onChangeMedInfo={onChangeMedInfo}
+                nearestHospital={nearestHospital}
+                cPR={cPR}
+                accessPoint={accessPoint}
+                caller={caller}
+                evacRoute={evacRoute}
+                medInfo={medInfo}
             />
             <Snackbar
                 open={openSnackbar}

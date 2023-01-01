@@ -36,7 +36,7 @@ function Exposure(props) {
                         sx={{ display: "flex" }}
                         size="small"
                         multiline
-                        rows={3}
+                        rows={2}
                         id="riskExposure"
                         label="Risk/Exposure"
                         value={exposure?.riskExposure}
@@ -48,7 +48,7 @@ function Exposure(props) {
                         sx={{ display: "flex" }}
                         size="small"
                         multiline
-                        rows={3}
+                        rows={2}
                         id="protMitigation"
                         label="Protection/Mitigation"
                         value={exposure?.protMitigation}

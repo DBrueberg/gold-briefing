@@ -27,7 +27,7 @@ function Task(props) {
                         sx={{ display: "flex" }}
                         size="small"
                         multiline
-                        rows={3}
+                        rows={2}
                         id="taskDetails"
                         label="Task Details"
                         value={taskDetails}
@@ -39,7 +39,7 @@ function Task(props) {
                         sx={{ display: "flex" }}
                         size="small"
                         multiline
-                        rows={3}
+                        rows={2}
                         id="taskRules"
                         label="Rules Applicable to Task"
                         value={taskRules}
