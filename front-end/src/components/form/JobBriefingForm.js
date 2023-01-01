@@ -4,6 +4,7 @@
 // December 23, 2022
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 12/28/2022, Added in the Task Component)
+//  (DAB, 12/31/2022, Added in the Exposures Component)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -13,6 +14,7 @@ import { Box, Snackbar } from "@mui/material";
 import moment from "moment";
 import sampleData from "../../redux/sampleData.json";
 import Task from "../subComponent/Task";
+import Exposures from "../subComponent/Exposures";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -39,6 +41,33 @@ function JobBriefingForm(props) {
     const [snackbarMessage, setSnackbarMessage] = useState(null);
     const [taskDetails, setTaskDetails] = useState("");
     const [taskRules, setTaskRules] = useState("");
+    const [primaryExposures, setExposures] = useState([
+        {
+            name: "Life Saving Processes",
+            riskExposure: "",
+            protMitigation: "",
+        },
+        {
+            name: "Line of Fire/Release of Energy",
+            riskExposure: "",
+            protMitigation: "",
+        },
+        {
+            name: "Pinch Points",
+            riskExposure: "",
+            protMitigation: "",
+        },
+        {
+            name: "Ascending/Descending",
+            riskExposure: "",
+            protMitigation: "",
+        },
+        {
+            name: "Walking/Path of Travel",
+            riskExposure: "",
+            protMitigation: "",
+        },
+    ]);
 
     // The function called if the geolocation request was successful
     const geoSuccess = (position) => {
@@ -139,13 +168,65 @@ function JobBriefingForm(props) {
         setPlaceOfSafety(value);
     };
 
+    // Function that will handle changes to the primaryExposures
+    // field when a protMitigation is changed
+    const onChangeProtMitigation = (e, exposure) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+
+        // Setting the new primary protection mitigation value to
+        // state
+        setExposures(
+            primaryExposures.map((primaryExposure) => {
+                // If the exposure parameter name matches the one in state that
+                // value is changed
+                if (primaryExposure.name === exposure.name) {
+                    return {
+                        name: primaryExposure.name,
+                        riskExposure: primaryExposure.riskExposure,
+                        protMitigation: value,
+                    };
+                }
+
+                // If the names do not match, the original is returned
+                return primaryExposure;
+            })
+        );
+    };
+
+    // Function that will handle changes to the primaryExposures
+    // field when a riskExposure is changed
+    const onChangeRiskExposure = (e, exposure) => {
+        // Destructuring the form field value to a variable
+        const { value } = e.target;
+
+        // Setting the new primary risk exposure value to
+        // state
+        setExposures(
+            primaryExposures.map((primaryExposure) => {
+                // If the exposure parameter name matches the one in state that
+                // value is changed
+                if (primaryExposure.name === exposure.name) {
+                    return {
+                        name: primaryExposure.name,
+                        riskExposure: value,
+                        protMitigation: primaryExposure.protMitigation,
+                    };
+                }
+
+                // If the names do not match, the original is returned
+                return primaryExposure;
+            })
+        );
+    };
+
     // Function that will handle changes to the taskDetails field
     const onChangeTaskDetails = (e) => {
         // Destructuring the form field value to a variable
         const { value } = e.target;
         // Setting the new form field value to local state
         setTaskDetails(value);
-    }
+    };
 
     // Function that will handle changes to the taskRules field
     const onChangeTaskRules = (e) => {
@@ -153,7 +234,7 @@ function JobBriefingForm(props) {
         const { value } = e.target;
         // Setting the new form field value to local state
         setTaskRules(value);
-    }
+    };
 
     // Function that will handle actions for a location button click
     const onLocFindClick = () => {
@@ -190,6 +271,11 @@ function JobBriefingForm(props) {
                 onChangeTaskRules={onChangeTaskRules}
                 taskDetails={taskDetails}
                 taskRules={taskRules}
+            />
+            <Exposures
+                exposures={primaryExposures}
+                onChangeRiskExposure={onChangeRiskExposure}
+                onChangeProtMitigation={onChangeProtMitigation}
             />
             <Snackbar
                 open={openSnackbar}
