@@ -18,16 +18,36 @@
     "jobBriefing": {
         "EIC": "Mike Heyer",
         "conductedBy": "Devin Brueberg",
-        "placeOfSaftey": "off track",
+        "placeOfSafety": "off track",
         "taskDetails": "Inspecting North Town yards tracks",
         "taskRules": "Alert and Attentive",
-        "primaryExposures": {
-            "lifeSaving": "Watch for trains in the area",
-            "lineOfFire": "Expect a train any direction any time.",
-            "pinchPoints": "Watch for throwing switches, truck doors, and tape measures",
-            "ascDesc": "Stay alert when getting in/out of trucks and climbing the crest",
-            "pathOfTravel": "Watch footing at all times. Cribbed out switches can't be seen under snow"
-        },
+        "primaryExposures": [
+            {
+                "name": "Life Saving Processes",
+                "riskExposure": "Trains",
+                "protMitigation": "Watch for trains in the area"
+            },
+            {
+                "name": "Line of Fire/Release of Energy",
+                "riskExposure": "Hit by a train",
+                "protMitigation": "Expect a train any direction any time"
+            },
+            {
+                "name": "Pinch Points",
+                "riskExposure": "Appendage Pinched",
+                "protMitigation": "Watch for throwing switches, truck doors, and tape measures"
+            },
+            {
+                "name": "Ascending/Descending",
+                "riskExposure": "Falling when getting in and out of vehicles/work locations",
+                "protMitigation": "Stay alert when getting in/out of trucks and climbing the crest"
+            },
+            {
+                "name": "Walking/Path of Travel",
+                "riskExposure": "Sprained ankles",
+                "protMitigation": "Watch footing at all times. Cribbed out switches can't be seen under snow"
+            }
+        ],
         "acknowledgement": {
             "0": {
                 "employeeName": "Mike Heyer",
@@ -47,10 +67,7 @@
         }
     },
     "weather": {
-        "alerts": [
-            "rainy",
-            "hot"
-        ]
+        "alerts": ["rainy", "hot"]
     },
     "emergencyPlan": {
         "nearestHospital": "Mercy",
@@ -59,9 +76,7 @@
         "caller": "Devin Brueberg",
         "CPR": "Mike Heyer",
         "medInfo": {
-            "0": [
-                "allergic to bees"
-            ]
+            "0": ["allergic to bees"]
         }
     }
 }
