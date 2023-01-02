@@ -19,6 +19,7 @@ import Task from "../subComponent/Task";
 import Exposures from "../subComponent/Exposures";
 import Emergency from "../subComponent/Emergency";
 import Acknowledgement from "../subComponent/Acknowledgement";
+import Widget from "../subComponent/Widget";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -338,6 +339,7 @@ function JobBriefingForm(props) {
                 lng={lng}
                 placeOfSafety={placeOfSafety}
             />
+            <Widget />
             <Task
                 onChangeTaskDetails={onChangeTaskDetails}
                 onChangeTaskRules={onChangeTaskRules}
