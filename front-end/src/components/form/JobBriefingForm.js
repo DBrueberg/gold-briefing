@@ -5,6 +5,8 @@
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 12/28/2022, Added in the Task Component)
 //  (DAB, 12/31/2022, Added in the Exposures Component)
+//  (DAB, 01/01/2023, Added the Emergency and Acknowledge
+//  Components)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -16,6 +18,7 @@ import sampleData from "../../redux/sampleData.json";
 import Task from "../subComponent/Task";
 import Exposures from "../subComponent/Exposures";
 import Emergency from "../subComponent/Emergency";
+import Acknowledgement from "../subComponent/Acknowledgement";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -30,6 +33,7 @@ function JobBriefingForm(props) {
 
     // Defining default settings for the local state
     const [accessPoint, setAccessPoint] = useState("");
+    const [acknowledgement, setAcknowledgment] = useState([]);
     const [caller, setCaller] = useState("");
     const [conductedBy, setConductedBy] = useState(
         `${user.firstName} ${user.lastName}` || ""
@@ -291,6 +295,19 @@ function JobBriefingForm(props) {
         setTaskRules(value);
     };
 
+    // Function that will handle changes to the acknowledgement
+    // field
+    const onClickAcknowledgement = (name, phone) => {
+        // Setting the acknowledgement array to include the
+        // new member
+        setAcknowledgment(
+            [...acknowledgement].concat({
+                name: name,
+                phone: phone,
+            })
+        );
+    };
+
     // Function that will handle actions for a location button click
     const onLocFindClick = () => {
         // Calling the location function to get the users geolocation
@@ -345,6 +362,10 @@ function JobBriefingForm(props) {
                 caller={caller}
                 evacRoute={evacRoute}
                 medInfo={medInfo}
+            />
+            <Acknowledgement
+                onClickAcknowledgement={onClickAcknowledgement}
+                acknowledgement={acknowledgement}
             />
             <Snackbar
                 open={openSnackbar}
