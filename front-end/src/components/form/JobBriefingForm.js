@@ -411,6 +411,8 @@ function JobBriefingForm(props) {
             <Widget
                 weather={weather}
                 onClickUpdateWeather={onClickUpdateWeather}
+                lat={lat}
+                lng={lng}
             />
             <Task
                 onChangeTaskDetails={onChangeTaskDetails}

@@ -6,7 +6,8 @@
 
 // Using React library in order to build components
 // for the app and importing needed components
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Map, Marker, ZoomControl } from "pigeon-maps";
 import {
     Accordion,
     AccordionDetails,
@@ -33,10 +34,23 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
  */
 function Widget(props) {
     // Destructuring the needed methods from props
-    const { onClickUpdateWeather } = props;
+    const { onClickUpdateWeather, lat, lng } = props;
     // Destructuring the needed variable from props
     const { weather } = props;
     // const { weather } = sampleData
+
+    // Adding in some default lat, lng, and zoom for the map
+    const [center, setCenter] = useState([32.7555, -97.309341]);
+    const [zoom, setZoom] = useState(16);
+
+    // Using useEffect to rerender the map component when there is a 
+    // change in lat/lng state
+    useEffect (() => {
+        if (lat !== "" || lng !== "") {
+            setCenter([lat, lng])
+            setZoom(16);
+        }
+    }, [lat, lng])
 
     const clickHandler = () => {
         onClickUpdateWeather();
@@ -74,7 +88,9 @@ function Widget(props) {
     const WeatherCard = () => (
         <Card display="flex" sx={{ height: "100%" }}>
             <CardContent>
-                <Typography variant="h6">{weather.weatherLocation} Weather</Typography>
+                <Typography variant="h6">
+                    {weather.weatherLocation} Weather
+                </Typography>
                 <Typography variant="h7" fontSize={".9rem"}>
                     {weather.currentCondition}
                 </Typography>
@@ -151,10 +167,25 @@ function Widget(props) {
                 <Grid item xs={12} sm={6}>
                     <Paper elevation={2} sx={{ height: "100%", marginLeft: 1 }}>
                         <Card sx={{ height: "100%" }}>
-                            <CardContent>
-                                <Typography gutterBottom variant="h6">
+                            <CardContent sx={{ minHeight: "300px", height: "100%"}}>
+                                {/* <Typography gutterBottom variant="h6">
                                     Map
-                                </Typography>
+                                </Typography> */}
+                                <Map
+                                    center={center}
+                                    zoom={zoom}
+                                    metaWheelZoom={true}
+                                    onBoundsChanged={({ center, zoom }) => { 
+                                        setCenter(center);
+                                        setZoom(zoom);
+                                    }} 
+                                >
+                                    <Marker
+                                        width={40}
+                                        anchor={[lat || 32.7555, lng || -97.309341]}
+                                    />
+                                    <ZoomControl />
+                                </Map>
                             </CardContent>
                         </Card>
                     </Paper>
