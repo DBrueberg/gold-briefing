@@ -67,7 +67,20 @@
         }
     },
     "weather": {
-        "alerts": ["rainy", "hot"]
+        "alerts": [
+            { "event": "rainy", "description": "its gonna rain" },
+            { "event": "hot", "description": "It's gonna be hot" }
+        ],
+        "currentCondition": "Raining",
+        "rain": "0",
+        "snow": "0",
+        "temp": "0",
+        "realFeel": "-10",
+        "wind": "10",
+        "gust": "15",
+        "weatherLocation": "Minneapolis",
+        "windDirection": "NWE",
+        "uV": "1"
     },
     "emergencyPlan": {
         "nearestHospital": "Mercy",

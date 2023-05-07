@@ -13,12 +13,14 @@
 import React, { useState } from "react";
 import General from "../subComponent/General";
 import { Box, Snackbar } from "@mui/material";
+import WeatherDataService from "../../services/weather.service";
 import moment from "moment";
 import sampleData from "../../redux/sampleData.json";
 import Task from "../subComponent/Task";
 import Exposures from "../subComponent/Exposures";
 import Emergency from "../subComponent/Emergency";
 import Acknowledgement from "../subComponent/Acknowledgement";
+import Widget from "../subComponent/Widget";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -79,6 +81,61 @@ function JobBriefingForm(props) {
             protMitigation: "",
         },
     ]);
+    const [weather, setWeather] = useState({
+        alerts: [
+            { event: "rainy", description: "its gonna rain" },
+            { event: "hot", description: "It's gonna be hot" },
+        ],
+        currentCondition: "Snowing",
+        rain: "0",
+        snow: "0",
+        temp: "0",
+        realFeel: "-10",
+        wind: "10",
+        gust: "15",
+        weatherLocation: "Minneapolis",
+        windDirection: "NWE",
+        uV: "1",
+    });
+
+    // Function will format the weather data retrieved from the 
+    // weather data service
+    const formatWeatherData = (data) => {
+        // Initializing a temporary weather variable to hold 
+        // the formatted data
+        let tempWeather = null;
+
+        // If there is data it will be formatted
+        if (data) {
+            // Pulling the day forecast from the data
+            const forecast = data.forecast.forecastday[0].day;
+            // Mapping the alert data to an array
+            const alertArray = data.alerts.alert.map((current) => {
+                return {
+                    event: current.headline,
+                    description: current.desc,
+                };
+            });
+
+            // Assigning and formatting the weather data
+            tempWeather = {
+                alerts: alertArray,
+                currentCondition: data.current.condition.text,
+                rain: forecast.daily_chance_of_rain,
+                snow: forecast.daily_chance_of_snow,
+                temp: data.current.temp_f,
+                realFeel: data.current.feelslike_f,
+                wind: data.current.wind_mph,
+                gust: data.current.gust_mph,
+                weatherLocation: data.location.name,
+                windDirection: data.current.wind_dir,
+                uV: data.current.uv,
+            };
+        }
+
+        // Returning the data to the caller
+        return tempWeather;
+    };
 
     // The function called if the geolocation request was successful
     const geoSuccess = (position) => {
@@ -308,6 +365,19 @@ function JobBriefingForm(props) {
         );
     };
 
+    // Function will update the current weather based off location data
+    // in state
+    const onClickUpdateWeather = async () => {
+        // Requesting data from the weather data service
+        const response = await WeatherDataService.forecast(physLoc || `${lat}/${lng}`);
+
+        // Formatting the data to match state
+        const tempWeather = await formatWeatherData(response.data);
+
+        // Setting the weather data to state
+        setWeather(tempWeather);
+    };
+
     // Function that will handle actions for a location button click
     const onLocFindClick = () => {
         // Calling the location function to get the users geolocation
@@ -337,6 +407,10 @@ function JobBriefingForm(props) {
                 lat={lat}
                 lng={lng}
                 placeOfSafety={placeOfSafety}
+            />
+            <Widget
+                weather={weather}
+                onClickUpdateWeather={onClickUpdateWeather}
             />
             <Task
                 onChangeTaskDetails={onChangeTaskDetails}
