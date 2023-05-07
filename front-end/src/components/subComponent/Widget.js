@@ -18,15 +18,12 @@ import {
     CardContent,
     Grid,
     List,
-    ListItem,
     ListItemButton,
     Paper,
     Tooltip,
     Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import WeatherDataService from "../../services/weather.service";
-import sampleData from "../../redux/sampleData.json";
 
 /**
  * The Widget Component will display widgets of the weather and
