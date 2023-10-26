@@ -369,7 +369,7 @@ function JobBriefingForm(props) {
     // in state
     const onClickUpdateWeather = async () => {
         // Requesting data from the weather data service
-        const response = await WeatherDataService.forecast(physLoc || `${lat}/${lng}`);
+        const response = await WeatherDataService.forecast(physLoc || `${lat},${lng}`);
 
         // Formatting the data to match state
         const tempWeather = await formatWeatherData(response.data);
