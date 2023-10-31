@@ -10,6 +10,7 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import JobBriefingForm from "../form/JobBriefingForm";
+import Debrief from "../modal/Debrief";
 
 /**
  * The JobBriefing View will display a completed job briefing that will need

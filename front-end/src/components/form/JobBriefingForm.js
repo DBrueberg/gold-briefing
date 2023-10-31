@@ -21,6 +21,7 @@ import Exposures from "../subComponent/Exposures";
 import Emergency from "../subComponent/Emergency";
 import Acknowledgement from "../subComponent/Acknowledgement";
 import Widget from "../subComponent/Widget";
+import GenerateBriefing from "../subComponent/GenerateBriefing";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -443,6 +444,7 @@ function JobBriefingForm(props) {
                 onClickAcknowledgement={onClickAcknowledgement}
                 acknowledgement={acknowledgement}
             />
+            <GenerateBriefing />
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={2000}
