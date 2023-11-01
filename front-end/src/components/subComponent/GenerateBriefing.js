@@ -25,6 +25,8 @@ import {
     FormControl,
     Stack,
     FormHelperText,
+    Snackbar,
+    Alert,
 } from "@mui/material";
 import Debrief from "../modal/Debrief";
 
@@ -42,8 +44,8 @@ function GenerateBriefing(props) {
 
     const [checked, setChecked] = useState(false);
     const [open, setOpen] = useState(false);
+    const [briefErrorSnackbarOpen, setBriefErrorSnackbarOpen] = useState(false)
     const [isDebriefed, setIsDebriefed] = useState(false);
-    const [error, setError] = useState(false);
 
     const handleDebriefOpen = () => {
         setOpen(true);
@@ -60,6 +62,15 @@ function GenerateBriefing(props) {
         console.log(e.target.checked);
     };
 
+    const handleBriefSnackbarClose = () => {
+        setBriefErrorSnackbarOpen(false);
+
+    }
+
+    const handleBriefSnackbarOpen = () => {
+        setBriefErrorSnackbarOpen(true);
+    }
+
     const createBriefHandler = (e) => {
         console.log("createBrief");
     };
@@ -69,10 +80,9 @@ function GenerateBriefing(props) {
         if (checked) {
             handleDebriefOpen();
             console.log("CLOSING BRIEFING");
-            setError(false);
         } else {
             console.log("BRIEF FIRST!");
-            setError(true);
+            handleBriefSnackbarOpen()
         }
     };
 
@@ -85,13 +95,6 @@ function GenerateBriefing(props) {
             marginRight={1}
             marginBottom={1}
         >
-            <FormControl required error={error} component="fieldset">
-                {error && (
-                    <FormHelperText>
-                        Entire workgroup must be briefed
-                    </FormHelperText>
-                )}
-            </FormControl>
             <FormGroup>
                 <FormControlLabel
                     control={
@@ -126,6 +129,13 @@ function GenerateBriefing(props) {
             </Button>
             <Debrief open={open} onClose={handleDebriefClose} />
             {console.log(isDebriefed)}
+            <Snackbar
+            open={briefErrorSnackbarOpen}
+            autoHideDuration={4000}
+            onClose={handleBriefSnackbarClose}
+            >
+                <Alert severity="error">Brief first</Alert>
+            </Snackbar>
         </Stack>
     );
 }
