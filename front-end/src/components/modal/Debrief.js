@@ -5,6 +5,14 @@
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 10/31/2023, Added limited functionality and error handling)
 
+
+/**
+ * STILL WORKING ON FUNCTIONALITY. 
+ * Need to add comments
+ * Need to organize code
+ * Better descriptive name for error variable
+ */
+
 // Using React library in order to build components
 // for the app and importing needed components
 import React, { useState } from "react";
