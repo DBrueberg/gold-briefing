@@ -14,6 +14,7 @@ import "./App.css";
 import JobBriefing from "./components/views/JobBriefing";
 import { Box, CssBaseline } from "@mui/material";
 import MainNav from "./components/subComponent/MainNav";
+import Login from "./components/views/Login";
 
 // MUI Settings to use a dark style theme
 const darkTheme = createTheme({
@@ -42,7 +43,8 @@ function App() {
                 <CssBaseline />
                 <Box className="App">
                     <MainNav />
-                    <JobBriefing />
+                    {/* <JobBriefing /> */}
+                    <Login />
                 </Box>
             </ThemeProvider>
         </LocalizationProvider>
