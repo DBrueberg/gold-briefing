@@ -4,14 +4,7 @@
 // October 27, 2023
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 10/31/2023, Added limited functionality and error handling)
-
-
-/**
- * STILL WORKING ON FUNCTIONALITY. 
- * Need to add comments
- * Need to organize code
- * Better descriptive name for error variable
- */
+//  (DAB, 11/01/2023, Added comments and sorted out functionality)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -42,9 +35,11 @@ function Debrief(props) {
     // Destructuring the needed variable from props
     const { open } = props;
 
+    // Defining default settings for the local state
     const [checked, setChecked] = useState([false, false, false, false]);
     const [error, setError] = useState(false);
 
+    // Defining the String checkbox dialog choices
     const dialogChoices = [
         "Boom and outriggers properly stored?",
         "Flags properly removed or replaced?",
@@ -52,49 +47,55 @@ function Debrief(props) {
         "All workgroups clear of authorities/track?",
     ];
 
-    const handleConfirmDebrief = () => {
-        const isChecked = isAllChecked();
-        if (isChecked) {
-            console.log("GOOD TO CLOSE BRIEFING");
-            onClose(isChecked);
-            setChecked([false, false, false, false]);
-            setError(false);
-        } else {
-            console.log("All FIELDS MUST BE CHECKED TO CLOSE BRIEFING");
-            setChecked([false, false, false, false]);
-            setError(true);
-        }
+    // This function will handle the changes to checkbox 0
+    const handleChange0 = (e) => {
+        setChecked([e.target.checked, checked[1], checked[2], checked[3]]);
     };
 
+    // This function will handle the changes to checkbox 1
+    const handleChange1 = (e) => {
+        setChecked([checked[0], e.target.checked, checked[2], checked[3]]);
+    };
+
+    // This function will handle the changes to checkbox 2
+    const handleChange2 = (e) => {
+        setChecked([checked[0], checked[1], e.target.checked, checked[3]]);
+    };
+
+    // This function will handle the changes to checkbox 3
+    const handleChange3 = (e) => {
+        setChecked([checked[0], checked[1], checked[2], e.target.checked]);
+    };
+
+    // Function will handle what happens when the Dialog is closed
     const handleClose = () => {
         onClose(false);
         setChecked([false, false, false, false]);
         setError(false);
     };
 
-    const handleChange0 = (e) => {
-        setChecked([e.target.checked, checked[1], checked[2], checked[3]]);
-        console.log(checked);
-    };
-    const handleChange1 = (e) => {
-        setChecked([checked[0], e.target.checked, checked[2], checked[3]]);
-        console.log(checked);
-    };
-    const handleChange2 = (e) => {
-        setChecked([checked[0], checked[1], e.target.checked, checked[3]]);
-        console.log(checked);
-    };
-    const handleChange3 = (e) => {
-        setChecked([checked[0], checked[1], checked[2], e.target.checked]);
-        console.log(checked);
+    // Function will handle what happens when the confirm debrief button is
+    // pressed
+    const handleConfirmDebrief = () => {
+        const isChecked = isAllChecked();
+        if (isChecked) {
+            onClose(isChecked);
+            setChecked([false, false, false, false]);
+            setError(false);
+        } else {
+            setChecked([false, false, false, false]);
+            setError(true);
+        }
     };
 
+    // This function checks to see if all the checkbox options are checked and
+    // returns true if true
     const isAllChecked = () => {
         return checked[0] && checked[1] && checked[2] && checked[3] === true;
     };
 
     return (
-        <Dialog dividers onClose={handleClose} open={open}>
+        <Dialog onClose={handleClose} open={open}>
             <DialogTitle
                 sx={{
                     border: "bottom",
@@ -146,7 +147,6 @@ function Debrief(props) {
                             />
                             <FormControlLabel
                                 required
-                                helperText="Work group must be briefed"
                                 control={
                                     <Checkbox
                                         id="debriefCheckBox3"

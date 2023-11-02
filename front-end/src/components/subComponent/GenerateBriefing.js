@@ -3,16 +3,8 @@
 // Gold-Briefing - GenerateBriefing.js
 // October 31, 2023
 // Last Edited (Initials, Date, Edits):
-
-
-/**
- * STILL WORKING ON FUNCTIONALITY. 
- * Need to add comments
- * Need to organize code
- * Better descriptive name for error variable
- * Thinking of switching FormControl error handling of debrief
- * checkbox to a snackbar error message for better UX
- */
+//  (DAB, 11/01/2023, Changed formfield error message to snackbar
+//      and refactored some variables)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -22,9 +14,7 @@ import {
     Button,
     FormGroup,
     FormControlLabel,
-    FormControl,
     Stack,
-    FormHelperText,
     Snackbar,
     Alert,
 } from "@mui/material";
@@ -42,48 +32,52 @@ function GenerateBriefing(props) {
     // Destructuring the needed variable from props
     const {} = props;
 
+    // Defining default settings for the local state
+    const [briefErrorSnackbarOpen, setBriefErrorSnackbarOpen] = useState(false);
     const [checked, setChecked] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [briefErrorSnackbarOpen, setBriefErrorSnackbarOpen] = useState(false)
     const [isDebriefed, setIsDebriefed] = useState(false);
+    const [open, setOpen] = useState(false);
 
-    const handleDebriefOpen = () => {
-        setOpen(true);
+    // Function that will handle the close briefing actions
+    const handleCloseBriefing = (e) => {
+        if (checked) {
+            handleDebriefOpen();
+        } else {
+            handleBriefSnackbarOpen();
+        }
     };
 
-    const handleDebriefClose = (isDebrief) => {
-        setOpen(false);
-        setIsDebriefed(isDebrief);
-        console.log(isDebrief);
-    };
-
-    const handleBriefChange = (e) => {
-        setChecked(e.target.checked);
-        console.log(e.target.checked);
-    };
-
-    const handleBriefSnackbarClose = () => {
-        setBriefErrorSnackbarOpen(false);
-
-    }
-
-    const handleBriefSnackbarOpen = () => {
-        setBriefErrorSnackbarOpen(true);
-    }
-
-    const createBriefHandler = (e) => {
+    // Function that will handle the create briefing actions
+    const handleCreateBriefing = (e) => {
         console.log("createBrief");
     };
 
-    const closeBriefHandler = (e) => {
-        console.log("closeBriefHandler");
-        if (checked) {
-            handleDebriefOpen();
-            console.log("CLOSING BRIEFING");
-        } else {
-            console.log("BRIEF FIRST!");
-            handleBriefSnackbarOpen()
-        }
+    // Function that will handle the change briefing actions
+    const handleBriefChange = (e) => {
+        setChecked(e.target.checked);
+    };
+
+    // Function that will handle the actions to be taken on the
+    // briefing snackbar error close
+    const handleBriefSnackbarClose = () => {
+        setBriefErrorSnackbarOpen(false);
+    };
+
+    // Function that will handle the actions to be taken on the
+    // briefing snackbar error open
+    const handleBriefSnackbarOpen = () => {
+        setBriefErrorSnackbarOpen(true);
+    };
+
+    // Function that will handle the changes to the debrief Dialog close
+    const handleDebriefClose = (isDebrief) => {
+        setOpen(false);
+        setIsDebriefed(isDebrief);
+    };
+
+    // Function that will handle the changes to the debrief Dialog open
+    const handleDebriefOpen = () => {
+        setOpen(true);
     };
 
     return (
@@ -112,27 +106,25 @@ function GenerateBriefing(props) {
                     }}
                 />
             </FormGroup>
-
             <Button
                 sx={{ minWidth: "7rem" }}
                 variant="contained"
-                onClick={(e) => createBriefHandler()}
+                onClick={(e) => handleCreateBriefing()}
             >
                 Create Briefing
             </Button>
             <Button
                 sx={{ minWidth: "7rem" }}
                 variant="contained"
-                onClick={(e) => closeBriefHandler()}
+                onClick={(e) => handleCloseBriefing()}
             >
                 Close Briefing
             </Button>
             <Debrief open={open} onClose={handleDebriefClose} />
-            {console.log(isDebriefed)}
             <Snackbar
-            open={briefErrorSnackbarOpen}
-            autoHideDuration={4000}
-            onClose={handleBriefSnackbarClose}
+                open={briefErrorSnackbarOpen}
+                autoHideDuration={4000}
+                onClose={handleBriefSnackbarClose}
             >
                 <Alert severity="error">Brief first</Alert>
             </Snackbar>
