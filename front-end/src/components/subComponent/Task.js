@@ -26,9 +26,9 @@ function Task(props) {
                     <TextField
                         sx={{ display: "flex" }}
                         size="small"
+                        id="taskDetails"
                         multiline
                         rows={2}
-                        id="taskDetails"
                         label="Task Details"
                         value={taskDetails}
                         onChange={onChangeTaskDetails}
@@ -38,9 +38,9 @@ function Task(props) {
                     <TextField
                         sx={{ display: "flex" }}
                         size="small"
+                        id="taskRules"
                         multiline
                         rows={2}
-                        id="taskRules"
                         label="Rules Applicable to Task"
                         value={taskRules}
                         onChange={onChangeTaskRules}

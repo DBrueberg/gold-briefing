@@ -3,6 +3,7 @@
 // Gold-Briefing - Exposure.js
 // December 28, 2022
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 11/02/2023, Added in unique id's for generated content)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -19,7 +20,7 @@ function Exposure(props) {
     // Destructuring the needed methods from props
     const { onChangeRiskExposure, onChangeProtMitigation } = props;
     // Destructuring the needed variable from props
-    const { exposure } = props;
+    const { exposure, index } = props;
 
     return (
         <Box>
@@ -37,7 +38,7 @@ function Exposure(props) {
                         size="small"
                         multiline
                         rows={2}
-                        id="riskExposure"
+                        id={`riskExposure${index}`}
                         label="Risk/Exposure"
                         value={exposure?.riskExposure}
                         onChange={(e) => onChangeRiskExposure(e, exposure)}
@@ -49,7 +50,7 @@ function Exposure(props) {
                         size="small"
                         multiline
                         rows={2}
-                        id="protMitigation"
+                        id={`protMitigation${index}`}
                         label="Protection/Mitigation"
                         value={exposure?.protMitigation}
                         onChange={(e) => onChangeProtMitigation(e, exposure)}
