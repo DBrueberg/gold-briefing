@@ -77,6 +77,7 @@ function Acknowledgement(props) {
                         id="name"
                         label="Name"
                         value={name}
+                        autoComplete="name"
                         onChange={onChangeName}
                     />
                 </Grid>
@@ -87,6 +88,7 @@ function Acknowledgement(props) {
                         id="phone"
                         label="Phone #"
                         value={phone}
+                        autoComplete="phone"
                         onChange={onChangePhone}
                     />
                 </Grid>
