@@ -21,6 +21,7 @@ import Exposures from "../subComponent/Exposures";
 import Emergency from "../subComponent/Emergency";
 import Acknowledgement from "../subComponent/Acknowledgement";
 import Widget from "../subComponent/Widget";
+import GenerateBriefing from "../subComponent/GenerateBriefing";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -369,7 +370,7 @@ function JobBriefingForm(props) {
     // in state
     const onClickUpdateWeather = async () => {
         // Requesting data from the weather data service
-        const response = await WeatherDataService.forecast(physLoc || `${lat}/${lng}`);
+        const response = await WeatherDataService.forecast(physLoc || `${lat},${lng}`);
 
         // Formatting the data to match state
         const tempWeather = await formatWeatherData(response.data);
@@ -443,6 +444,7 @@ function JobBriefingForm(props) {
                 onClickAcknowledgement={onClickAcknowledgement}
                 acknowledgement={acknowledgement}
             />
+            <GenerateBriefing />
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={2000}
