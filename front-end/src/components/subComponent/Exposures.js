@@ -32,6 +32,7 @@ function Exposures(props) {
             {primaryExposures.length > 0 && primaryExposures.map((exposure, index) => (
                 <Exposure
                     exposure={exposure}
+                    key={index}
                     index={index}
                     onChangeRiskExposure={onChangeRiskExposure}
                     onChangeProtMitigation={onChangeProtMitigation}
