@@ -9,6 +9,7 @@
 import React, { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import sampleData from "../../redux/sampleData.json";
+import { Link } from "react-router-dom";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -62,6 +63,7 @@ function LoginForm(props) {
                     label="User Name"
                     size="small"
                     sx={{ minWidth: "50%" }}
+                    autoComplete="username"
                     required
                     value={userName}
                     onChange={onChangeUserName}
@@ -84,7 +86,7 @@ function LoginForm(props) {
                 >
                     Login
                 </Button>
-                <Typography fontSize="small" mt={1}>
+                <Typography component={Link} to="/" fontSize="small" mt={1}>
                     Create an account.
                 </Typography>
             </Stack>

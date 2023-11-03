@@ -5,15 +5,16 @@
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 12/22/2022, Added in Router for SPA page navigation)
 //  (DAB, 12/27/2022, Added in ThemeProvider and LocalizationProvider)
+//  (DAB, 11/02/2022, Added in Routes for BrowserRouter)
 
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "./App.css";
 import JobBriefing from "./components/views/JobBriefing";
+import Whoops404 from "./components/views/Whoops404";
 import { Box, CssBaseline } from "@mui/material";
-import MainNav from "./components/subComponent/MainNav";
 import Login from "./components/views/Login";
 
 // MUI Settings to use a dark style theme
@@ -33,7 +34,7 @@ const lightTheme = createTheme({
 /**
  * The main React Component that will allow for interaction with the Gold
  * Briefing application
- * 
+ *
  * @returns
  */
 function App() {
@@ -42,9 +43,11 @@ function App() {
             <ThemeProvider theme={lightTheme}>
                 <CssBaseline />
                 <Box className="App">
-                    <MainNav />
-                    {/* <JobBriefing /> */}
-                    <Login />
+                    <Routes>
+                        <Route exact path="/" element={<JobBriefing />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="*" element={<Whoops404 />} />
+                    </Routes>
                 </Box>
             </ThemeProvider>
         </LocalizationProvider>

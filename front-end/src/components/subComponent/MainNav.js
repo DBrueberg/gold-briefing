@@ -23,10 +23,10 @@ function MainNav() {
                     direction="row"
                     justifyContent={{ xs: "end" }}
                 >
-                    <Button component={Link} color="inherit" to="">
+                    <Button component={Link} color="inherit" to="/">
                         Forms
                     </Button>
-                    <Button component={Link} color="inherit" to="">
+                    <Button component={Link} color="inherit" to="/login">
                         Login
                     </Button>
                 </Stack>
