@@ -7,6 +7,7 @@
 import { AppBar, Button, Stack, Toolbar } from "@mui/material";
 import { Link } from "react-router-dom";
 import React from "react";
+import { ClassNames } from "@emotion/react";
 
 /**
  * The main navigation for the Gold Briefing we application

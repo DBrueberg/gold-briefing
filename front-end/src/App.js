@@ -5,7 +5,8 @@
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 12/22/2022, Added in Router for SPA page navigation)
 //  (DAB, 12/27/2022, Added in ThemeProvider and LocalizationProvider)
-//  (DAB, 11/02/2022, Added in Routes for BrowserRouter)
+//  (DAB, 11/02/2023, Added in Routes for BrowserRouter)
+//  (DAB, 11/07/2023, Added in createAccount path)
 
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -16,6 +17,7 @@ import JobBriefing from "./components/views/JobBriefing";
 import Whoops404 from "./components/views/Whoops404";
 import { Box, CssBaseline } from "@mui/material";
 import Login from "./components/views/Login";
+import CreateAccount from "./components/views/CreateAccount";
 
 // MUI Settings to use a dark style theme
 const darkTheme = createTheme({
@@ -46,6 +48,7 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<JobBriefing />} />
                         <Route path="/login" element={<Login />} />
+                        <Route path="/createAccount" element={<CreateAccount />} />
                         <Route path="*" element={<Whoops404 />} />
                     </Routes>
                 </Box>

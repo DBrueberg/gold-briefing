@@ -57,14 +57,7 @@
                 "employeeName": "Devin Brueberg",
                 "employeePhoneNumber": "(111)111-1111"
             }
-        ],
-        "briefed": true,
-        "deBrief": {
-            "outriggers": true,
-            "flags": true,
-            "switches": true,
-            "workgroups": false
-        }
+        ]
     },
     "weather": {
         "alerts": [
