@@ -86,7 +86,7 @@ function LoginForm(props) {
                 >
                     Login
                 </Button>
-                <Typography component={Link} to="/" fontSize="small" mt={1}>
+                <Typography component={Link} to="/createAccount" fontSize="small" mt={1}>
                     Create an account.
                 </Typography>
             </Stack>
