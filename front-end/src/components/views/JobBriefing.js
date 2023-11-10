@@ -36,7 +36,9 @@ function JobBriefing(props) {
                     src="bnsflogo.gif"
                     alt="Briefing Logo"
                 />
-                <Typography variant="h3">Job Safety Briefing</Typography>
+                <Typography variant="h3" component="h1">
+                    Job Safety Briefing
+                </Typography>
             </Box>
             <JobBriefingForm />
         </Box>

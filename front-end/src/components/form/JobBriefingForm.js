@@ -12,7 +12,7 @@
 // for the app and importing needed components
 import React, { useState } from "react";
 import General from "../subComponent/General";
-import { Box, Snackbar } from "@mui/material";
+import { Box, Snackbar, Typography } from "@mui/material";
 import WeatherDataService from "../../services/weather.service";
 import moment from "moment";
 import sampleData from "../../redux/sampleData.json";
@@ -22,6 +22,11 @@ import Emergency from "../subComponent/Emergency";
 import Acknowledgement from "../subComponent/Acknowledgement";
 import Widget from "../subComponent/Widget";
 import GenerateBriefing from "../subComponent/GenerateBriefing";
+import SaveIcon from "@mui/icons-material/Save";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import BriefingSpeedDial from "../subComponent/BriefingSpeedDial";
+import SaveJobBriefing from "../modal/SaveJobBriefing";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -37,6 +42,7 @@ function JobBriefingForm(props) {
     // Defining default settings for the local state
     const [accessPoint, setAccessPoint] = useState("");
     const [acknowledgement, setAcknowledgment] = useState([]);
+    const [briefingName, setBriefingName] = useState("");
     const [caller, setCaller] = useState("");
     const [conductedBy, setConductedBy] = useState(
         `${user.firstName} ${user.lastName}` || ""
@@ -49,6 +55,7 @@ function JobBriefingForm(props) {
     const [lng, setLng] = useState("");
     const [medInfo, setMedInfo] = useState("");
     const [nearestHospital, setNearestHospital] = useState("");
+    const [openBriefDialog, setOpenBriefDialog] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [physLoc, setPhysLoc] = useState("");
     const [placeOfSafety, setPlaceOfSafety] = useState("");
@@ -99,10 +106,116 @@ function JobBriefingForm(props) {
         uV: "1",
     });
 
-    // Function will format the weather data retrieved from the 
+    const speedDialActions = [
+        { icon: <SaveIcon />, name: "Save" },
+        { icon: <UploadFileIcon />, name: "Load" },
+        { icon: <RestartAltIcon />, name: "New" },
+    ];
+
+    const handleSpeedDialClick = (actName) => {
+        switch (actName) {
+            case "Save":
+                saveBriefing();
+                // Let user type a name before saving, name
+                // must have at least one character
+
+                // "Saved" toast pops up on screen if saved
+                break;
+            case "Load":
+                console.log("Load was selected");
+                // Take the user to the Briefings view where
+                // they can choose to load or delete a briefing
+
+                break;
+            case "New":
+                console.log("New was selected");
+                clearForm();
+                break;
+            default:
+                break;
+        }
+    };
+
+    const clearForm = () => {
+        setConductedBy("");
+        setEIC("");
+        setDateTime(moment());
+        setPhysLoc("");
+        setLat("");
+        setLng("");
+        setPlaceOfSafety("");
+        setWeather({});
+        setTaskDetails("");
+        setTaskRules("");
+        setExposures(defaultPrimaryExposures);
+        setNearestHospital("");
+        setCPR("");
+        setAccessPoint("");
+        setCaller("");
+        setEvacRoute("");
+        setMedInfo("");
+        setAcknowledgment([]);
+        setBriefingName("")
+        console.log("Job Briefing Form cleared");
+    };
+
+    const saveBriefing = () => {
+        console.log("Saving Briefing");
+        // If there is already a name the briefing is updated
+        if (briefingName !== "") {
+
+        }
+        // Else the use is prompted to choose a name and the 
+        // briefing is saved
+        else {
+           openSaveBrief(); 
+        }
+        
+        
+    };
+
+    const openSaveBrief = () => {
+        setOpenBriefDialog(true);
+    };
+
+    const onCloseSaveBrief = (name) => {
+        setBriefingName(name);
+        console.log(name);
+        setOpenBriefDialog(false);
+    };
+
+    const defaultPrimaryExposures = [
+        {
+            name: "Life Saving Processes",
+            riskExposure: "",
+            protMitigation: "",
+        },
+        {
+            name: "Line of Fire/Release of Energy",
+            riskExposure: "",
+            protMitigation: "",
+        },
+        {
+            name: "Pinch Points",
+            riskExposure: "",
+            protMitigation: "",
+        },
+        {
+            name: "Ascending/Descending",
+            riskExposure: "",
+            protMitigation: "",
+        },
+        {
+            name: "Walking/Path of Travel",
+            riskExposure: "",
+            protMitigation: "",
+        },
+    ];
+
+    // Function will format the weather data retrieved from the
     // weather data service
     const formatWeatherData = (data) => {
-        // Initializing a temporary weather variable to hold 
+        // Initializing a temporary weather variable to hold
         // the formatted data
         let tempWeather = null;
 
@@ -370,7 +483,9 @@ function JobBriefingForm(props) {
     // in state
     const onClickUpdateWeather = async () => {
         // Requesting data from the weather data service
-        const response = await WeatherDataService.forecast(physLoc || `${lat},${lng}`);
+        const response = await WeatherDataService.forecast(
+            physLoc || `${lat},${lng}`
+        );
 
         // Formatting the data to match state
         const tempWeather = await formatWeatherData(response.data);
@@ -392,6 +507,32 @@ function JobBriefingForm(props) {
                 "& .MuiTextField-root": { m: 1 },
             }}
         >
+            <Box
+                sx={{
+                    display: "flex",
+                    flexFlow: "row",
+                    flexWrap: "wrap",
+                    justifyContent: {
+                        xs: "center",
+                        sm: "space-around",
+                        md: "end",
+                    },
+                }}
+            >
+                <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ alignSelf: "center" }}
+                >
+                    {briefingName}
+                </Typography>
+
+                <BriefingSpeedDial
+                    actions={speedDialActions}
+                    handleSpeedDialClick={handleSpeedDialClick}
+                />
+            </Box>
+
             <General
                 onChangeConductedBy={onChangeConductedBy}
                 onChangeEIC={onChangeEIC}
@@ -450,6 +591,10 @@ function JobBriefingForm(props) {
                 autoHideDuration={2000}
                 message={snackbarMessage}
                 onClose={handleSnackbarClose}
+            />
+            <SaveJobBriefing
+                open={openBriefDialog}
+                onClose={onCloseSaveBrief}
             />
         </Box>
     );
