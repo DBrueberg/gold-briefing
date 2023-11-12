@@ -7,6 +7,9 @@
 //  (DAB, 12/31/2022, Added in the Exposures Component)
 //  (DAB, 01/01/2023, Added the Emergency and Acknowledge
 //  Components)
+//  (DAB, 11/09/2023, Added in BriefingSpeedDial Component)
+//  (DAB, 11/12/2023, Added in SaveJobBriefing Component. Also 
+//  updated comments to current)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -27,7 +30,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import BriefingSpeedDial from "../subComponent/BriefingSpeedDial";
 import SaveJobBriefing from "../modal/SaveJobBriefing";
-import { Navigate, redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -108,85 +111,8 @@ function JobBriefingForm(props) {
         uV: "1",
     });
 
-    const speedDialActions = [
-        { icon: <SaveIcon />, name: "Save" },
-        { icon: <UploadFileIcon />, name: "Load" },
-        { icon: <RestartAltIcon />, name: "New" },
-    ];
-
-    const handleSpeedDialClick = (actName) => {
-        switch (actName) {
-            case "Save":
-                saveBriefing();
-                // Let user type a name before saving, name
-                // must have at least one character
-
-                // "Saved" toast pops up on screen if saved
-                break;
-            case "Load":
-                console.log("Load was selected");
-                // Take the user to the Briefings view where
-                // they can choose to load or delete a briefing
-                navigate("/briefings");
-
-                break;
-            case "New":
-                console.log("New was selected");
-                clearForm();
-                break;
-            default:
-                break;
-        }
-    };
-
-    const clearForm = () => {
-        setConductedBy("");
-        setEIC("");
-        setDateTime(moment());
-        setPhysLoc("");
-        setLat("");
-        setLng("");
-        setPlaceOfSafety("");
-        setWeather({});
-        setTaskDetails("");
-        setTaskRules("");
-        setExposures(defaultPrimaryExposures);
-        setNearestHospital("");
-        setCPR("");
-        setAccessPoint("");
-        setCaller("");
-        setEvacRoute("");
-        setMedInfo("");
-        setAcknowledgment([]);
-        setBriefingName("")
-        console.log("Job Briefing Form cleared");
-    };
-
-    const saveBriefing = () => {
-        console.log("Saving Briefing");
-        // If there is already a name the briefing is updated
-        if (briefingName !== "") {
-
-        }
-        // Else the use is prompted to choose a name and the 
-        // briefing is saved
-        else {
-           openSaveBrief(); 
-        }
-        
-        
-    };
-
-    const openSaveBrief = () => {
-        setOpenBriefDialog(true);
-    };
-
-    const onCloseSaveBrief = (name) => {
-        setBriefingName(name);
-        console.log(name);
-        setOpenBriefDialog(false);
-    };
-
+    // The default primary exposures that will allow for
+    // resetting of the primary exposures field
     const defaultPrimaryExposures = [
         {
             name: "Life Saving Processes",
@@ -214,6 +140,39 @@ function JobBriefingForm(props) {
             protMitigation: "",
         },
     ];
+
+    // The available actions for the displayed speed dial. Tied
+    // to handleSpeedDialClick due to name variable
+    const speedDialActions = [
+        { icon: <SaveIcon />, name: "Save" },
+        { icon: <UploadFileIcon />, name: "Load" },
+        { icon: <RestartAltIcon />, name: "New" },
+    ];
+
+    // The clearForm method will wipe out all the data currently
+    // held in the form
+    const clearForm = () => {
+        setConductedBy("");
+        setEIC("");
+        setDateTime(moment());
+        setPhysLoc("");
+        setLat("");
+        setLng("");
+        setPlaceOfSafety("");
+        setWeather({});
+        setTaskDetails("");
+        setTaskRules("");
+        setExposures(defaultPrimaryExposures);
+        setNearestHospital("");
+        setCPR("");
+        setAccessPoint("");
+        setCaller("");
+        setEvacRoute("");
+        setMedInfo("");
+        setAcknowledgment([]);
+        setBriefingName("");
+        console.log("Job Briefing Form cleared");
+    };
 
     // Function will format the weather data retrieved from the
     // weather data service
@@ -297,6 +256,33 @@ function JobBriefingForm(props) {
         // nulling out the current snackbar message
         setOpenSnackbar(false);
         setSnackbarMessage(null);
+    };
+
+    // This function allows the handling of the selected
+    // speed dial action
+    const handleSpeedDialClick = (actName) => {
+        switch (actName) {
+            case "Save":
+                saveBriefing();
+                // Let user type a name before saving, name
+                // must have at least one character
+
+                // "Saved" toast pops up on screen if saved
+                break;
+            case "Load":
+                console.log("Load was selected");
+                // Take the user to the Briefings view where
+                // they can choose to load or delete a briefing
+                navigate("/briefings");
+
+                break;
+            case "New":
+                console.log("New was selected");
+                clearForm();
+                break;
+            default:
+                break;
+        }
     };
 
     // Function that will handle changes to the accessPoint field
@@ -497,10 +483,35 @@ function JobBriefingForm(props) {
         setWeather(tempWeather);
     };
 
+    // This function closes the SaveJobBriefing dialog
+    const onCloseSaveBrief = (name) => {
+        setBriefingName(name);
+        setOpenBriefDialog(false);
+    };
+
     // Function that will handle actions for a location button click
     const onLocFindClick = () => {
         // Calling the location function to get the users geolocation
         location();
+    };
+
+    // This function will open the dialog that allows the user
+    // to name and save their current briefing (SaveJobBriefing.js)
+    const openSaveBrief = () => {
+        setOpenBriefDialog(true);
+    };
+
+    // This function will allow the user to save the current
+    // briefing and name it
+    const saveBriefing = () => {
+        // If there is already a name the briefing is updated
+        if (briefingName) {
+        }
+        // Else the use is prompted to choose a name and then
+        // briefing is saved
+        else {
+            openSaveBrief();
+        }
     };
 
     return (

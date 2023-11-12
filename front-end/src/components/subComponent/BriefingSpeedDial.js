@@ -1,17 +1,18 @@
 // Initially Created by: Devin Brueberg
 // 2022 Side Project
 // Gold-Briefing - BriefingSpeedDial.js
-// October 31, 2023
+// November 9, 2023
 // Last Edited (Initials, Date, Edits):
 
 // Using React library in order to build components
 // for the app and importing needed components
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 /**
- * The GenerateBriefing Component will allow the user to create or
- * close out a briefing
+ * The BriefingSpeedDial Component will show a speed dial that
+ * allows the user to select a number of actions from a light
+ * but user friendly component.
  *
  * @returns
  */
@@ -24,7 +25,8 @@ function BriefingSpeedDial(props) {
     return (
         <Box>
             <SpeedDial
-                ariaLabel="SpeedDial basic example"
+                role="navigation"
+                ariaLabel="Secondary Navigation"
                 sx={{
                     "& .MuiFab-primary": { maxWidth: 35, maxHeight: 35 },
                     mx: ".5rem",

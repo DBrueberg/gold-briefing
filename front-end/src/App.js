@@ -7,6 +7,7 @@
 //  (DAB, 12/27/2022, Added in ThemeProvider and LocalizationProvider)
 //  (DAB, 11/02/2023, Added in Routes for BrowserRouter)
 //  (DAB, 11/07/2023, Added in createAccount path)
+//  (DAB, 11/09/2023, Added in Briefings path)
 
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";

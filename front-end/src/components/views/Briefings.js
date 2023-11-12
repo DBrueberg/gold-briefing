@@ -1,7 +1,7 @@
 // Initially Created by: Devin Brueberg
 // 2022 Side Project
-// Gold-Briefing - Login.js
-// November 2, 2023
+// Gold-Briefing - Briefings.js
+// November 12, 2023
 // Last Edited (Initials, Date, Edits):
 
 // Using React library in order to build components
@@ -11,13 +11,18 @@ import React from "react";
 import BriefingList from "../subComponent/BriefingList";
 
 /**
- * The Login View will display a Login page where the user 
- * can either login or link to the CreateAccount page.
+ * The Briefings View will display a list of saved briefings that
+ * allow the user to perform load or delete.
  *
  * @param {*} props
  * @returns
  */
 function Briefings(props) {
+    // Destructuring the needed methods from props
+    const {} = props;
+    // Destructuring the needed variable from props
+    const {} = props;
+
     return (
         <Box>
             <Box
@@ -34,9 +39,10 @@ function Briefings(props) {
                     src="bnsflogo.gif"
                     alt="Briefing Logo"
                 />
-                <Typography variant="h3">Briefings</Typography>
+                <Typography variant="h3" component="h2">
+                    Briefings
+                </Typography>
             </Box>
-            Hello
             <BriefingList />
         </Box>
     );
