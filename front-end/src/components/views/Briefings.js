@@ -1,25 +1,28 @@
 // Initially Created by: Devin Brueberg
 // 2022 Side Project
-// Gold-Briefing - JobBriefing.js
-// December 23, 2022
+// Gold-Briefing - Briefings.js
+// November 12, 2023
 // Last Edited (Initials, Date, Edits):
-//  (DAB, 12/28/2022, Adjusted aesthetics of heading and added a logo)
 
 // Using React library in order to build components
 // for the app and importing needed components
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import JobBriefingForm from "../form/JobBriefingForm";
-import Debrief from "../modal/Debrief";
+import BriefingList from "../subComponent/BriefingList";
 
 /**
- * The JobBriefing View will display a completed job briefing that will need
- * to be filled out by the work group
+ * The Briefings View will display a list of saved briefings that
+ * allow the user to perform load or delete.
  *
  * @param {*} props
  * @returns
  */
-function JobBriefing(props) {
+function Briefings(props) {
+    // Destructuring the needed methods from props
+    const {} = props;
+    // Destructuring the needed variable from props
+    const {} = props;
+
     return (
         <Box>
             <Box
@@ -36,14 +39,14 @@ function JobBriefing(props) {
                     src="bnsflogo.gif"
                     alt="Briefing Logo"
                 />
-                <Typography variant="h3" component="h1">
-                    Job Safety Briefing
+                <Typography variant="h3" component="h2">
+                    Briefings
                 </Typography>
             </Box>
-            <JobBriefingForm />
+            <BriefingList />
         </Box>
     );
 }
 
 // Exporting the component
-export default JobBriefing;
+export default Briefings;
