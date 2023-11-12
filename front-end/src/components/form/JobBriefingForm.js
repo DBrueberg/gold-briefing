@@ -27,6 +27,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import BriefingSpeedDial from "../subComponent/BriefingSpeedDial";
 import SaveJobBriefing from "../modal/SaveJobBriefing";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -38,6 +39,7 @@ import SaveJobBriefing from "../modal/SaveJobBriefing";
 function JobBriefingForm(props) {
     // Loading in the sample data, this is only temporary
     const { user } = sampleData;
+    const navigate = useNavigate();
 
     // Defining default settings for the local state
     const [accessPoint, setAccessPoint] = useState("");
@@ -125,6 +127,7 @@ function JobBriefingForm(props) {
                 console.log("Load was selected");
                 // Take the user to the Briefings view where
                 // they can choose to load or delete a briefing
+                navigate("/briefings");
 
                 break;
             case "New":

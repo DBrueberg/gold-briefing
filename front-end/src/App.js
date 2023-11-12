@@ -18,6 +18,7 @@ import Whoops404 from "./components/views/Whoops404";
 import { Box, CssBaseline } from "@mui/material";
 import Login from "./components/views/Login";
 import CreateAccount from "./components/views/CreateAccount";
+import Briefings from "./components/views/Briefings";
 
 // MUI Settings to use a dark style theme
 const darkTheme = createTheme({
@@ -49,6 +50,7 @@ function App() {
                         <Route exact path="/" element={<JobBriefing />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/createAccount" element={<CreateAccount />} />
+                        <Route path="/briefings" element={<Briefings />} />
                         <Route path="*" element={<Whoops404 />} />
                     </Routes>
                 </Box>
