@@ -8,7 +8,7 @@ import { reduxAction as C } from "../constants";
 
 /**
  * React Redux action will add weather data to state
- * 
+ *
  * @param {
  * alerts,
  * currentCondition,
@@ -20,8 +20,8 @@ import { reduxAction as C } from "../constants";
  * gust,
  * weatherLocation,
  * windDirection,
- * uV,} param0 
- * @returns 
+ * uV,} param0
+ * @returns
  */
 export const addWeather = ({
     alerts,
@@ -52,21 +52,21 @@ export const addWeather = ({
 
 /**
  * React Redux action will update weather data to state
- * 
+ *
  * @param {
-* alerts,
-* currentCondition,
-* rain,
-* snow,
-* temp,
-* realFeel,
-* wind,
-* gust,
-* weatherLocation,
-* windDirection,
-* uV,} param0 
-* @returns 
-*/
+ * alerts,
+ * currentCondition,
+ * rain,
+ * snow,
+ * temp,
+ * realFeel,
+ * wind,
+ * gust,
+ * weatherLocation,
+ * windDirection,
+ * uV,} param0
+ * @returns
+ */
 export const updateWeather = ({
     alerts,
     currentCondition,
@@ -96,7 +96,7 @@ export const updateWeather = ({
 
 /**
  * React Redux action will delete weather from state
- * @returns 
+ * @returns
  */
 export const deleteWeather = () => ({
     type: C.DELETE_WEATHER,

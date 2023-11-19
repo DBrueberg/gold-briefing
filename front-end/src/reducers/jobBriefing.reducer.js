@@ -23,9 +23,11 @@ export const jobBriefing = (state = {}, action) => {
                 placeOfSafety: action.placeOfSafety,
                 taskDetails: action.taskDetails,
                 taskRules: action.taskRules,
-                primaryExposures: primaryExposure([], action),
-                acknowledgements: acknowledgement([], action),
+                primaryExposures: primaryExposures([], action),
+                acknowledgements: acknowledgements([], action),
             };
+        case C.ADD_ACKNOWLEDGEMENT:
+            return [...state, acknowledgements(state.acknowledgements, action)];
         case C.UPDATE_JOB_BRIEFING:
             return {
                 eIC: action.eIC,
@@ -33,13 +35,15 @@ export const jobBriefing = (state = {}, action) => {
                 placeOfSafety: action.placeOfSafety,
                 taskDetails: action.taskDetails,
                 taskRules: action.taskRules,
-                primaryExposures: primaryExposure([], action),
-                acknowledgements: acknowledgement([], action),
+                primaryExposures: primaryExposures([], action),
+                acknowledgements: acknowledgements([], action),
             };
         case C.DELETE_JOB_BRIEFING:
             return {};
+        case C.DELETE_ALL_ACKNOWLEDGEMENTS:
+            return [...state, acknowledgements([], action)];
         default:
-            return {};
+            return state;
     }
 };
 
@@ -54,13 +58,17 @@ export const jobBriefing = (state = {}, action) => {
 export const primaryExposures = (state = [], action) => {
     switch (action.type) {
         case C.ADD_JOB_BRIEFING:
-            return [...state, primaryExposure({}, action)];
+            return action.primaryExposures.map((exposure) => {
+                return primaryExposure(exposure, action);
+            });
         case C.UPDATE_JOB_BRIEFING:
-            return [...state, primaryExposure({}, action)];
+            return action.primaryExposures.map((exposure) => {
+                return primaryExposure(exposure, action);
+            });
         case C.DELETE_JOB_BRIEFING:
             return [];
         default:
-            return [];
+            return state;
     }
 };
 
@@ -76,20 +84,20 @@ export const primaryExposure = (state = {}, action) => {
     switch (action.type) {
         case C.ADD_JOB_BRIEFING:
             return {
-                name: action.name,
-                riskExposure: action.riskExposure,
-                protMitigation: action.protMitigation,
+                name: state.name,
+                riskExposure: state.riskExposure,
+                protMitigation: state.protMitigation,
             };
         case C.UPDATE_JOB_BRIEFING:
             return {
-                name: action.name,
-                riskExposure: action.riskExposure,
-                protMitigation: action.protMitigation,
+                name: state.name,
+                riskExposure: state.riskExposure,
+                protMitigation: state.protMitigation,
             };
         case C.DELETE_JOB_BRIEFING:
             return {};
         default:
-            return {};
+            return state;
     }
 };
 
@@ -104,13 +112,21 @@ export const primaryExposure = (state = {}, action) => {
 export const acknowledgements = (state = [], action) => {
     switch (action.type) {
         case C.ADD_JOB_BRIEFING:
+            return action.acknowledgements.map((current) => {
+                return acknowledgement(current, action);
+            });
+        case C.ADD_ACKNOWLEDGEMENT:
             return [...state, acknowledgement({}, action)];
         case C.UPDATE_JOB_BRIEFING:
-            return [...state, acknowledgement({}, action)];
+            return action.acknowledgements.map((current) => {
+                return acknowledgement(current, action);
+            });
         case C.DELETE_JOB_BRIEFING:
             return [];
-        default:
+        case C.DELETE_ALL_ACKNOWLEDGEMENTS:
             return [];
+        default:
+            return state;
     }
 };
 
@@ -126,17 +142,22 @@ export const acknowledgement = (state = {}, action) => {
     switch (action.type) {
         case C.ADD_JOB_BRIEFING:
             return {
+                employeeName: state.employeeName,
+                employeePNum: state.employeePNum,
+            };
+        case C.ADD_ACKNOWLEDGEMENT:
+            return {
                 employeeName: action.employeeName,
                 employeePNum: action.employeePNum,
             };
         case C.UPDATE_JOB_BRIEFING:
             return {
-                employeeName: action.employeeName,
-                employeePNum: action.employeePNum,
+                employeeName: state.employeeName,
+                employeePNum: state.employeePNum,
             };
         case C.DELETE_JOB_BRIEFING:
             return {};
         default:
-            return {};
+            return state;
     }
 };

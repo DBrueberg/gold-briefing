@@ -35,6 +35,6 @@ export const general = (state = {}, action) => {
         case C.DELETE_GENERAL:
             return {};
         default:
-            return {};
+            return state;
     }
 };

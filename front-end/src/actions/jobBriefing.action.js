@@ -8,15 +8,15 @@ import { reduxAction as C } from "../constants";
 
 /**
  * React Redux action will add a job briefing to state
- * 
+ *
  * @param {
- * eIC, 
- * conductedBy, 
- * placeOfSafety, 
- * taskDetails, 
- * taskRules, 
- * primaryExposures, 
- * acknowledgement
+ * eIC,
+ * conductedBy,
+ * placeOfSafety,
+ * taskDetails,
+ * taskRules,
+ * primaryExposures,
+ * acknowledgements
  * } param0
  * @returns
  */
@@ -27,7 +27,7 @@ export const addJobBriefing = ({
     taskDetails,
     taskRules,
     primaryExposures,
-    acknowledgement,
+    acknowledgements,
 }) => ({
     type: C.ADD_JOB_BRIEFING,
     eIC: eIC,
@@ -36,23 +36,23 @@ export const addJobBriefing = ({
     taskDetails,
     taskRules,
     primaryExposures,
-    acknowledgement,
+    acknowledgements,
 });
 
 /**
  * React Redux action will update a job briefing to state
- * 
+ *
  * @param {
-* eIC, 
-* conductedBy, 
-* placeOfSafety, 
-* taskDetails, 
-* taskRules, 
-* primaryExposures, 
-* acknowledgement
-* } param0
-* @returns
-*/
+ * eIC,
+ * conductedBy,
+ * placeOfSafety,
+ * taskDetails,
+ * taskRules,
+ * primaryExposures,
+ * acknowledgements
+ * } param0
+ * @returns
+ */
 export const updateJobBriefing = ({
     eIC,
     conductedBy,
@@ -60,7 +60,7 @@ export const updateJobBriefing = ({
     taskDetails,
     taskRules,
     primaryExposures,
-    acknowledgement,
+    acknowledgements,
 }) => ({
     type: C.UPDATE_JOB_BRIEFING,
     eIC,
@@ -69,15 +69,36 @@ export const updateJobBriefing = ({
     taskDetails,
     taskRules,
     primaryExposures,
-    acknowledgement,
+    acknowledgements,
 });
 
 /**
  * React Redux action will delete a job briefing to state
- * 
+ *
  * @param {} param0
-* @returns
-*/
+ * @returns
+ */
 export const deleteJobBriefing = () => ({
     type: C.DELETE_JOB_BRIEFING,
+});
+
+/**
+ * React Redux action will add an acknowledgement to the list
+ * 
+ * @param {employeeName, employeePNum} param0 
+ * @returns 
+ */
+export const addAcknowledgement = ({ employeeName, employeePNum }) => ({
+    type: C.ADD_ACKNOWLEDGEMENT,
+    employeeName,
+    employeePNum,
+});
+
+/**
+ * React Redux action will clear all entries on the acknowledgment list
+ * 
+ * @returns 
+ */
+export const deleteAllAcknowledgement = () => ({
+    type: C.DELETE_ALL_ACKNOWLEDGEMENT,
 });

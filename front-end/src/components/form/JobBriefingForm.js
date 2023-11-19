@@ -8,12 +8,13 @@
 //  (DAB, 01/01/2023, Added the Emergency and Acknowledge
 //  Components)
 //  (DAB, 11/09/2023, Added in BriefingSpeedDial Component)
-//  (DAB, 11/12/2023, Added in SaveJobBriefing Component. Also 
+//  (DAB, 11/12/2023, Added in SaveJobBriefing Component. Also
 //  updated comments to current)
 
 // Using React library in order to build components
 // for the app and importing needed components
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import General from "../subComponent/General";
 import { Box, Snackbar, Typography } from "@mui/material";
 import WeatherDataService from "../../services/weather.service";
@@ -31,6 +32,12 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import BriefingSpeedDial from "../subComponent/BriefingSpeedDial";
 import SaveJobBriefing from "../modal/SaveJobBriefing";
 import { useNavigate } from "react-router-dom";
+import { addUser } from "../../actions/user.action";
+import { addWeather } from "../../actions/weather.action";
+import { addJobBriefing } from "../../actions/jobBriefing.action";
+import { addEmergencyPlan } from "../../actions/emergencyPlan.action";
+import { addGeneral } from "../../actions/general.action";
+import { addBriefingList } from "../../actions/briefingList.action";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -40,8 +47,19 @@ import { useNavigate } from "react-router-dom";
  * @returns
  */
 function JobBriefingForm(props) {
+    //***********USER AND WEATHER LOCAL STATE HAS BEEN DISABLED TEMP TO ALLOW FOR REDUX IMPLEMENTATION */
     // Loading in the sample data, this is only temporary
-    const { user } = sampleData;
+    const { user, general, jobBriefing, weather, emergencyPlan, briefingList } =
+        props;
+    const {
+        onAddUser,
+        onAddEmergencyPlan,
+        onAddGeneral,
+        onAddJobBriefing,
+        onAddWeather,
+        onAddBriefingList,
+    } = props;
+    // const { user } = sampleData;
     const navigate = useNavigate();
 
     // Defining default settings for the local state
@@ -50,11 +68,11 @@ function JobBriefingForm(props) {
     const [briefingName, setBriefingName] = useState("");
     const [caller, setCaller] = useState("");
     const [conductedBy, setConductedBy] = useState(
-        `${user.firstName} ${user.lastName}` || ""
+        `${user.fName} ${user.lName}` || ""
     );
     const [cPR, setCPR] = useState("");
     const [dateTime, setDateTime] = useState(moment());
-    const [eIC, setEIC] = useState(`${user.firstName} ${user.lastName}` || "");
+    const [eIC, setEIC] = useState(`${user.fName} ${user.lName}` || "");
     const [evacRoute, setEvacRoute] = useState("");
     const [lat, setLat] = useState("");
     const [lng, setLng] = useState("");
@@ -94,22 +112,22 @@ function JobBriefingForm(props) {
             protMitigation: "",
         },
     ]);
-    const [weather, setWeather] = useState({
-        alerts: [
-            { event: "rainy", description: "its gonna rain" },
-            { event: "hot", description: "It's gonna be hot" },
-        ],
-        currentCondition: "Snowing",
-        rain: "0",
-        snow: "0",
-        temp: "0",
-        realFeel: "-10",
-        wind: "10",
-        gust: "15",
-        weatherLocation: "Minneapolis",
-        windDirection: "NWE",
-        uV: "1",
-    });
+    // const [weather, setWeather] = useState({
+    //     alerts: [
+    //         { event: "rainy", description: "its gonna rain" },
+    //         { event: "hot", description: "It's gonna be hot" },
+    //     ],
+    //     currentCondition: "Snowing",
+    //     rain: "0",
+    //     snow: "0",
+    //     temp: "0",
+    //     realFeel: "-10",
+    //     wind: "10",
+    //     gust: "15",
+    //     weatherLocation: "Minneapolis",
+    //     windDirection: "NWE",
+    //     uV: "1",
+    // });
 
     // The default primary exposures that will allow for
     // resetting of the primary exposures field
@@ -149,6 +167,15 @@ function JobBriefingForm(props) {
         { icon: <RestartAltIcon />, name: "New" },
     ];
 
+    // useEffect(() => {
+    //     sampleData.briefingList.map(briefing => onAddBriefingList(briefing))
+    //     onAddEmergencyPlan(sampleData.emergencyPlan);
+    //     onAddGeneral(sampleData.general);
+    //     onAddJobBriefing(sampleData.jobBriefing);   
+    //     onAddWeather(sampleData.weather);
+    //     onAddUser(sampleData.user);
+    // }, []);
+
     // The clearForm method will wipe out all the data currently
     // held in the form
     const clearForm = () => {
@@ -159,7 +186,7 @@ function JobBriefingForm(props) {
         setLat("");
         setLng("");
         setPlaceOfSafety("");
-        setWeather({});
+        // setWeather({});
         setTaskDetails("");
         setTaskRules("");
         setExposures(defaultPrimaryExposures);
@@ -479,8 +506,11 @@ function JobBriefingForm(props) {
         // Formatting the data to match state
         const tempWeather = await formatWeatherData(response.data);
 
-        // Setting the weather data to state
-        setWeather(tempWeather);
+        // Setting the weather data to local state
+        // setWeather(tempWeather);
+
+        // Dispatching to redux store
+        onAddWeather(tempWeather);
     };
 
     // This function closes the SaveJobBriefing dialog
@@ -512,6 +542,17 @@ function JobBriefingForm(props) {
         else {
             openSaveBrief();
         }
+        // testReducers();
+    };
+
+    //************** STATE TEST METHOD ********************/
+    //***************ADDED IN saveBriefing() **************/
+    const testReducers = () => {
+        onAddEmergencyPlan(sampleData.emergencyPlan);
+        onAddGeneral(sampleData.general);
+        onAddJobBriefing(sampleData.jobBriefing);
+        onAddUser(sampleData.user);
+        onAddWeather(sampleData.weather);
     };
 
     return (
@@ -521,6 +562,7 @@ function JobBriefingForm(props) {
                 "& .MuiTextField-root": { m: 1 },
             }}
         >
+            {console.log("user object ", user)}
             <Box
                 sx={{
                     display: "flex",
@@ -613,6 +655,95 @@ function JobBriefingForm(props) {
         </Box>
     );
 }
+const mapStateToProps = (state) => ({
+    user: { ...state.user },
+    general: { ...state.general },
+    JobBriefing: { ...state.jobBriefing },
+    weather: { ...state.weather },
+    emergencyPlan: { ...state.emergencyPlan },
+    briefingList: [...state.briefingList],
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    onAddUser(userId, fName, lName, pNumber, email) {
+        dispatch(addUser(userId, fName, lName, pNumber, email));
+    },
+    onAddGeneral(date, time, physLoc, lat, lng) {
+        dispatch(addGeneral(date, time, physLoc, lat, lng));
+    },
+    onAddJobBriefing(
+        eIc,
+        conductedBy,
+        placeOfSafety,
+        taskDetails,
+        taskRules,
+        primaryExposures,
+        acknowledgements
+    ) {
+        dispatch(
+            addJobBriefing(
+                eIc,
+                conductedBy,
+                placeOfSafety,
+                taskDetails,
+                taskRules,
+                primaryExposures,
+                acknowledgements
+            )
+        );
+    },
+    onAddEmergencyPlan(
+        nearestHospital,
+        accessPoint,
+        evacRoute,
+        caller,
+        cPR,
+        medInfo
+    ) {
+        dispatch(
+            addEmergencyPlan(
+                nearestHospital,
+                accessPoint,
+                evacRoute,
+                caller,
+                cPR,
+                medInfo
+            )
+        );
+    },
+    onAddWeather(
+        alerts,
+        currentCondition,
+        rain,
+        snow,
+        temp,
+        realFeel,
+        wind,
+        gust,
+        weatherLocation,
+        windDirection,
+        uV
+    ) {
+        dispatch(
+            addWeather(
+                alerts,
+                currentCondition,
+                rain,
+                snow,
+                temp,
+                realFeel,
+                wind,
+                gust,
+                weatherLocation,
+                windDirection,
+                uV
+            )
+        );
+    },
+    onAddBriefingList(briefingId, briefingName) {
+        dispatch(addBriefingList(briefingId, briefingName));
+    },
+});
 
 // Exporting the component
-export default JobBriefingForm;
+export default connect(mapStateToProps, mapDispatchToProps)(JobBriefingForm);

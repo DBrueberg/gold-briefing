@@ -1,9 +1,9 @@
 {
     "user": {
         "userId": 1,
-        "firstName": "Michael",
-        "lastName": "Heyer",
-        "phoneNumber": "(222)222-2222",
+        "fName": "Michael",
+        "lName": "Heyer",
+        "pNum": "(222)222-2222",
         "email": "michael.heyer@bnsf.com",
         "permission": 1,
         "isLoggedIn": true

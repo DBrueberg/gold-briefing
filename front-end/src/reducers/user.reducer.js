@@ -16,12 +16,12 @@ import { reduxAction as C } from "../constants";
  */
 export const user = (state = {}, action) => {
     switch (action.type) {
-        case C.ADD_USER:
+        case C.ADD_USER: 
             return {
                 userId: action.userId,
                 fName: action.fName,
                 lName: action.lName,
-                pNumber: action.pNumber,
+                pNum: action.pNum,
                 email: action.email,
                 permission: action.permission,
                 isLoggedIn: action.isLoggedIn,
@@ -31,12 +31,12 @@ export const user = (state = {}, action) => {
                 ...state,
                 fName: action.fName,
                 lName: action.lName,
-                pNumber: action.pNumber,
+                pNum: action.pNum,
                 email: action.email,
             };
         case C.DELETE_USER:
             return {};
         default:
-            return {};
+            return state;
     }
 };

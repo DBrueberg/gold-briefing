@@ -10,15 +10,15 @@ import { reduxAction as C } from "../constants";
  * React Redux action will add a user to state with a default 
  * permission 1 and log them in
  * 
- * @param { userId, fName, lName, pNumber, email } param0 
+ * @param { userId, fName, lName, pNum, email } param0 
  * @returns 
  */
-export const addUser = ({ userId, fName, lName, pNumber, email }) => ({
+export const addUser = ({ userId, fName, lName, pNum, email }) => ({
     type: C.ADD_USER,
-    id: userId,
+    userId: userId,
     fName: fName,
     lName: lName,
-    pNumber: pNumber,
+    pNum: pNum,
     email: email,
     permission: 1,
     isLoggedIn: 1,

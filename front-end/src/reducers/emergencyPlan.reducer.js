@@ -37,6 +37,6 @@ export const emergencyPlan = (state = {}, action) => {
         case C.DELETE_EMERGENCY_PLAN:
             return {};
         default:
-            return {};
+            return state;
     }
 };

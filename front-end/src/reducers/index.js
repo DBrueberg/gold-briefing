@@ -17,11 +17,11 @@ import { weather } from "./weather.reducer";
 
 // Combining all reducers
 const reducers = combineReducers({
+    user,
     briefingList,
     emergencyPlan,
     general,
     jobBriefing,
-    user,
     weather,
 });
 

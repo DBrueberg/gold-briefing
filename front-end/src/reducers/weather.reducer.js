@@ -47,7 +47,7 @@ export const weather = (state = {}, action) => {
         case C.DELETE_WEATHER:
             return {};
         default:
-            return {};
+            return state;
     }
 };
 
@@ -63,12 +63,12 @@ export const weather = (state = {}, action) => {
 export const alerts = (state = [], action) => {
     switch (action.type) {
         case C.ADD_WEATHER:
-            return action.alerts.map((alert) => {
-                return alert(alert, action);
+            return action.alerts.map((current) => {
+                return alert(current, action);
             });
         case C.UPDATE_WEATHER:
-            return action.alerts.map((alert) => {
-                return alert(alert, action);
+            return action.alerts.map((current) => {
+                return alert(current, action);
             });
         default:
             return [];
