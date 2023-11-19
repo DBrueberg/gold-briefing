@@ -1,8 +1,8 @@
 {
-    "user": [],
-    "general": [],
-    "jobBriefing": [],
-    "weather": [],
-    "emergencyPlan": [],
+    "user": {},
+    "general": {},
+    "jobBriefing": {},
+    "weather": {},
+    "emergencyPlan": {},
     "briefingList": []
 }

@@ -1,9 +1,9 @@
 {
     "user": {
-        "id": 1,
-        "firstName": "Michael",
-        "lastName": "Heyer",
-        "phoneNumber": "(222)222-2222",
+        "userId": 1,
+        "fName": "Michael",
+        "lName": "Heyer",
+        "pNum": "(222)222-2222",
         "email": "michael.heyer@bnsf.com",
         "permission": 1,
         "isLoggedIn": true
@@ -11,26 +11,26 @@
     "briefingList": [
         {
             "briefingName": "Northtown",
-            "id": 0
+            "briefingId": 0
         },
         {
             "briefingName": "300s",
-            "id": 1
+            "briefingId": 1
         },
         {
             "briefingName": "Grove Yard South",
-            "id": 2
+            "briefingId": 2
         }
     ],
     "general": {
         "date": "12/12/2022",
         "time": "0700",
-        "physLocation": "3138 3rd Ave NE, Minneapolis, MN 55418",
+        "physLoc": "3138 3rd Ave NE, Minneapolis, MN 55418",
         "lat": "testLat",
-        "long": "testLong"
+        "lng": "testLong"
     },
     "jobBriefing": {
-        "EIC": "Mike Heyer",
+        "eIC": "Mike Heyer",
         "conductedBy": "Devin Brueberg",
         "placeOfSafety": "off track",
         "taskDetails": "Inspecting North Town yards tracks",
@@ -62,14 +62,14 @@
                 "protMitigation": "Watch footing at all times. Cribbed out switches can't be seen under snow"
             }
         ],
-        "acknowledgement": [
+        "acknowledgements": [
             {
                 "employeeName": "Mike Heyer",
-                "employeePhoneNumber": "(222)222-2222"
+                "employeePNum": "(222)222-2222"
             },
             {
                 "employeeName": "Devin Brueberg",
-                "employeePhoneNumber": "(111)111-1111"
+                "employeePNum": "(111)111-1111"
             }
         ]
     },
@@ -94,7 +94,7 @@
         "accessPoint": "central ave and 694 behind Home Depot",
         "evacRoute": "clear tracks and head to Home Depot",
         "caller": "Devin Brueberg",
-        "CPR": "Mike Heyer",
+        "cPR": "Mike Heyer",
         "medInfo": "Mike is allergic to bees"
     }
 }

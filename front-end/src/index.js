@@ -11,6 +11,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import storeFactory from "./redux/store";
 import stateData from "./redux/initialState.json";
+import testState from './redux/sampleData.json';
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import MainTemplate from "./components/template/MainTemplate";
@@ -19,10 +20,13 @@ import MainTemplate from "./components/template/MainTemplate";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 // Using the storeFactory to create a store with default
 // stateData
-const store = storeFactory(stateData);
+const store = storeFactory(testState);
+
+// const store = storeFactory(testState);
 
 root.render(
     <Provider store={store}>
+        {console.log(store.getState())}
         <BrowserRouter>
             <MainTemplate />
         </BrowserRouter>
