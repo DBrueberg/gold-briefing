@@ -30,6 +30,7 @@
         "lng": "testLong"
     },
     "jobBriefing": {
+        "briefingName": "Northtown",
         "eIC": "Mike Heyer",
         "conductedBy": "Devin Brueberg",
         "placeOfSafety": "off track",

@@ -33,10 +33,10 @@ import BriefingSpeedDial from "../subComponent/BriefingSpeedDial";
 import SaveJobBriefing from "../modal/SaveJobBriefing";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../../actions/user.action";
-import { addWeather } from "../../actions/weather.action";
-import { addJobBriefing } from "../../actions/jobBriefing.action";
-import { addEmergencyPlan } from "../../actions/emergencyPlan.action";
-import { addGeneral } from "../../actions/general.action";
+import { addWeather, deleteWeather } from "../../actions/weather.action";
+import { addJobBriefing, deleteJobBriefing } from "../../actions/jobBriefing.action";
+import { addEmergencyPlan, deleteEmergencyPlan } from "../../actions/emergencyPlan.action";
+import { addGeneral, deleteGeneral } from "../../actions/general.action";
 import { addBriefingList } from "../../actions/briefingList.action";
 
 /**
@@ -57,77 +57,91 @@ function JobBriefingForm(props) {
         onAddGeneral,
         onAddJobBriefing,
         onAddWeather,
+        onDeleteWeather,
+        onDeleteGeneral,
+        onDeleteEmergencyPlan,
+        onDeleteJobBriefing,
         onAddBriefingList,
     } = props;
     // const { user } = sampleData;
     const navigate = useNavigate();
 
     // Defining default settings for the local state
-    const [accessPoint, setAccessPoint] = useState("");
-    const [acknowledgement, setAcknowledgment] = useState([]);
-    const [briefingName, setBriefingName] = useState("");
-    const [caller, setCaller] = useState("");
-    const [conductedBy, setConductedBy] = useState(
-        `${user.fName} ${user.lName}` || ""
+    const [accessPoint, setAccessPoint] = useState(
+        emergencyPlan.accessPoint ? emergencyPlan.accessPoint : ""
     );
-    const [cPR, setCPR] = useState("");
+    const [acknowledgement, setAcknowledgment] = useState([]);
+    const [briefingName, setBriefingName] = useState(
+        jobBriefing.briefingName ? jobBriefing.briefingName : ""
+    );
+    const [caller, setCaller] = useState(
+        emergencyPlan.caller ? emergencyPlan.caller : ""
+    );
+    const [conductedBy, setConductedBy] = useState(
+        jobBriefing.conductedBy
+            ? jobBriefing.conductedBy
+            : `${user.fName} ${user.lName}` || ""
+    );
+    const [cPR, setCPR] = useState(emergencyPlan.cPR ? emergencyPlan.cPR : "");
     const [dateTime, setDateTime] = useState(moment());
-    const [eIC, setEIC] = useState(`${user.fName} ${user.lName}` || "");
-    const [evacRoute, setEvacRoute] = useState("");
-    const [lat, setLat] = useState("");
-    const [lng, setLng] = useState("");
-    const [medInfo, setMedInfo] = useState("");
-    const [nearestHospital, setNearestHospital] = useState("");
+    const [eIC, setEIC] = useState(
+        jobBriefing.eIC ? jobBriefing.eIC : `${user.fName} ${user.lName}` || ""
+    );
+    const [evacRoute, setEvacRoute] = useState(
+        emergencyPlan.evacRoute ? emergencyPlan.evacRoute : ""
+    );
+    const [lat, setLat] = useState(general.lat ? general.lat : "");
+    const [lng, setLng] = useState(general.lng ? general.lng : "");
+    const [medInfo, setMedInfo] = useState(
+        emergencyPlan.medInfo ? emergencyPlan.medInfo : ""
+    );
+    const [nearestHospital, setNearestHospital] = useState(
+        emergencyPlan.nearestHospital ? emergencyPlan.nearestHospital : ""
+    );
     const [openBriefDialog, setOpenBriefDialog] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [physLoc, setPhysLoc] = useState("");
-    const [placeOfSafety, setPlaceOfSafety] = useState("");
+    const [physLoc, setPhysLoc] = useState(general.physLoc ? general.physLoc : "");
+    const [placeOfSafety, setPlaceOfSafety] = useState(
+        jobBriefing.placeOfSafety ? jobBriefing.placeOfSafety : ""
+    );
     const [snackbarMessage, setSnackbarMessage] = useState(null);
-    const [taskDetails, setTaskDetails] = useState("");
-    const [taskRules, setTaskRules] = useState("");
-    const [primaryExposures, setExposures] = useState([
-        {
-            name: "Life Saving Processes",
-            riskExposure: "",
-            protMitigation: "",
-        },
-        {
-            name: "Line of Fire/Release of Energy",
-            riskExposure: "",
-            protMitigation: "",
-        },
-        {
-            name: "Pinch Points",
-            riskExposure: "",
-            protMitigation: "",
-        },
-        {
-            name: "Ascending/Descending",
-            riskExposure: "",
-            protMitigation: "",
-        },
-        {
-            name: "Walking/Path of Travel",
-            riskExposure: "",
-            protMitigation: "",
-        },
-    ]);
-    // const [weather, setWeather] = useState({
-    //     alerts: [
-    //         { event: "rainy", description: "its gonna rain" },
-    //         { event: "hot", description: "It's gonna be hot" },
-    //     ],
-    //     currentCondition: "Snowing",
-    //     rain: "0",
-    //     snow: "0",
-    //     temp: "0",
-    //     realFeel: "-10",
-    //     wind: "10",
-    //     gust: "15",
-    //     weatherLocation: "Minneapolis",
-    //     windDirection: "NWE",
-    //     uV: "1",
-    // });
+    const [taskDetails, setTaskDetails] = useState(
+        jobBriefing.taskDetails ? jobBriefing.taskDetails : ""
+    );
+    const [taskRules, setTaskRules] = useState(
+        jobBriefing.taskRules ? jobBriefing.taskRules : ""
+    );
+    const [primaryExposures, setExposures] = useState(
+        jobBriefing.primaryExposures
+            ? jobBriefing.primaryExposures
+            : [
+                  {
+                      name: "Life Saving Processes",
+                      riskExposure: "",
+                      protMitigation: "",
+                  },
+                  {
+                      name: "Line of Fire/Release of Energy",
+                      riskExposure: "",
+                      protMitigation: "",
+                  },
+                  {
+                      name: "Pinch Points",
+                      riskExposure: "",
+                      protMitigation: "",
+                  },
+                  {
+                      name: "Ascending/Descending",
+                      riskExposure: "",
+                      protMitigation: "",
+                  },
+                  {
+                      name: "Walking/Path of Travel",
+                      riskExposure: "",
+                      protMitigation: "",
+                  },
+              ]
+    );
 
     // The default primary exposures that will allow for
     // resetting of the primary exposures field
@@ -167,14 +181,15 @@ function JobBriefingForm(props) {
         { icon: <RestartAltIcon />, name: "New" },
     ];
 
-    // useEffect(() => {
-    //     sampleData.briefingList.map(briefing => onAddBriefingList(briefing))
-    //     onAddEmergencyPlan(sampleData.emergencyPlan);
-    //     onAddGeneral(sampleData.general);
-    //     onAddJobBriefing(sampleData.jobBriefing);   
-    //     onAddWeather(sampleData.weather);
-    //     onAddUser(sampleData.user);
-    // }, []);
+    useEffect(() => {
+        // setEIC(jobBriefing?.eIC || "")
+        // sampleData.briefingList.map(briefing => onAddBriefingList(briefing))
+        // onAddEmergencyPlan(sampleData.emergencyPlan);
+        // onAddGeneral(sampleData.general);
+        // onAddJobBriefing(sampleData.jobBriefing);
+        // onAddWeather(sampleData.weather);
+        // onAddUser(sampleData.user);
+    }, []);
 
     // The clearForm method will wipe out all the data currently
     // held in the form
@@ -199,6 +214,10 @@ function JobBriefingForm(props) {
         setAcknowledgment([]);
         setBriefingName("");
         console.log("Job Briefing Form cleared");
+        onDeleteWeather();
+        onDeleteEmergencyPlan();
+        onDeleteGeneral();
+        onDeleteJobBriefing();
     };
 
     // Function will format the weather data retrieved from the
@@ -658,7 +677,7 @@ function JobBriefingForm(props) {
 const mapStateToProps = (state) => ({
     user: { ...state.user },
     general: { ...state.general },
-    JobBriefing: { ...state.jobBriefing },
+    jobBriefing: { ...state.jobBriefing },
     weather: { ...state.weather },
     emergencyPlan: { ...state.emergencyPlan },
     briefingList: [...state.briefingList],
@@ -743,6 +762,18 @@ const mapDispatchToProps = (dispatch) => ({
     onAddBriefingList(briefingId, briefingName) {
         dispatch(addBriefingList(briefingId, briefingName));
     },
+    onDeleteWeather() {
+        dispatch(deleteWeather());
+    },
+    onDeleteGeneral() {
+        dispatch(deleteGeneral());
+    },
+    onDeleteJobBriefing() {
+        dispatch(deleteJobBriefing());
+    },
+    onDeleteEmergencyPlan() {
+        dispatch(deleteEmergencyPlan());
+    }
 });
 
 // Exporting the component
