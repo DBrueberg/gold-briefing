@@ -3,6 +3,7 @@
 // Gold-Briefing - jobBriefing.reducer.js
 // November 17, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 11/24/2023, Added in the briefingName field)
 
 import { reduxAction as C } from "../constants";
 
@@ -19,6 +20,7 @@ export const jobBriefing = (state = {}, action) => {
         case C.ADD_JOB_BRIEFING:
             console.log(action);
             return {
+                briefingName: action.briefingName,
                 eIC: action.eIC,
                 conductedBy: action.conductedBy,
                 placeOfSafety: action.placeOfSafety,

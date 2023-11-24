@@ -168,9 +168,6 @@ function Widget(props) {
                     <Paper elevation={2} sx={{ height: "100%", marginLeft: 1 }}>
                         <Card sx={{ height: "100%" }}>
                             <CardContent sx={{ minHeight: "300px", height: "100%"}}>
-                                {/* <Typography gutterBottom variant="h6">
-                                    Map
-                                </Typography> */}
                                 <Map
                                     center={center}
                                     zoom={zoom}

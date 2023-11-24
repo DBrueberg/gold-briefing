@@ -10,36 +10,29 @@
 //  (DAB, 11/09/2023, Added in BriefingSpeedDial Component)
 //  (DAB, 11/12/2023, Added in SaveJobBriefing Component. Also
 //  updated comments to current)
-//  (DAB, 11/23/2023, Linked redux state with local state)
-
-/** NEED TO LIST
- * -Have job briefing title saved to state
- * -Map and weather update off address if address and/then
- *  gps if gps
- *
- */
+//  (DAB, 11/23/2023, Linked redux state with local state and 
+//  all milestone1 redux state functionality working correctly)
 
 // Using React library in order to build components
 // for the app and importing needed components
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import General from "../subComponent/General";
-import { Box, Snackbar, Typography } from "@mui/material";
-import WeatherDataService from "../../services/weather.service";
 import moment from "moment";
-import sampleData from "../../redux/sampleData.json";
+import WeatherDataService from "../../services/weather.service";
+import { Box, Snackbar, Typography } from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Task from "../subComponent/Task";
 import Exposures from "../subComponent/Exposures";
 import Emergency from "../subComponent/Emergency";
 import Acknowledgement from "../subComponent/Acknowledgement";
 import Widget from "../subComponent/Widget";
 import GenerateBriefing from "../subComponent/GenerateBriefing";
-import SaveIcon from "@mui/icons-material/Save";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import General from "../subComponent/General";
 import BriefingSpeedDial from "../subComponent/BriefingSpeedDial";
 import SaveJobBriefing from "../modal/SaveJobBriefing";
-import { useNavigate } from "react-router-dom";
 import { addUser } from "../../actions/user.action";
 import { addWeather, deleteWeather } from "../../actions/weather.action";
 import {
@@ -202,13 +195,6 @@ function JobBriefingForm(props) {
     ];
 
     useEffect(() => {
-        // setEIC(jobBriefing?.eIC || "")
-        // sampleData.briefingList.map(briefing => onAddBriefingList(briefing))
-        // onAddEmergencyPlan(sampleData.emergencyPlan);
-        // onAddGeneral(sampleData.general);
-        // onAddJobBriefing(sampleData.jobBriefing);
-        // onAddWeather(sampleData.weather);
-        // onAddUser(sampleData.user);
     }, []);
 
     // The clearForm method will wipe out all the data currently
@@ -221,7 +207,6 @@ function JobBriefingForm(props) {
         setLat("");
         setLng("");
         setPlaceOfSafety("");
-        // setWeather({});
         setTaskDetails("");
         setTaskRules("");
         setExposures(defaultPrimaryExposures);
@@ -545,9 +530,6 @@ function JobBriefingForm(props) {
         // Formatting the data to match state
         const tempWeather = await formatWeatherData(response.data);
 
-        // Setting the weather data to local state
-        // setWeather(tempWeather);
-
         // Dispatching to redux store
         onAddWeather(tempWeather);
     };
@@ -556,12 +538,53 @@ function JobBriefingForm(props) {
     const onCloseSaveBrief = (name) => {
         setBriefingName(name);
         setOpenBriefDialog(false);
+        // If a name has been inputted the briefing is updated
+        if (name) {
+            onSaveBriefData(name);
+        }
     };
 
     // Function that will handle actions for a location button click
     const onLocFindClick = () => {
         // Calling the location function to get the users geolocation
         location();
+    };
+
+    // This function is used to call the actions to add a new redux
+    // state for jobBriefing, general, and emergencyPlan
+    const onSaveBriefData = (name) => {
+        // Formatting the data needed to be used in the redux
+        // onAdd method calls
+        const jobBriefData = {
+            briefingName: name,
+            eIC: eIC,
+            conductedBy: conductedBy,
+            placeOfSafety: placeOfSafety,
+            taskDetails: taskDetails,
+            taskRules: taskRules,
+            primaryExposures: primaryExposures,
+            acknowledgements: acknowledgements,
+        };
+        const generalData = {
+            dateTime: dateTime,
+            physLoc: physLoc,
+            lat: lat,
+            lng: lng,
+        };
+        const emergencyPlanData = {
+            nearestHospital: nearestHospital,
+            accessPoint: accessPoint,
+            caller: caller,
+            cPR: cPR,
+            medInfo: medInfo,
+            evacRoute: evacRoute,
+        };
+
+        // Saving the formatted data to state by calling the onAdd
+        // redux methods
+        onAddJobBriefing(jobBriefData);
+        onAddGeneral(generalData);
+        onAddEmergencyPlan(emergencyPlanData);
     };
 
     // This function will open the dialog that allows the user
@@ -575,50 +598,13 @@ function JobBriefingForm(props) {
     const saveBriefing = () => {
         // If there is already a name the briefing is updated
         if (briefingName) {
-            const jobBriefData = {
-                eIC: eIC,
-                conductedBy: conductedBy,
-                placeOfSafety: placeOfSafety,
-                taskDetails: taskDetails,
-                taskRules: taskRules,
-                primaryExposures: primaryExposures,
-                acknowledgements: acknowledgements,
-            };
-            const generalData = {
-                dateTime: dateTime,
-                physLoc: physLoc,
-                lat: lat,
-                lng: lng,
-            };
-            const emergencyPlanData = {
-                nearestHospital: nearestHospital,
-                accessPoint: accessPoint,
-                caller: caller,
-                cPR: cPR,
-                medInfo: medInfo,
-                evacRoute: evacRoute,
-            };
-            onAddJobBriefing(jobBriefData);
-            onAddGeneral(generalData);
-            onAddEmergencyPlan(emergencyPlanData);
-            console.log("Saving Brief");
+            onSaveBriefData(briefingName);
         }
         // Else the use is prompted to choose a name and then
         // briefing is saved
         else {
             openSaveBrief();
         }
-        // testReducers();
-    };
-
-    //************** STATE TEST METHOD ********************/
-    //***************ADDED IN saveBriefing() **************/
-    const testReducers = () => {
-        onAddEmergencyPlan(sampleData.emergencyPlan);
-        onAddGeneral(sampleData.general);
-        onAddJobBriefing(sampleData.jobBriefing);
-        onAddUser(sampleData.user);
-        onAddWeather(sampleData.weather);
     };
 
     return (

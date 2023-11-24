@@ -3,6 +3,7 @@
 // Gold-Briefing - jobBriefing.action.js
 // November 17, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 11/24/2023, Added in the briefingName field)
 
 import { reduxAction as C } from "../constants";
 
@@ -16,7 +17,8 @@ import { reduxAction as C } from "../constants";
  * taskDetails,
  * taskRules,
  * primaryExposures,
- * acknowledgements
+ * acknowledgements,
+ * briefingName
  * } param0
  * @returns
  */
@@ -28,6 +30,7 @@ export const addJobBriefing = ({
     taskRules,
     primaryExposures,
     acknowledgements,
+    briefingName
 }) => ({
     type: C.ADD_JOB_BRIEFING,
     eIC: eIC,
@@ -37,6 +40,7 @@ export const addJobBriefing = ({
     taskRules,
     primaryExposures,
     acknowledgements,
+    briefingName
 });
 
 /**
