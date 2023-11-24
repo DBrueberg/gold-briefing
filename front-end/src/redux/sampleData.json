@@ -23,13 +23,13 @@
         }
     ],
     "general": {
-        "date": "12/12/2022",
-        "time": "0700",
+        "dateTime": "12/12/2022 0700",
         "physLoc": "3138 3rd Ave NE, Minneapolis, MN 55418",
         "lat": "testLat",
         "lng": "testLong"
     },
     "jobBriefing": {
+        "briefingName": "Northtown",
         "eIC": "Mike Heyer",
         "conductedBy": "Devin Brueberg",
         "placeOfSafety": "off track",

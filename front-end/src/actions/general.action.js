@@ -18,10 +18,9 @@ import { reduxAction as C } from "../constants";
  * } param0 
  * @returns 
  */
-export const addGeneral = ({ date, time, physLoc, lat, lng}) => ({
+export const addGeneral = ({ dateTime, physLoc, lat, lng}) => ({
     type: C.ADD_GENERAL,
-    date: date,
-    time: time,
+    dateTime: dateTime,
     physLoc: physLoc,
     lat: lat,
     lng: lng,

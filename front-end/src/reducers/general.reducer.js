@@ -7,27 +7,25 @@
 import { reduxAction as C } from "../constants";
 
 /**
- * The general reducer will allow the general{} state to 
+ * The general reducer will allow the general{} state to
  * be altered
- * 
- * @param {*} state 
- * @param {*} action 
- * @returns 
+ *
+ * @param {*} state
+ * @param {*} action
+ * @returns
  */
 export const general = (state = {}, action) => {
     switch (action.type) {
         case C.ADD_GENERAL:
             return {
-                date: action.date,
-                time: action.time,
+                dateTime: action.dateTime,
                 physLoc: action.physLoc,
                 lat: action.lat,
                 lng: action.lng,
             };
         case C.UPDATE_GENERAL:
             return {
-                date: action.date,
-                time: action.time,
+                dateTime: action.dateTime,
                 physLoc: action.physLoc,
                 lat: action.lat,
                 lng: action.lng,
