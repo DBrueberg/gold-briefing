@@ -10,6 +10,14 @@
 //  (DAB, 11/09/2023, Added in BriefingSpeedDial Component)
 //  (DAB, 11/12/2023, Added in SaveJobBriefing Component. Also
 //  updated comments to current)
+//  (DAB, 11/23/2023, Linked redux state with local state)
+
+/** NEED TO LIST
+ * -Have job briefing title saved to state
+ * -Map and weather update off address if address and/then
+ *  gps if gps
+ *
+ */
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -34,8 +42,14 @@ import SaveJobBriefing from "../modal/SaveJobBriefing";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../../actions/user.action";
 import { addWeather, deleteWeather } from "../../actions/weather.action";
-import { addJobBriefing, deleteJobBriefing } from "../../actions/jobBriefing.action";
-import { addEmergencyPlan, deleteEmergencyPlan } from "../../actions/emergencyPlan.action";
+import {
+    addJobBriefing,
+    deleteJobBriefing,
+} from "../../actions/jobBriefing.action";
+import {
+    addEmergencyPlan,
+    deleteEmergencyPlan,
+} from "../../actions/emergencyPlan.action";
 import { addGeneral, deleteGeneral } from "../../actions/general.action";
 import { addBriefingList } from "../../actions/briefingList.action";
 
@@ -70,7 +84,9 @@ function JobBriefingForm(props) {
     const [accessPoint, setAccessPoint] = useState(
         emergencyPlan.accessPoint ? emergencyPlan.accessPoint : ""
     );
-    const [acknowledgement, setAcknowledgment] = useState([]);
+    const [acknowledgements, setAcknowledgments] = useState(
+        jobBriefing.acknowledgements ? jobBriefing.acknowledgements : []
+    );
     const [briefingName, setBriefingName] = useState(
         jobBriefing.briefingName ? jobBriefing.briefingName : ""
     );
@@ -83,7 +99,9 @@ function JobBriefingForm(props) {
             : `${user.fName} ${user.lName}` || ""
     );
     const [cPR, setCPR] = useState(emergencyPlan.cPR ? emergencyPlan.cPR : "");
-    const [dateTime, setDateTime] = useState(moment());
+    const [dateTime, setDateTime] = useState(
+        general.dateTime ? moment(general.dateTime) : moment()
+    );
     const [eIC, setEIC] = useState(
         jobBriefing.eIC ? jobBriefing.eIC : `${user.fName} ${user.lName}` || ""
     );
@@ -100,7 +118,9 @@ function JobBriefingForm(props) {
     );
     const [openBriefDialog, setOpenBriefDialog] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [physLoc, setPhysLoc] = useState(general.physLoc ? general.physLoc : "");
+    const [physLoc, setPhysLoc] = useState(
+        general.physLoc ? general.physLoc : ""
+    );
     const [placeOfSafety, setPlaceOfSafety] = useState(
         jobBriefing.placeOfSafety ? jobBriefing.placeOfSafety : ""
     );
@@ -211,7 +231,7 @@ function JobBriefingForm(props) {
         setCaller("");
         setEvacRoute("");
         setMedInfo("");
-        setAcknowledgment([]);
+        setAcknowledgments([]);
         setBriefingName("");
         console.log("Job Briefing Form cleared");
         onDeleteWeather();
@@ -506,10 +526,10 @@ function JobBriefingForm(props) {
     const onClickAcknowledgement = (name, phone) => {
         // Setting the acknowledgement array to include the
         // new member
-        setAcknowledgment(
-            [...acknowledgement].concat({
-                name: name,
-                phone: phone,
+        setAcknowledgments(
+            [...acknowledgements].concat({
+                employeeName: name,
+                employeePNum: phone,
             })
         );
     };
@@ -555,6 +575,33 @@ function JobBriefingForm(props) {
     const saveBriefing = () => {
         // If there is already a name the briefing is updated
         if (briefingName) {
+            const jobBriefData = {
+                eIC: eIC,
+                conductedBy: conductedBy,
+                placeOfSafety: placeOfSafety,
+                taskDetails: taskDetails,
+                taskRules: taskRules,
+                primaryExposures: primaryExposures,
+                acknowledgements: acknowledgements,
+            };
+            const generalData = {
+                dateTime: dateTime,
+                physLoc: physLoc,
+                lat: lat,
+                lng: lng,
+            };
+            const emergencyPlanData = {
+                nearestHospital: nearestHospital,
+                accessPoint: accessPoint,
+                caller: caller,
+                cPR: cPR,
+                medInfo: medInfo,
+                evacRoute: evacRoute,
+            };
+            onAddJobBriefing(jobBriefData);
+            onAddGeneral(generalData);
+            onAddEmergencyPlan(emergencyPlanData);
+            console.log("Saving Brief");
         }
         // Else the use is prompted to choose a name and then
         // briefing is saved
@@ -581,7 +628,6 @@ function JobBriefingForm(props) {
                 "& .MuiTextField-root": { m: 1 },
             }}
         >
-            {console.log("user object ", user)}
             <Box
                 sx={{
                     display: "flex",
@@ -658,7 +704,7 @@ function JobBriefingForm(props) {
             />
             <Acknowledgement
                 onClickAcknowledgement={onClickAcknowledgement}
-                acknowledgement={acknowledgement}
+                acknowledgements={acknowledgements}
             />
             <GenerateBriefing />
             <Snackbar
@@ -773,7 +819,7 @@ const mapDispatchToProps = (dispatch) => ({
     },
     onDeleteEmergencyPlan() {
         dispatch(deleteEmergencyPlan());
-    }
+    },
 });
 
 // Exporting the component

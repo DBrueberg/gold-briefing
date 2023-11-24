@@ -3,6 +3,8 @@
 // Gold-Briefing - Acknowledgement.js
 // January 1, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 11/23/2023, Changed the name and number variable names to 
+//  align better with state for clarity)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -29,23 +31,23 @@ function Acknowledgement(props) {
     // Destructuring the needed methods from props
     const { onClickAcknowledgement } = props;
     // Destructuring the needed variable from props
-    const { acknowledgement } = props;
+    const { acknowledgements } = props;
 
     // Local state to keep track of the name and phone
-    const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
+    const [employeeName, setEmployeeName] = useState("");
+    const [employeePNum, setEmployeePNum] = useState("");
 
     // The handleClick method will handle the button click that 
     // adds a new member to acknowledgment state
     const handleClick = () => {
         // Verifying the name has a name in it
-        if (name !== "") {
-            onClickAcknowledgement(name, phone);
+        if (employeeName !== "") {
+            onClickAcknowledgement(employeeName, employeePNum);
         }
 
         // Clearing the form fields
-        setName("");
-        setPhone("");
+        setEmployeeName("");
+        setEmployeePNum("");
     };
 
     // Function that will handle changes to the caller field
@@ -53,7 +55,7 @@ function Acknowledgement(props) {
         // Destructuring the form field value to a variable
         const { value } = e.target;
         // Setting the new form field value to local state
-        setName(value);
+        setEmployeeName(value);
     };
 
     // Function that will handle changes to the caller field
@@ -61,7 +63,7 @@ function Acknowledgement(props) {
         // Destructuring the form field value to a variable
         const { value } = e.target;
         // Setting the new form field value to local state
-        setPhone(value);
+        setEmployeePNum(value);
     };
 
     return (
@@ -76,7 +78,7 @@ function Acknowledgement(props) {
                         size="small"
                         id="name"
                         label="Name"
-                        value={name}
+                        value={employeeName}
                         autoComplete="name"
                         onChange={onChangeName}
                     />
@@ -87,7 +89,7 @@ function Acknowledgement(props) {
                         size="small"
                         id="phone"
                         label="Phone #"
-                        value={phone}
+                        value={employeePNum}
                         autoComplete="phone"
                         onChange={onChangePhone}
                     />
@@ -111,8 +113,8 @@ function Acknowledgement(props) {
                     }}
                 >
                     <Grid container>
-                        {acknowledgement.length > 0 &&
-                            acknowledgement.map((workerInfo, index) => (
+                        {acknowledgements.length > 0 &&
+                            acknowledgements.map((workerInfo, index) => (
                                 <Grid key={index} item xs={12} sm={6} md={4}>
                                     <ListItem
                                         sx={{
@@ -126,9 +128,9 @@ function Acknowledgement(props) {
                                                 flexDirection: "column",
                                             }}
                                             primary={`${index + 1}.\u00A0${
-                                                workerInfo.name
+                                                workerInfo.employeeName
                                             }`}
-                                            secondary={workerInfo.phone}
+                                            secondary={workerInfo.employeePNum}
                                             primaryTypographyProps={{
                                                 style: {
                                                     wordWrap: "break-word",

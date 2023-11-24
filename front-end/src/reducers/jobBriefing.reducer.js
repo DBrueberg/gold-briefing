@@ -17,6 +17,7 @@ import { reduxAction as C } from "../constants";
 export const jobBriefing = (state = {}, action) => {
     switch (action.type) {
         case C.ADD_JOB_BRIEFING:
+            console.log(action);
             return {
                 eIC: action.eIC,
                 conductedBy: action.conductedBy,
@@ -147,8 +148,8 @@ export const acknowledgement = (state = {}, action) => {
             };
         case C.ADD_ACKNOWLEDGEMENT:
             return {
-                employeeName: action.employeeName,
-                employeePNum: action.employeePNum,
+                employeeName: state.employeeName,
+                employeePNum: state.employeePNum,
             };
         case C.UPDATE_JOB_BRIEFING:
             return {
