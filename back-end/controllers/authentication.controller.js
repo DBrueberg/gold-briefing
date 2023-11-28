@@ -4,6 +4,7 @@
 // November 26, 2023
 // Last Edited (Initials, Date, Edits):
 
+// Importing sequelize models
 const db = require("../models");
 const Sequelize = require("sequelize");
 const { Op } = db.Sequelize;
@@ -32,25 +33,29 @@ exports.login = async (req, res) => {
         include: [Authentication],
         where: {
             email: authData.email,
-            password: authData.password,
+            "$Authentication.password$": authData.password,
         },
     })
         .then((data) => {
+            // If the user was found, the user data is
+            // sent
             if (data !== null) {
                 res.send({
                     fName: data.fName,
                     lName: data.lName,
                     pNum: data.pNum,
                     email: data.email,
-                    permId: data.permId,
+                    permId: data.Authentication.permId,
                 });
             } else {
+                // If no user was found a 404 message is sent
                 res.status(404).send({
                     message: `There is no user with that email/password combination.`,
                 });
             }
         })
         .catch((err) => {
+            // If there is an error the message is sent
             res.status(500).send({
                 message:
                     err.message ||
