@@ -38,24 +38,17 @@ exports.create = async (req, res) => {
         });
     }
 
-    const emergencyData = {
-        hospName: req.body.hospName,
-        accessPoint: req.body.accessPoint,
-        evacRoute: req.body.evacRoute,
-        callerName: req.body.callerName,
-        cPR: req.body.cPR,
-        medInfo: req.body.medInfo,
-    };
-
-    console.log(req.body.primaryExposures);
-
+    // Iterating through primary exposures and creating a promise array
+    // of exposure ids based on the specific entry
     const exposuresIdPromises = await req.body.primaryExposures.map(
         async (exposure) => {
+            // Formatting the exposure data to be used in record creation
             const exposureData = {
                 risk: exposure.riskExposure,
                 mitigation: exposure.protMitigation,
             };
 
+            // The exposure will be added to its correct table by using the exposure.name
             switch (exposure.name) {
                 case "Life Saving Processes":
                     // Save to lifeSaving
@@ -140,14 +133,16 @@ exports.create = async (req, res) => {
                 return;
             }
         }
-    )
+    );
 
+    // Resolving promises array
     const exposureIdsArray = await Promise.all(exposuresIdPromises);
-    console.log(exposureIdsArray)
+
+    // Converting exposure id array into a since object
     const exposureIds = Object.assign({}, ...exposureIdsArray);
-    console.log(exposureIds)
-    
-    // Exposure Id's done
+
+    // Creating the exposer record using all the newly created exposure ids and
+    // assigning the exposure id
     const exposureId = await Exposure.create(exposureIds)
         .then((data) => {
             // The exposureId is returned
@@ -167,10 +162,21 @@ exports.create = async (req, res) => {
         return;
     }
 
+    // Formatting the emergency data
+    const emergencyData = {
+        hospName: req.body.hospName,
+        accessPoint: req.body.accessPoint,
+        evacRoute: req.body.evacRoute,
+        callerName: req.body.callerName,
+        cPR: req.body.cPR,
+        medInfo: req.body.medInfo,
+    };
+
+    // Creating an emergency record
     const emerId = await Emergency.create(emergencyData)
         .then((data) => {
             // Then emergencyId is returned
-            return data.emergencyId;
+            return data.emerId;
         })
         .catch((err) => {
             // If there is an error a response is sent
@@ -186,12 +192,14 @@ exports.create = async (req, res) => {
         return;
     }
 
+    // Formatting the location data
     const locationData = {
         physLoc: req.body.physLoc,
         lat: req.body.lat,
         lng: req.body.lng,
     };
 
+    // Adding the location data to record
     const locId = await Location.create(locationData)
         .then((data) => {
             // The new locId is returned
@@ -212,6 +220,7 @@ exports.create = async (req, res) => {
         return;
     }
 
+    // Formatting the briefing data
     const briefing = {
         briefingName: req.body.briefingName,
         conductedBy: req.body.conductedBy,
@@ -225,6 +234,7 @@ exports.create = async (req, res) => {
         exposureId: exposureId,
     };
 
+    // Adding a briefing to record
     await Briefing.create(briefing)
         .then((data) => {
             // The new briefing data is returned
@@ -238,4 +248,80 @@ exports.create = async (req, res) => {
                     "An error occurred while creating the briefing",
             });
         });
+};
+
+exports.update = async (req, res) => {
+    // Validate request
+    if (false) {
+        res.status(400).send({
+            message: "You must supply an email and password to login.",
+        });
+        return;
+    }
+
+    await Briefing.update(briefing, {
+        where: {
+            userId: userId,
+        },
+    });
+};
+
+exports.findBriefingByPk = async (req, res) => {
+    // Getting the userId from the param
+    const { id: briefingId } = req.params;
+
+    await Briefing.findByPk(briefingId, {
+        attributes: {},
+        include: [
+            Location,
+            Emergency,
+            {
+                model: Exposure,
+                include: [
+                    
+                    PinchPoint,
+                    LifeSaving,
+                    PathTravel,
+                    LineFire,
+                    AscDesc,
+                ],
+            },
+        ],
+    })
+        .then((data) => {
+            if (data) {
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message: `Can not find Tutorial with briefingId=${briefingId}`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "An error occurred while retrieving the briefing",
+            });
+        });
+};
+
+exports.findAll = async (req, res) => {
+    // Validate request
+    if (false) {
+        res.status(400).send({
+            message: "You must supply an email and password to login.",
+        });
+        return;
+    }
+};
+
+exports.delete = async (req, res) => {
+    // Validate request
+    if (false) {
+        res.status(400).send({
+            message: "You must supply an email and password to login.",
+        });
+        return;
+    }
 };

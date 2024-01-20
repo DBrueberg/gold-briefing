@@ -11,6 +11,18 @@ module.exports = (app) => {
     // Create a briefing
     router.post("/", briefings.create);
 
+    // Update a briefing by id
+    router.put("/:id", briefings.update);
+    
+    // Find a briefing by id
+    router.get("/:id", briefings.findBriefingByPk);
+
+    // Find all briefings by userId
+    router.get("/:id", briefings.findAll);
+
+    // Delete a briefing
+    router.delete("/:id", briefings.delete);
+
     // Defining route
     app.use("/api/briefings", router);
 };
