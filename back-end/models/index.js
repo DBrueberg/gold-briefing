@@ -44,7 +44,8 @@ db.pinchPoints = require("./pinchPoint.model.js")(sequelize, Sequelize);
 db.ascDescs = require("./ascDesc.model.js")(sequelize, Sequelize);
 db.pathTravels = require("./pathTravel.model.js")(sequelize, Sequelize);
 
-// Defining relationships between models
+// Defining relationships between models. On delete cascade does not work 
+// with sequelize
 
 // Users to Briefings
 db.users.hasMany(db.briefings, { foreignKey: "userId" });
@@ -63,15 +64,15 @@ db.locations.hasOne(db.briefings, { foreignKey: "locId" });
 db.briefings.belongsTo(db.locations, { foreignKey: "locId" });
 
 // Emergencies to Briefings
-db.emergencies.hasOne(db.briefings, { foreignKey: "emerId" });
-db.briefings.belongsTo(db.emergencies, { foreignKey: "emerId" });
+db.emergencies.hasOne(db.briefings, { foreignKey: "emerId"});
+db.briefings.belongsTo(db.emergencies, { foreignKey: "emerId"  });
 
 // Exposures to Briefings
 db.exposures.hasOne(db.briefings, { foreignKey: "exposureId" });
 db.briefings.belongsTo(db.exposures, { foreignKey: "exposureId" });
 
 // LifeSavings to Exposures
-db.lifeSavings.hasOne(db.exposures, { foreignKey: "lifeSaveId" });
+db.lifeSavings.hasOne(db.exposures, { foreignKey: "lifeSaveId"  });
 db.exposures.belongsTo(db.lifeSavings, { foreignKey: "lifeSaveId" });
 
 // LineFires to Exposures
@@ -79,15 +80,15 @@ db.lineFires.hasOne(db.exposures, { foreignKey: "lineFireId" });
 db.exposures.belongsTo(db.lineFires, { foreignKey: "lineFireId" });
 
 // PinchPoints to Exposures
-db.pinchPoints.hasOne(db.exposures, { foreignKey: "pinchPointId" });
+db.pinchPoints.hasOne(db.exposures, { foreignKey: "pinchPointId"  });
 db.exposures.belongsTo(db.pinchPoints, { foreignKey: "pinchPointId" });
 
 // AscDescs to Exposures
-db.ascDescs.hasOne(db.exposures, { foreignKey: "ascDescId" });
+db.ascDescs.hasOne(db.exposures, { foreignKey: "ascDescId"  });
 db.exposures.belongsTo(db.ascDescs, { foreignKey: "ascDescId" });
 
 // PathTravels to Exposures
-db.pathTravels.hasOne(db.exposures, { foreignKey: "pathTravelId" });
+db.pathTravels.hasOne(db.exposures, { foreignKey: "pathTravelId"  });
 db.exposures.belongsTo(db.pathTravels, { foreignKey: "pathTravelId" });
 
 module.exports = db;

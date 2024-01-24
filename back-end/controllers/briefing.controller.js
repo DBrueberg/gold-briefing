@@ -278,7 +278,6 @@ exports.findBriefingByPk = async (req, res) => {
             {
                 model: Exposure,
                 include: [
-                    
                     PinchPoint,
                     LifeSaving,
                     PathTravel,
@@ -306,22 +305,72 @@ exports.findBriefingByPk = async (req, res) => {
         });
 };
 
-exports.findAll = async (req, res) => {
-    // Validate request
-    if (false) {
-        res.status(400).send({
-            message: "You must supply an email and password to login.",
+exports.findAllByUserId = async (req, res) => {
+    // Getting the userId from the param
+    const { id: userId } = req.params;
+    let condition = userId ? { userId: userId } : null;
+
+    await Briefing.findAll({ where: condition })
+        .then((data) => {
+            res.send(data);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "An error occurred while retrieving briefings.",
+            });
         });
-        return;
-    }
 };
 
+// NEED TO CHECK THAT ALL TABLES ARE DELETED INCLUDING EXPOSURES
 exports.delete = async (req, res) => {
-    // Validate request
-    if (false) {
-        res.status(400).send({
-            message: "You must supply an email and password to login.",
+    // Getting the briefingId in request
+    const { id: briefingId } = req.params;
+    let condition = { briefingId: briefingId };
+
+    const briefingData = await Briefing.findByPk(condition, {
+        include: [Location, Emergency, Exposure],
+    })
+        .then((data) => {
+            if (data) {
+                return data;
+            } else {
+                res.status(404).send({
+                    message: `The briefing with id=${briefingId} was not found`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    err.message ||
+                    "An error occurred while deleting briefings.",
+            });
         });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
         return;
     }
+
+    
+
+    await Briefing.destroy({ where: condition }, { cascade: true })
+        .then((num) => {
+            if (num === 1) {
+                res.send({
+                    message: `Briefing was deleted successfully`,
+                });
+            } else {
+                res.send({
+                    message: `Cannot delete Briefing with id=${briefingId}. Maybe Briefing was not found`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: `An error occurred and the Briefing with id=${briefingId} could not be deleted`,
+            });
+        });
 };

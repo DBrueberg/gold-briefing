@@ -18,7 +18,7 @@ module.exports = (app) => {
     router.get("/:id", briefings.findBriefingByPk);
 
     // Find all briefings by userId
-    router.get("/:id", briefings.findAll);
+    router.get("/allByUserId/:id", briefings.findAllByUserId);
 
     // Delete a briefing
     router.delete("/:id", briefings.delete);
