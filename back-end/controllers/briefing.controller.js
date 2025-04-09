@@ -328,8 +328,9 @@ exports.delete = async (req, res) => {
     // Getting the briefingId in request
     const { id: briefingId } = req.params;
     let condition = { briefingId: briefingId };
+    console.log("condition", condition);
 
-    const briefingData = await Briefing.findByPk(condition, {
+    const briefingData = await Briefing.findByPk(briefingId, {
         include: [Location, Emergency, Exposure],
     })
         .then((data) => {
