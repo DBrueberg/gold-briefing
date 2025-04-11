@@ -266,10 +266,19 @@ exports.update = async (req, res) => {
     });
 };
 
+/**
+ * Find a job briefing by briefing id. The job briefing data 
+ * will be returned.
+ * 
+ * @param { id: briefingId - The briefing Id. } req 
+ * @param { data - data from the search results. } res 
+ */
 exports.findBriefingByPk = async (req, res) => {
-    // Getting the userId from the param
+    // Getting the briefingId from the param
     const { id: briefingId } = req.params;
 
+    // Searching the database for the a briefing with the briefing Id. Results
+    // will include all child tables
     await Briefing.findByPk(briefingId, {
         attributes: {},
         include: [
@@ -288,6 +297,8 @@ exports.findBriefingByPk = async (req, res) => {
         ],
     })
         .then((data) => {
+            // If data was found it will be sent back in the res or else 
+            // an error message will be sent
             if (data) {
                 res.send(data);
             } else {
@@ -297,6 +308,8 @@ exports.findBriefingByPk = async (req, res) => {
             }
         })
         .catch((err) => {
+            // An error message is sent in res if there was an error while making the 
+            // database call
             res.status(500).send({
                 message:
                     err.message ||
@@ -305,6 +318,13 @@ exports.findBriefingByPk = async (req, res) => {
         });
 };
 
+/**
+ * Find all briefings for a user by user id. All the briefing data will be 
+ * sent in the req.
+ * 
+ * @param { id - The user id that will be used for the briefing query } req 
+ * @param { data - All the briefing data found in the query } res 
+ */
 exports.findAllByUserId = async (req, res) => {
     // Getting the userId from the param
     const { id: userId } = req.params;
@@ -355,9 +375,193 @@ exports.delete = async (req, res) => {
         return;
     }
 
-    
+    console.log("Data in delete is ", briefingData.toJSON());
 
-    await Briefing.destroy({ where: condition }, { cascade: true })
+    await Exposure.destroy({
+        where: { exposureId: briefingData.Exposure.exposureId },
+    })
+        .then((num) => {
+            if (num == 1) {
+                // Delete was successful
+            } else {
+                res.send({
+                    message: `Cannot delete Exposure with id=${briefingData.Exposure.exposureId}.`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: `An error occurred and the Exposure with id=${briefingData.Exposure.exposureId} could not be deleted`,
+            });
+        });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    await LifeSaving.destroy({
+        where: { lifeSaveId: briefingData.Exposure.lifeSaveId },
+    })
+        .then((num) => {
+            if (num == 1) {
+                // Delete was successful
+            } else {
+                res.send({
+                    message: `Cannot delete Life Saving Exposure with id=${briefingData.Exposure.lifeSaveId}`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: `An error occurred and the Life Saving Exposure with id=${briefingData.Exposure.lifeSaveId} could not be deleted`,
+            });
+        });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    await LineFire.destroy({
+        where: { lineFireId: briefingData.Exposure.lineFireId },
+    })
+        .then((num) => {
+            if (num == 1) {
+                // Delete was successful
+            } else {
+                res.send({
+                    message: `Cannot delete Line of Fire Exposure with id=${briefingData.Exposure.lineFireId}`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: `An error occurred and the Line of Fire Exposure with id=${briefingData.Exposure.lineFireId} could not be deleted`,
+            });
+        });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    await PinchPoint.destroy({
+        where: { pinchPointId: briefingData.Exposure.pinchPointId },
+    })
+        .then((num) => {
+            if (num == 1) {
+                // Delete was successful
+            } else {
+                res.send({
+                    message: `Cannot delete Pinch Point Exposure with id=${briefingData.Exposure.pinchPointId}`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: `An error occurred and the Pinch Point Exposure with id=${briefingData.Exposure.pinchPointId} could not be deleted`,
+            });
+        });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    await AscDesc.destroy({
+        where: { ascDescId: briefingData.Exposure.ascDescId },
+    })
+        .then((num) => {
+            if (num == 1) {
+                // Delete was successful
+            } else {
+                res.send({
+                    message: `Cannot delete Ascending Descending Exposure with id=${briefingData.Exposure.ascDescId}`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: `An error occurred and the Ascending Descending Exposure with id=${briefingData.Exposure.ascDescId} could not be deleted`,
+            });
+        });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    await PathTravel.destroy({
+        where: { pathTravelId: briefingData.Exposure.pathTravelId },
+    })
+        .then((num) => {
+            if (num == 1) {
+                // Delete was successful
+            } else {
+                res.send({
+                    message: `Cannot delete Path Travel Exposure with id=${briefingData.Exposure.pathTravelId}`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: `An error occurred and the Path Travel Exposure with id=${briefingData.Exposure.pathTravelId} could not be deleted`,
+            });
+        });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    await Emergency.destroy({
+        where: { emerId: briefingData.Emergency.emerId },
+    })
+        .then((num) => {
+            if (num == 1) {
+                // Delete was successful
+            } else {
+                res.send({
+                    message: `Cannot delete Emergency with id=${briefingData.Emergency.emerId}`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: `An error occurred and the Emergency with id=${briefingData.Emergency.emerId} could not be deleted`,
+            });
+        });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    await Location.destroy({
+        where: { locId: briefingData.Location.locId },
+    })
+        .then((num) => {
+            if (num == 1) {
+                // Delete was successful
+            } else {
+                res.send({
+                    message: `Cannot delete Location with id=${briefingData.Location.locId}`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: `An error occurred and the Location with id=${briefingData.Location.locId} could not be deleted`,
+            });
+        });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    await Briefing.destroy({ where: condition })
         .then((num) => {
             if (num === 1) {
                 res.send({
