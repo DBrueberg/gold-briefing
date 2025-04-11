@@ -72,8 +72,8 @@ db.exposures.hasOne(db.briefings, { foreignKey: "exposureId" });
 db.briefings.belongsTo(db.exposures, { foreignKey: "exposureId" });
 
 // LifeSavings to Exposures
-db.lifeSavings.hasOne(db.exposures, { foreignKey: "lifeSaveId"  });
-db.exposures.belongsTo(db.lifeSavings, { foreignKey: "lifeSaveId" });
+db.lifeSavings.hasOne(db.exposures, { foreignKey: "lifeSaveId", onDelete: "Cascade"  });
+db.exposures.belongsTo(db.lifeSavings, { foreignKey: "lifeSaveId", onDelete: "Cascade" });
 
 // LineFires to Exposures
 db.lineFires.hasOne(db.exposures, { foreignKey: "lineFireId" });
