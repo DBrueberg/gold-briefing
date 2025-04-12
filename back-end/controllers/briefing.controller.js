@@ -3,6 +3,8 @@
 // Gold-Briefing - briefing.controller.js
 // November 26, 2023
 // Last Edited (Initials, Date, Edits):
+// (DAB, 4/11/2024, Added the update method to update the briefing data)
+// (DAB, 4/12/2024, Error checked new briefing controllers and added comments)
 
 /**
  * Names for PrimaryExposures messed up
@@ -29,7 +31,15 @@ const PinchPoint = db.pinchPoints;
 const Exposure = db.exposures;
 const Emergency = db.emergencies;
 
-// Create a new briefing
+/**
+ * Creates a new briefing record in the database.
+ * 
+ * @param {userId: the id of user creating this briefing. 
+ * Data for the Briefing, Exposures, Emergency, and Location tables.} req 
+ * @param {Returns the data from the completed database creation with ids for 
+ * the briefing and the exposure tables} res 
+ * @returns 
+ */
 exports.create = async (req, res) => {
     // There must be a briefing name
     if (!req.body.briefingName || !req.body.userId) {
@@ -250,20 +260,185 @@ exports.create = async (req, res) => {
         });
 };
 
+
+/**
+ * 
+ * @param {briefingId, userId are required.
+ * Updates the data from Briefing, Location, Emergency, Exposure tables if provided} req 
+ * @param {200 response if briefing was updated successfully} res 
+ * @returns 
+ */
 exports.update = async (req, res) => {
     // Validate request
-    if (false) {
+    if (!req.body && !req.body.userId) {
         res.status(400).send({
-            message: "You must supply an email and password to login.",
+            message: "Content can not be empty, need a userId!",
         });
+    }
+
+    // Getting the table ids from the request body
+    const { briefingId: briefingId } = req.body;
+    const { emerId: emerId } = req.body.Emergency;
+    const { locId: locId } = req.body.Location;
+    const { lifeSaveId: lifeSaveId } = req.body.Exposure.LifeSaving;
+    const { lineFireId: lineFireId } = req.body.Exposure.LineFire;
+    const { pinchPointId: pinchPointId } = req.body.Exposure.PinchPoint;
+    const { ascDescId: ascDescId } = req.body.Exposure.AscDesc;
+    const { pathTravelId: pathTravelId } = req.body.Exposure.PathTravel;
+
+
+    // Preparing the data to be updated in the database
+    // The data is being destructured from the request body
+    const briefing = req.body;
+    const { Location: location } = req.body;
+    const { Emergency: emergency } = req.body; 
+    const { PinchPoint: pinchpoint } = req.body.Exposure;
+    const { LifeSaving: lifesaving } = req.body.Exposure;
+    const { PathTravel: pathtravel } = req.body.Exposure;
+    const { LineFire: linefire } = req.body.Exposure;
+    const { AscDesc: ascdesc } = req.body.Exposure;
+
+    // Updating the briefing in the briefing table using briefingId to find the briefing
+    await Briefing.update(briefing, {
+        where: {
+            briefingId: briefingId,
+        },
+    })
+    .catch((err) => {
+        res.status(500).send({
+            message: `An error occurred while updating the Briefing with id=${briefingId}`,
+        });
+    });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
         return;
     }
 
-    await Briefing.update(briefing, {
+    // Updating the emergency in the emergency table using emerId to find the emergency
+    await Emergency.update(emergency, {
         where: {
-            userId: userId,
+            emerId: emerId,
         },
+    })
+    .catch((err) => {
+        res.status(500).send({
+            message: `An error occurred while updating the Emergency with id=${emerId}`,
+        });
     });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    // Updating the location in the location table using locId to find the location
+    await Location.update(location, {
+        where: {
+            locId: locId,
+        },
+    }) 
+    .catch((err) => {
+        res.status(500).send({
+            message: `An error occurred while updating the Location with id=${locId}`,
+        });
+    });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    // Updating the lifesaving in the lifesaving table using lifesavingId to find the lifesaving
+    await LifeSaving.update(lifesaving, {
+        where: {
+            lifeSaveId: lifeSaveId,
+        },
+    })
+    .catch((err) => {
+        res.status(500).send({
+            message: `An error occurred while updating the Life Saving with id=${lifeSaveId}`,
+        });
+    });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    // Updating the pathtravel in the pathtravel table using pathTravelId to find the pathtravel
+    await PathTravel.update(pathtravel, {
+        where: {
+            pathTravelId: pathTravelId,
+        },
+    })
+    .catch((err) => {
+        res.status(500).send({
+            message: `An error occurred while updating the Path Travel with id=${pathTravelId}`,
+        });
+    });
+
+    // If a response was sent the method will terminate 
+    if (res.headersSent) {
+        return;
+    }
+
+    // Updating the linefire in the linefire table using lineFireId to find the linefire
+    await LineFire.update(linefire, {
+        where: {
+            lineFireId: lineFireId,
+        },
+    })
+    .catch((err) => {
+        res.status(500).send({
+            message: `An error occurred while updating the Line Fire with id=${lineFireId}`,
+        });
+    });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    // Updating the pinchpoint in the pinchpoint table using pinchPointId to find the pinchpoint
+    await PinchPoint.update(pinchpoint, {
+        where: {
+            pinchPointId: pinchPointId,
+        },
+    })
+    .catch((err) => {
+        res.status(500).send({
+            message: `An error occurred while updating the Pinch Point with id=${pinchPointId}`,
+        });
+    });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    // Updating the ascdesc in the ascdesc table using ascDescId to find the ascdesc
+    await AscDesc.update(ascdesc, {
+        where: {
+            ascDescId: ascDescId,
+        },
+    })
+    .catch((err) => {
+        res.status(500).send({
+            message: `An error occurred while updating the Ascending Descending with id=${ascDescId}`,
+        });
+    });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    // Sending a response back to the client that the briefing was updated successfully
+    res.status(200).send({
+        message: `Briefing with id=${briefingId} was updated successfully.`,
+    });
+
 };
 
 /**
@@ -343,26 +518,35 @@ exports.findAllByUserId = async (req, res) => {
         });
 };
 
-// NEED TO CHECK THAT ALL TABLES ARE DELETED INCLUDING EXPOSURES
+/**
+ * 
+ * @param {id - the briefingId to be deleted} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.delete = async (req, res) => {
     // Getting the briefingId in request
     const { id: briefingId } = req.params;
-    let condition = { briefingId: briefingId };
-    console.log("condition", condition);
+    const condition = { briefingId: briefingId };
 
+    // Retrieving the briefing data from the database. Need the record ids to delete
+    // the child records in the other tables
     const briefingData = await Briefing.findByPk(briefingId, {
         include: [Location, Emergency, Exposure],
     })
         .then((data) => {
             if (data) {
+                // If the record was found the data is returned to the caller
                 return data;
             } else {
+                // If no record was found the response is sent with a 404
                 res.status(404).send({
                     message: `The briefing with id=${briefingId} was not found`,
                 });
             }
         })
         .catch((err) => {
+            // An error sends a 500 response with the error message
             res.status(500).send({
                 message:
                     err.message ||
@@ -375,8 +559,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
-    console.log("Data in delete is ", briefingData.toJSON());
-
+    // Deleting the child records in Exposure table using the exposureId from the briefingData
     await Exposure.destroy({
         where: { exposureId: briefingData.Exposure.exposureId },
     })
@@ -400,6 +583,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
+    // Deleting the child records in the Lifesaving table using the lifeSaveId from the briefingData
     await LifeSaving.destroy({
         where: { lifeSaveId: briefingData.Exposure.lifeSaveId },
     })
@@ -423,6 +607,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
+    // Deleting the child records in the LineFire table using the lineFireId from the briefingData
     await LineFire.destroy({
         where: { lineFireId: briefingData.Exposure.lineFireId },
     })
@@ -446,6 +631,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
+    // Deleting the child records in the PinchPoint table using the pinchPointId from the briefingData
     await PinchPoint.destroy({
         where: { pinchPointId: briefingData.Exposure.pinchPointId },
     })
@@ -469,6 +655,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
+    // Deleting the child records in the AscDesc table using the ascDescId from the briefingData
     await AscDesc.destroy({
         where: { ascDescId: briefingData.Exposure.ascDescId },
     })
@@ -492,6 +679,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
+    // Deleting the child records in the PathTravel table using the pathTravelId from the briefingData
     await PathTravel.destroy({
         where: { pathTravelId: briefingData.Exposure.pathTravelId },
     })
@@ -515,6 +703,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
+    // Deleting the child records in the Emergency table using the emerId from the briefingData
     await Emergency.destroy({
         where: { emerId: briefingData.Emergency.emerId },
     })
@@ -538,6 +727,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
+    // Deleting the child records in the Location table using the locId from the briefingData
     await Location.destroy({
         where: { locId: briefingData.Location.locId },
     })
@@ -561,6 +751,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
+    // Deleting the briefing record using the briefingId from the request
     await Briefing.destroy({ where: condition })
         .then((num) => {
             if (num === 1) {
