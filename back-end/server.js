@@ -13,9 +13,13 @@ const defaultData = require("./data/default.data");
 // Initializing express instance
 const app = express();
 
+// Check if prod environment
+const isProd = checkEnv();
+
 // Setting cors options
 var corsOptions = {
-    origin: "http://localhost:5001",
+    // origin: "http://localhost:5001",
+    origin: isProd ? process.env.MYSQL_URL : "http://localhost:5001",
 };
 
 app.use(cors(corsOptions));
@@ -28,6 +32,16 @@ app.use(express.urlencoded({ extended: true }));
 
 const db = require("./models");
 
+// Test database connection
+const testConnection = (async () => {
+    try {
+        await db.sequelize.authenticate();
+        console.log("Connection has been established successfully.");
+    } catch (error) {
+        console.error("Unable to connect to the database:", error);
+    }
+})();
+
 // Standard database sync
 db.sequelize
     .sync()
@@ -39,14 +53,14 @@ db.sequelize
     });
 
 // Use to drop and resync database for development
-db.sequelize
-    .sync({ force: true })
-    .then(() => {
-        console.log("Database dropped and re-synced");
-    })
-    .then(() => {
-        defaultData.defaultPermissions();
-    });
+// db.sequelize
+//     .sync({ force: true })
+//     .then(() => {
+//         console.log("Database dropped and re-synced");
+//     })
+//     .then(() => {
+//         defaultData.defaultPermissions();
+//     });
 
 // Routes
 require("./routes/tutorial.routes")(app);
