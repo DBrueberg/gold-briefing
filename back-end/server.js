@@ -3,6 +3,7 @@
 // Gold-Briefing - server.js
 // November 24, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 1/15/2024, Added briefings route)
 
 // Importing express and cors modules
 const express = require("express");
@@ -51,6 +52,7 @@ db.sequelize
 require("./routes/tutorial.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/authentication.routes")(app);
+require("./routes/briefing.routes")(app);
 
 // Setting port
 const port = process.env.PORT || 5000;
