@@ -9,6 +9,7 @@
 const express = require("express");
 const cors = require("cors");
 const defaultData = require("./data/default.data");
+const checkEnv = require("./helperFunction/checkEnvironment")
 
 // Initializing express instance
 const app = express();
