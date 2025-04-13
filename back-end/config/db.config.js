@@ -4,6 +4,7 @@
 // November 25, 2023
 // Last Edited (Initials, Date, Edits):
 
+const checkEnv = require("./helperFunction/checkEnvironment")
 // Checking for production environment
 const isProd = checkEnv();
 
