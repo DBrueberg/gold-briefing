@@ -23,10 +23,10 @@ module.exports = {
 };
 
 module.exports = {
-    HOST: isProd ? process.env.MYSQLHOST : "localhost",
-    PORT: isProd ? process.env.MYSQLPORT : 3306,
-    USER: isProd ? process.env.MYSQLUSER : "root",
-    PASSWORD: isProd ? process.env.MYSQLPASSWORD : "password",
+    HOST: isProd ? process.env.MYSQL_HOST : "localhost",
+    PORT: isProd ? process.env.MYSQL_PORT : 3306,
+    USER: isProd ? process.env.MYSQL_USER : "root",
+    PASSWORD: isProd ? process.env.MYSQL_PASSWORD : "password",
     DB: isProd ? process.env.MYSQL_DATABASE : "goldBriefing",
     ssl: {
       ca: isProd ? process.env.CA_CERT : "",
