@@ -3,6 +3,7 @@
 // Gold-Briefing - CreateAccountForm.js
 // November 2, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 04/17/2025, Added in redux state and connect)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -11,6 +12,8 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import sampleData from "../../redux/sampleData.json";
 import { Link } from "react-router-dom";
 import { formatPhoneNumber } from "../../helperFunction/FormatString";
+import { addUser } from "../../actions/user.action";
+import { connect } from "react-redux";
 
 /**
  * The CreateAccountForm View will handle the form needed for
@@ -22,6 +25,8 @@ import { formatPhoneNumber } from "../../helperFunction/FormatString";
 function CreateAccountForm(props) {
     // Loading in the sample data, this is only temporary
     const {} = sampleData;
+
+    const { onAddUser} = props;
 
     // Local state to keep track of the user name and password
     const [fName, setFName] = useState("");
@@ -36,12 +41,34 @@ function CreateAccountForm(props) {
             `Fields are ${fName}, ${lName}, ${phone}, and ${email} with password ${password}`
         );
 
-        // Clearing password entries
-        setFName("");
-        setLName("");
-        setPhone("");
-        setEmail("");
-        setPassword("");
+        // Checking if the required form fields are filled out
+        if (fName && lName && phone && email && password) {
+            // DEBUG: can be left in but also can be removed
+            console.log("Creating account...");
+
+            // Formating form data to be sent to state and backend
+            const createAccountData = {
+                fName: fName,
+                lName: lName,
+                pNum: phone,
+                email: email,
+            }
+
+            // Adding the user to the redux state
+            onAddUser(createAccountData);
+
+            // Clearing password entries
+            setFName("");
+            setLName("");
+            setPhone("");
+            setEmail("");
+            setPassword("");
+
+            // Redirect to the briefing page on successful account creation
+
+        }
+
+        
     };
 
     // This function will set the form fields contents to local state
@@ -152,5 +179,12 @@ function CreateAccountForm(props) {
     );
 }
 
+// Mapping the redux store states to props
+const mapDispatchToProps = (dispatch) => ({
+    onAddUser(fName, lName, pNum, email) {
+        dispatch(addUser(fName, lName, pNum, email));
+    }
+})
+
 // Exporting the component
-export default CreateAccountForm;
+export default connect(null, mapDispatchToProps)(CreateAccountForm);
