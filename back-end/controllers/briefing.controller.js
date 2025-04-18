@@ -505,6 +505,8 @@ exports.findAllByUserId = async (req, res) => {
     const { id: userId } = req.params;
     let condition = userId ? { userId: userId } : null;
 
+    // Searching the database for all briefings with the userId, resaults are
+    // returned to the caller
     await Briefing.findAll({ where: condition })
         .then((data) => {
             res.send(data);

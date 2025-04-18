@@ -8,8 +8,9 @@
 // Importing express and cors modules
 const express = require("express");
 const cors = require("cors");
-const defaultData = require("./data/default.data");
-const checkEnv = require("./helperFunction/checkEnvironment")
+const defaultDBData = require("./data/defaultDB.data");
+const testDefaultDBData = require("./data/dbTestData");
+const checkEnv = require("./helperFunction/checkEnvironment");
 
 // Initializing express instance
 const app = express();
@@ -19,7 +20,6 @@ const isProd = checkEnv();
 
 // Setting cors options
 var corsOptions = {
-    // origin: "http://localhost:5001",
     origin: isProd ? process.env.MYSQL_URL : "http://localhost:5001",
 };
 
@@ -43,25 +43,46 @@ const testConnection = (async () => {
     }
 })();
 
-// Standard database sync
-db.sequelize
-    .sync()
+// Production database load and sync
+const prodSequelizeDBLoad = () => {
+    // Standard database sync for production
+    db.sequelize
+        .sync()
+        .then(() => {
+            console.log("DB Synced");
+            // Load default data into database
+
+        })
+        .then(() => {
+            // Load default data into database
+            defaultDBData.loadTestDBData();
+        })
+        .catch((err) => {
+            console.log("Failed to sync db: " + err.message);
+        });
+}
+
+// Development database load and sync
+const devSequelizeDBLoad = () => {
+    // Use to drop and resync database for development
+    db.sequelize
+    .sync({ force: true })
     .then(() => {
-        console.log("DB Synced");
+        console.log("DB Dropped and Re-Synced");
+        // Load default data into database
+
+    })
+    .then(() => {
+        // Load default and test data into database
+        testDefaultDBData.loadTestDBData();
     })
     .catch((err) => {
         console.log("Failed to sync db: " + err.message);
     });
+}
 
-// Use to drop and resync database for development
-// db.sequelize
-//     .sync({ force: true })
-//     .then(() => {
-//         console.log("Database dropped and re-synced");
-//     })
-//     .then(() => {
-//         defaultData.defaultPermissions();
-//     });
+// Checking if production or development environment before loading database
+isProd ? prodSequelizeDBLoad() : devSequelizeDBLoad();
 
 // Routes
 require("./routes/tutorial.routes")(app);
