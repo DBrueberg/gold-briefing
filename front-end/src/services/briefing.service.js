@@ -9,7 +9,7 @@ import http from "../httpCommon";
 class BriefingDataService {
     /**
      * Creates a new briefing and saves it to the database.
-     * 
+     *
      * @param {Object} - JSON object containing the briefing data.
      * @param {string} briefingName - The name of the briefing.
      * @param {string} eIC - The EIC of the briefing.
@@ -30,7 +30,7 @@ class BriefingDataService {
      * @param {string} physLoc - The physical location of the job.
      * @param {number} lat - The latitude of the job location.
      * @param {number} lng - The longitude of the job location.
-     * 
+     *
      * @returns @param {Object} - JSON object containing the created briefing data.
      * @param {Object} data - The created briefing data.
      * @param {number} data.briefingId - The ID of the created briefing.
@@ -51,17 +51,45 @@ class BriefingDataService {
         return http.post(`/api/briefings/`, data);
     }
 
+    /**
+     * Updates an existing briefing in the database.
+     *
+     * @param {Object} data - JSON object containing the briefing data with all table id fields.
+     * @returns @param {Object} - JSON object containing the a message that the briefing was updated.
+     */
     update(data) {
         return http.put(`/api/briefing/`, data);
     }
+
+    /**
+     * Retrieves a briefing by its ID.
+     *
+     * @param {number} id - The briefingId.
+     *
+     * @returns @param {Object} - JSON object containing the briefing data.
+     */
     get(id) {
         return http.get(`/api/briefing/${id}`);
     }
+
+    /**
+     * Retrieves all briefings associated with a user ID.
+     *
+     * @param {number} id - The userId.
+     *
+     * @returns @param {Array<Object>} - Array of JSON objects containing the briefing data.
+     */
     getAllByUserId(id) {
         return http.get(`/api/briefing/allByUserId/${id}`);
     }
+
+    /**
+     * Deletes a briefing by its briefingId..
+     *
+     * @param {number} id - The briefingId.
+     * @returns @param {Object} - JSON object containing the message that the briefing was deleted.
+     */
     delete(id) {
         return http.delete(`/api/briefing/${id}`);
     }
-      
 }

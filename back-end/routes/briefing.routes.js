@@ -13,8 +13,8 @@ module.exports = (app) => {
     router.post("/briefing/", briefings.create);
 
     // Update a briefing by id
-    router.put("/briefing/:id", briefings.update);
-    
+    router.put("/briefing/", briefings.update);
+
     // Find a briefing by id
     router.get("/briefing/:id", briefings.findBriefingByPk);
 
@@ -23,7 +23,7 @@ module.exports = (app) => {
 
     // Delete a briefing
     router.delete("/briefing/:id", briefings.delete);
-    
+
     // Defining route
     app.use("/api", router);
 };
