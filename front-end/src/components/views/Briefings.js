@@ -10,6 +10,8 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import BriefingList from "../subComponent/BriefingList";
 
+const image = window.location.origin + "/images/bnsfLogo.gif";
+
 /**
  * The Briefings View will display a list of saved briefings that
  * allow the user to perform load or delete.
@@ -36,7 +38,7 @@ function Briefings(props) {
             >
                 <img
                     sx={{ display: "flex", flexShrink: "1" }}
-                    src="bnsflogo.gif"
+                    src={window.location.origin + '/images/bnsfLogo.gif'}
                     alt="Briefing Logo"
                 />
                 <Typography variant="h3" component="h2">

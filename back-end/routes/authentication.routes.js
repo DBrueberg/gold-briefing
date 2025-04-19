@@ -9,8 +9,8 @@ module.exports = (app) => {
     let router = require("express").Router();
 
     // Login a user
-    router.post("/login", authentications.login);
+    router.post("/authentication/login", authentications.login);
 
     // Defining route
-    app.use("/api/authentications", router);
+    app.use("/api", router);
 };

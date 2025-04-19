@@ -33,12 +33,12 @@ const Emergency = db.emergencies;
 
 /**
  * Creates a new briefing record in the database.
- * 
- * @param {userId: the id of user creating this briefing. 
- * Data for the Briefing, Exposures, Emergency, and Location tables.} req 
- * @param {Returns the data from the completed database creation with ids for 
- * the briefing and the exposure tables} res 
- * @returns 
+ *
+ * @param {userId: the id of user creating this briefing.
+ * Data for the Briefing, Exposures, Emergency, and Location tables.} req
+ * @param {Returns the data from the completed database creation with ids for
+ * the briefing and the exposure tables} res
+ * @returns
  */
 exports.create = async (req, res) => {
     // There must be a briefing name
@@ -142,7 +142,7 @@ exports.create = async (req, res) => {
             if (res.headersSent) {
                 return;
             }
-        }
+        },
     );
 
     // Resolving promises array
@@ -260,13 +260,12 @@ exports.create = async (req, res) => {
         });
 };
 
-
 /**
- * 
+ *
  * @param {briefingId, userId are required.
- * Updates the data from Briefing, Location, Emergency, Exposure tables if provided} req 
- * @param {200 response if briefing was updated successfully} res 
- * @returns 
+ * Updates the data from Briefing, Location, Emergency, Exposure tables if provided} req
+ * @param {200 response if briefing was updated successfully} res
+ * @returns
  */
 exports.update = async (req, res) => {
     // Validate request
@@ -286,12 +285,11 @@ exports.update = async (req, res) => {
     const { ascDescId: ascDescId } = req.body.Exposure.AscDesc;
     const { pathTravelId: pathTravelId } = req.body.Exposure.PathTravel;
 
-
     // Preparing the data to be updated in the database
     // The data is being destructured from the request body
     const briefing = req.body;
     const { Location: location } = req.body;
-    const { Emergency: emergency } = req.body; 
+    const { Emergency: emergency } = req.body;
     const { PinchPoint: pinchpoint } = req.body.Exposure;
     const { LifeSaving: lifesaving } = req.body.Exposure;
     const { PathTravel: pathtravel } = req.body.Exposure;
@@ -303,8 +301,7 @@ exports.update = async (req, res) => {
         where: {
             briefingId: briefingId,
         },
-    })
-    .catch((err) => {
+    }).catch((err) => {
         res.status(500).send({
             message: `An error occurred while updating the Briefing with id=${briefingId}`,
         });
@@ -320,8 +317,7 @@ exports.update = async (req, res) => {
         where: {
             emerId: emerId,
         },
-    })
-    .catch((err) => {
+    }).catch((err) => {
         res.status(500).send({
             message: `An error occurred while updating the Emergency with id=${emerId}`,
         });
@@ -337,8 +333,7 @@ exports.update = async (req, res) => {
         where: {
             locId: locId,
         },
-    }) 
-    .catch((err) => {
+    }).catch((err) => {
         res.status(500).send({
             message: `An error occurred while updating the Location with id=${locId}`,
         });
@@ -354,8 +349,7 @@ exports.update = async (req, res) => {
         where: {
             lifeSaveId: lifeSaveId,
         },
-    })
-    .catch((err) => {
+    }).catch((err) => {
         res.status(500).send({
             message: `An error occurred while updating the Life Saving with id=${lifeSaveId}`,
         });
@@ -371,14 +365,13 @@ exports.update = async (req, res) => {
         where: {
             pathTravelId: pathTravelId,
         },
-    })
-    .catch((err) => {
+    }).catch((err) => {
         res.status(500).send({
             message: `An error occurred while updating the Path Travel with id=${pathTravelId}`,
         });
     });
 
-    // If a response was sent the method will terminate 
+    // If a response was sent the method will terminate
     if (res.headersSent) {
         return;
     }
@@ -388,8 +381,7 @@ exports.update = async (req, res) => {
         where: {
             lineFireId: lineFireId,
         },
-    })
-    .catch((err) => {
+    }).catch((err) => {
         res.status(500).send({
             message: `An error occurred while updating the Line Fire with id=${lineFireId}`,
         });
@@ -405,8 +397,7 @@ exports.update = async (req, res) => {
         where: {
             pinchPointId: pinchPointId,
         },
-    })
-    .catch((err) => {
+    }).catch((err) => {
         res.status(500).send({
             message: `An error occurred while updating the Pinch Point with id=${pinchPointId}`,
         });
@@ -422,8 +413,7 @@ exports.update = async (req, res) => {
         where: {
             ascDescId: ascDescId,
         },
-    })
-    .catch((err) => {
+    }).catch((err) => {
         res.status(500).send({
             message: `An error occurred while updating the Ascending Descending with id=${ascDescId}`,
         });
@@ -438,15 +428,14 @@ exports.update = async (req, res) => {
     res.status(200).send({
         message: `Briefing with id=${briefingId} was updated successfully.`,
     });
-
 };
 
 /**
- * Find a job briefing by briefing id. The job briefing data 
+ * Find a job briefing by briefing id. The job briefing data
  * will be returned.
- * 
- * @param { id: briefingId - The briefing Id. } req 
- * @param { data - data from the search results. } res 
+ *
+ * @param { id: briefingId - The briefing Id. } req
+ * @param { data - data from the search results. } res
  */
 exports.findBriefingByPk = async (req, res) => {
     // Getting the briefingId from the param
@@ -472,7 +461,7 @@ exports.findBriefingByPk = async (req, res) => {
         ],
     })
         .then((data) => {
-            // If data was found it will be sent back in the res or else 
+            // If data was found it will be sent back in the res or else
             // an error message will be sent
             if (data) {
                 res.send(data);
@@ -483,7 +472,7 @@ exports.findBriefingByPk = async (req, res) => {
             }
         })
         .catch((err) => {
-            // An error message is sent in res if there was an error while making the 
+            // An error message is sent in res if there was an error while making the
             // database call
             res.status(500).send({
                 message:
@@ -494,17 +483,19 @@ exports.findBriefingByPk = async (req, res) => {
 };
 
 /**
- * Find all briefings for a user by user id. All the briefing data will be 
+ * Find all briefings for a user by user id. All the briefing data will be
  * sent in the req.
- * 
- * @param { id - The user id that will be used for the briefing query } req 
- * @param { data - All the briefing data found in the query } res 
+ *
+ * @param { id - The user id that will be used for the briefing query } req
+ * @param { data - All the briefing data found in the query } res
  */
 exports.findAllByUserId = async (req, res) => {
     // Getting the userId from the param
     const { id: userId } = req.params;
     let condition = userId ? { userId: userId } : null;
 
+    // Searching the database for all briefings with the userId, resaults are
+    // returned to the caller
     await Briefing.findAll({ where: condition })
         .then((data) => {
             res.send(data);
@@ -519,10 +510,10 @@ exports.findAllByUserId = async (req, res) => {
 };
 
 /**
- * 
- * @param {id - the briefingId to be deleted} req 
- * @param {*} res 
- * @returns 
+ *
+ * @param {id - the briefingId to be deleted} req
+ * @param {*} res
+ * @returns
  */
 exports.delete = async (req, res) => {
     // Getting the briefingId in request
