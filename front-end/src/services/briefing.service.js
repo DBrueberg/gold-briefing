@@ -6,7 +6,7 @@
 
 import http from "../httpCommon";
 
-class BriefingDataService {
+export class BriefingDataService {
     /**
      * Creates a new briefing and saves it to the database.
      *

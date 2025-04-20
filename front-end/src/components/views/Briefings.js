@@ -38,7 +38,7 @@ function Briefings(props) {
             >
                 <img
                     sx={{ display: "flex", flexShrink: "1" }}
-                    src={window.location.origin + '/images/bnsfLogo.gif'}
+                    src={window.location.origin + "/images/bnsfLogo.gif"}
                     alt="Briefing Logo"
                 />
                 <Typography variant="h3" component="h2">

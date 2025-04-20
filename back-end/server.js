@@ -20,7 +20,7 @@ const isProd = checkEnv();
 
 // Setting cors options
 var corsOptions = {
-    origin: isProd ? process.env.MYSQL_URL : "http://localhost:5001",
+    origin: isProd ? process.env.MYSQL_URL : "http://localhost:3000",
 };
 
 app.use(cors(corsOptions));
@@ -51,7 +51,6 @@ const prodSequelizeDBLoad = () => {
         .then(() => {
             console.log("DB Synced");
             // Load default data into database
-
         })
         .then(() => {
             // Load default data into database
@@ -60,26 +59,25 @@ const prodSequelizeDBLoad = () => {
         .catch((err) => {
             console.log("Failed to sync db: " + err.message);
         });
-}
+};
 
 // Development database load and sync
 const devSequelizeDBLoad = () => {
     // Use to drop and resync database for development
     db.sequelize
-    .sync({ force: true })
-    .then(() => {
-        console.log("DB Dropped and Re-Synced");
-        // Load default data into database
-
-    })
-    .then(() => {
-        // Load default and test data into database
-        testDefaultDBData.loadTestDBData();
-    })
-    .catch((err) => {
-        console.log("Failed to sync db: " + err.message);
-    });
-}
+        .sync({ force: true })
+        .then(() => {
+            console.log("DB Dropped and Re-Synced");
+            // Load default data into database
+        })
+        .then(() => {
+            // Load default and test data into database
+            testDefaultDBData.loadTestDBData();
+        })
+        .catch((err) => {
+            console.log("Failed to sync db: " + err.message);
+        });
+};
 
 // Checking if production or development environment before loading database
 isProd ? prodSequelizeDBLoad() : devSequelizeDBLoad();
