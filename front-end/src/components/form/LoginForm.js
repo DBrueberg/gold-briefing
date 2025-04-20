@@ -34,8 +34,10 @@ function LoginForm(props) {
 
     // This function will handle the actions for the Login button
     const handleLogin = async () => {
-        console.log(`Logging in ${email} with password ${password}`);
+        // Debug: comment out when not needed
+        // console.log(`Logging in ${email} with password ${password}`);
 
+        // Checking if the required form fields are filled out
         if (email && password) {
             // Formating form data to be sent to state and backend
             const loginData = {
@@ -59,10 +61,6 @@ function LoginForm(props) {
                 console.log("Invalid email or password");
             }
         }
-
-        // Clearing password entries
-        // setEmail("");
-        // setPassword("");
     };
 
     // This function will set the form fields contents to local state
