@@ -9,7 +9,7 @@ import http from "../httpCommon";
 class UserDataService {
     /**
      * Calling the API to create a new user.
-     * 
+     *
      * @param {Object} data - User json formatted object to be create a user, no key.
      * @param {String} fName - User first name.
      * @param {String} lName - User last name.
@@ -18,7 +18,7 @@ class UserDataService {
      * @param {number} permId - User permission ID.
      * @param {String} password - User password.
      * }
-     * @returns 
+     * @returns
      */
     create(data) {
         return http.post("/api/user/", data);
@@ -29,3 +29,6 @@ class UserDataService {
         return http.get(`/api/user/${id}`);
     }
 }
+
+// Exporting and initializing the UserDataService class
+export default new UserDataService();

@@ -31,7 +31,7 @@ function CreateAccount(props) {
             >
                 <img
                     sx={{ display: "flex", flexShrink: "1" }}
-                    src="bnsflogo.gif"
+                    src={window.location.origin + "/images/bnsfLogo.gif"}
                     alt="Briefing Logo"
                 />
                 <Typography variant="h3">Create Account</Typography>

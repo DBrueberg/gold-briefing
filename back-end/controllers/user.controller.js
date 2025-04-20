@@ -26,6 +26,9 @@ exports.create = async (req, res) => {
         return;
     }
 
+    console.log(req.body);
+    console.log(req.body.email);
+
     // Initializing user data
     let user = {
         fName: req.body.fName,

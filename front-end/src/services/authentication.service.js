@@ -6,15 +6,15 @@
 
 import http from "../httpCommon";
 
-class AuthenticationDataService {
+export class AuthenticationDataService {
     /**
      * Calling the API to login a user.
-     * 
-     * 
+     *
+     *
      * @param {JSON} - User json formatted object to be used for login.
      * @param {String} email - User email address.
      * @param {String} password - User password.
-     * 
+     *
      * @returns {JSON} - JSON object containing the user data.
      * @param {String} fName - User first name.
      * @param {String} lName - User last name.
