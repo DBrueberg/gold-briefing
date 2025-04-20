@@ -8,7 +8,7 @@
 import { addUser, updateUser, deleteUser } from "../user.action";
 import UserDataService from "../../services/user.service";
 
-/*
+/** 
  * The addUserThunk function will handle the actions needed to add a user to the database
  * and redux state. It will use the UserDataService to send the data to the backend and
  * then dispatch the action to update the redux state.

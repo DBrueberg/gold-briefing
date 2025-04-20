@@ -10,6 +10,9 @@ import React, { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import sampleData from "../../redux/sampleData.json";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { loginUserThunk } from "../../actions/thunks/authentication.thunk.action";
+import { useNavigate } from "react-router-dom";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -21,24 +24,51 @@ import { Link } from "react-router-dom";
 function LoginForm(props) {
     // Loading in the sample data, this is only temporary
     const {} = sampleData;
+    const { loginUserThunk } = props;
+
+    const navigate = useNavigate();
 
     // Local state to keep track of the user name and password
-    const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     // This function will handle the actions for the Login button
-    const handleLogin = () => {
-        console.log(`Logging in ${userName} with password ${password}`);
+    const handleLogin = async () => {
+        console.log(`Logging in ${email} with password ${password}`);
+
+        if (email && password) {
+            // Formating form data to be sent to state and backend
+            const loginData = {
+                email: email,
+                password: password,
+            };
+
+            // DEBUG: can be left in but also can be removed
+            console.log("Logging in...");
+
+            // Calling the thunk action to save the data to the database and redux state
+            const response = await loginUserThunk(loginData);
+
+            if (response === 200) {
+                // If the login is successful, navigate to the home page
+                console.log("Login successful");
+                navigate("/");
+            }
+            if (response === 404) {
+                // If the user/password combo does not exist, show an error message
+                console.log("Invalid email or password");
+            }
+        }
 
         // Clearing password entries
-        setUserName("");
-        setPassword("");
+        // setEmail("");
+        // setPassword("");
     };
 
     // This function will set the form fields contents to local state
-    const onChangeUserName = (e) => {
+    const onChangeEmail = (e) => {
         const { value } = e.target;
-        setUserName(value);
+        setEmail(value);
     };
 
     // This function will set the form fields contents to local state
@@ -59,14 +89,14 @@ function LoginForm(props) {
         >
             <Stack justifyContent="center" sx={{ minWidth: "50%" }}>
                 <TextField
-                    id="userName"
-                    label="User Name"
+                    id="email"
+                    label="Email"
                     size="small"
                     sx={{ minWidth: "50%" }}
-                    autoComplete="username"
+                    autoComplete="email"
                     required
-                    value={userName}
-                    onChange={onChangeUserName}
+                    value={email}
+                    onChange={onChangeEmail}
                 />
                 <TextField
                     id="password"
@@ -94,5 +124,12 @@ function LoginForm(props) {
     );
 }
 
+// Map the dispatch to props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loginUserThunk: (userData) => dispatch(loginUserThunk(userData)),
+    };
+};
+
 // Exporting the component
-export default LoginForm;
+export default connect(null, mapDispatchToProps)(LoginForm);

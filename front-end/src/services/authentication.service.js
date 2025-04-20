@@ -6,7 +6,7 @@
 
 import http from "../httpCommon";
 
-export class AuthenticationDataService {
+export default new class AuthenticationDataService {
     /**
      * Calling the API to login a user.
      *
@@ -22,7 +22,7 @@ export class AuthenticationDataService {
      * @param {String} email - User email address.
      * @param {number} permId - User permission ID.
      */
-    get(data) {
+    login(data) {
         return http.post(`/api/authentication/login/`, data);
     }
 }
