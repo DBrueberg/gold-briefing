@@ -3,6 +3,7 @@
 // Gold-Briefing - general.action.js
 // November 17, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 04/20/2025, Added in the locId field)
 
 import { reduxAction as C } from "../constants";
 
@@ -10,6 +11,7 @@ import { reduxAction as C } from "../constants";
  * React Redux action will add the general state
  * 
  * @param {
+ * locId,
  * date,
  * time,
  * physLoc,
@@ -18,8 +20,9 @@ import { reduxAction as C } from "../constants";
  * } param0 
  * @returns 
  */
-export const addGeneral = ({ dateTime, physLoc, lat, lng}) => ({
+export const addGeneral = ({ locId, dateTime, physLoc, lat, lng}) => ({
     type: C.ADD_GENERAL,
+    locId: locId,
     dateTime: dateTime,
     physLoc: physLoc,
     lat: lat,
@@ -30,6 +33,7 @@ export const addGeneral = ({ dateTime, physLoc, lat, lng}) => ({
  * React Redux action will update the general state
  * 
  * @param {
+ * locId,
  * date,
  * time,
  * physLoc,
@@ -38,8 +42,9 @@ export const addGeneral = ({ dateTime, physLoc, lat, lng}) => ({
  * } param0 
  * @returns 
  */
-export const updateGeneral = ({ date, time, physLoc, lat, lng}) => ({
+export const updateGeneral = ({ locId, date, time, physLoc, lat, lng }) => ({
     type: C.UPDATE_GENERAL,
+    locId: locId,
     date: date,
     time: time,
     physLoc: physLoc,

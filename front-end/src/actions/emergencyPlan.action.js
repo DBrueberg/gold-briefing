@@ -3,6 +3,7 @@
 // Gold-Briefing - emergencyPlan.action.js
 // November 17, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 11/24/2023, Added in the emerId field)
 
 import { reduxAction as C } from "../constants";
 
@@ -10,6 +11,7 @@ import { reduxAction as C } from "../constants";
  * React Redux action will add an emergency plan to state
  *
  * @param {
+ * emerId,
  * nearestHospital,
  * accessPoint,
  * evacRoute,
@@ -20,6 +22,7 @@ import { reduxAction as C } from "../constants";
  * @returns
  */
 export const addEmergencyPlan = ({
+    emerId,
     nearestHospital,
     accessPoint,
     evacRoute,
@@ -28,6 +31,7 @@ export const addEmergencyPlan = ({
     medInfo,
 }) => ({
     type: C.ADD_EMERGENCY_PLAN,
+    emerId: emerId,
     nearestHospital: nearestHospital,
     accessPoint: accessPoint,
     evacRoute: evacRoute,
@@ -40,6 +44,7 @@ export const addEmergencyPlan = ({
  * React Redux action will update emergency plan in state
  *
  * @param {
+ * emerId,
  * nearestHospital,
  * accessPoint,
  * evacRoute,
@@ -50,6 +55,7 @@ export const addEmergencyPlan = ({
  * @returns
  */
 export const updateEmergencyPlan = ({
+    emerId,
     nearestHospital,
     accessPoint,
     evacRoute,
@@ -58,6 +64,7 @@ export const updateEmergencyPlan = ({
     medInfo,
 }) => ({
     type: C.UPDATE_EMERGENCY_PLAN,
+    emerId: emerId,
     nearestHospital: nearestHospital,
     accessPoint: accessPoint,
     evacRoute: evacRoute,

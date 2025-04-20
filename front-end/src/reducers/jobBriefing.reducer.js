@@ -4,6 +4,8 @@
 // November 17, 2023
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 11/24/2023, Added in the briefingName field)
+//  (DAB, 04/20/2025, Added in the briefingId, and specific exposure id fields,
+//   and refactored the exposures to match the database)
 
 import { reduxAction as C } from "../constants";
 
@@ -19,7 +21,9 @@ export const jobBriefing = (state = {}, action) => {
     switch (action.type) {
         case C.ADD_JOB_BRIEFING:
             console.log(action);
+            console.log("action", action);
             return {
+                briefingId: action.briefingId,
                 briefingName: action.briefingName,
                 eIC: action.eIC,
                 conductedBy: action.conductedBy,
@@ -33,6 +37,8 @@ export const jobBriefing = (state = {}, action) => {
             return [...state, acknowledgements(state.acknowledgements, action)];
         case C.UPDATE_JOB_BRIEFING:
             return {
+                briefingId: action.briefingId,
+                briefingName: action.briefingName,
                 eIC: action.eIC,
                 conductedBy: action.conductedBy,
                 placeOfSafety: action.placeOfSafety,
@@ -88,14 +94,17 @@ export const primaryExposure = (state = {}, action) => {
         case C.ADD_JOB_BRIEFING:
             return {
                 name: state.name,
-                riskExposure: state.riskExposure,
-                protMitigation: state.protMitigation,
+                risk: state.risk,
+                mitigation: state.mitigation,
+                ...state,
+
             };
         case C.UPDATE_JOB_BRIEFING:
             return {
-                name: state.name,
-                riskExposure: state.riskExposure,
-                protMitigation: state.protMitigation,
+                name: state.primaryExposure.name,
+                risk: state.primaryExposure.risk,
+                mitigation: state.primaryExposure.mitigation,
+                ...state,
             };
         case C.DELETE_JOB_BRIEFING:
             return {};
@@ -103,6 +112,7 @@ export const primaryExposure = (state = {}, action) => {
             return state;
     }
 };
+
 
 /**
  * The acknowledgements reducer will allow the acknowledgements[]

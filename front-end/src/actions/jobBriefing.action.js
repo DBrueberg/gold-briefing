@@ -4,6 +4,7 @@
 // November 17, 2023
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 11/24/2023, Added in the briefingName field)
+//  (DAB, 04/20/2025, Added in the briefingId field)
 
 import { reduxAction as C } from "../constants";
 
@@ -11,6 +12,7 @@ import { reduxAction as C } from "../constants";
  * React Redux action will add a job briefing to state
  *
  * @param {
+ * briefingId,
  * eIC,
  * conductedBy,
  * placeOfSafety,
@@ -23,6 +25,7 @@ import { reduxAction as C } from "../constants";
  * @returns
  */
 export const addJobBriefing = ({
+    briefingId,
     eIC,
     conductedBy,
     placeOfSafety,
@@ -33,7 +36,8 @@ export const addJobBriefing = ({
     briefingName
 }) => ({
     type: C.ADD_JOB_BRIEFING,
-    eIC: eIC,
+    briefingId,
+    eIC,
     conductedBy,
     placeOfSafety,
     taskDetails,
@@ -47,6 +51,8 @@ export const addJobBriefing = ({
  * React Redux action will update a job briefing to state
  *
  * @param {
+ * briefingId,
+ * briefingName,
  * eIC,
  * conductedBy,
  * placeOfSafety,
@@ -58,6 +64,8 @@ export const addJobBriefing = ({
  * @returns
  */
 export const updateJobBriefing = ({
+    briefingId,
+    briefingName,
     eIC,
     conductedBy,
     placeOfSafety,
@@ -67,6 +75,8 @@ export const updateJobBriefing = ({
     acknowledgements,
 }) => ({
     type: C.UPDATE_JOB_BRIEFING,
+    briefingId,
+    briefingName,
     eIC,
     conductedBy,
     placeOfSafety,

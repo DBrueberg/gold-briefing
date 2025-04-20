@@ -45,6 +45,7 @@ import {
 } from "../../actions/emergencyPlan.action";
 import { addGeneral, deleteGeneral } from "../../actions/general.action";
 import { addBriefingList } from "../../actions/briefingList.action";
+import { addJobBriefingThunk } from "../../actions/thunks/jobBriefing.thunk.action";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -59,6 +60,7 @@ function JobBriefingForm(props) {
     const { user, general, jobBriefing, weather, emergencyPlan, briefingList } =
         props;
     const {
+        addJobBriefingThunk,
         onAddUser,
         onAddEmergencyPlan,
         onAddGeneral,
@@ -93,7 +95,8 @@ function JobBriefingForm(props) {
     );
     const [cPR, setCPR] = useState(emergencyPlan.cPR ? emergencyPlan.cPR : "");
     const [dateTime, setDateTime] = useState(
-        general.dateTime ? moment(general.dateTime) : moment()
+        general.dateTime ? general.dateTime 
+        : moment(new Date(), 'MM-DD-YYYY HH:mm:ss')
     );
     const [eIC, setEIC] = useState(
         jobBriefing.eIC ? jobBriefing.eIC : `${user.fName} ${user.lName}` || ""
@@ -130,28 +133,28 @@ function JobBriefingForm(props) {
             : [
                   {
                       name: "Life Saving Processes",
-                      riskExposure: "",
-                      protMitigation: "",
+                      risk: "",
+                      mitigation: "",
                   },
                   {
                       name: "Line of Fire/Release of Energy",
-                      riskExposure: "",
-                      protMitigation: "",
+                      risk: "",
+                      mitigation: "",
                   },
                   {
                       name: "Pinch Points",
-                      riskExposure: "",
-                      protMitigation: "",
+                      risk: "",
+                      mitigation: "",
                   },
                   {
                       name: "Ascending/Descending",
-                      riskExposure: "",
-                      protMitigation: "",
+                      risk: "",
+                      mitigation: "",
                   },
                   {
                       name: "Walking/Path of Travel",
-                      riskExposure: "",
-                      protMitigation: "",
+                      risk: "",
+                      mitigation: "",
                   },
               ]
     );
@@ -161,28 +164,28 @@ function JobBriefingForm(props) {
     const defaultPrimaryExposures = [
         {
             name: "Life Saving Processes",
-            riskExposure: "",
-            protMitigation: "",
+            risk: "",
+            mitigation: "",
         },
         {
             name: "Line of Fire/Release of Energy",
-            riskExposure: "",
-            protMitigation: "",
+            risk: "",
+            mitigation: "",
         },
         {
             name: "Pinch Points",
-            riskExposure: "",
-            protMitigation: "",
+            risk: "",
+            mitigation: "",
         },
         {
             name: "Ascending/Descending",
-            riskExposure: "",
-            protMitigation: "",
+            risk: "",
+            mitigation: "",
         },
         {
             name: "Walking/Path of Travel",
-            riskExposure: "",
-            protMitigation: "",
+            risk: "",
+            mitigation: "",
         },
     ];
 
@@ -195,14 +198,17 @@ function JobBriefingForm(props) {
     ];
 
     useEffect(() => {
+        setDateTime(general.dateTime === "" ? "" : general.dateTime);
+        setConductedBy(user.fName === "" ? "" : `${user.fName} ${user.lName}`);
+        setEIC(user.fName === "" ? "" : `${user.fName} ${user.lName}`);
     }, []);
 
     // The clearForm method will wipe out all the data currently
     // held in the form
     const clearForm = () => {
-        setConductedBy("");
-        setEIC("");
-        setDateTime(moment());
+        setConductedBy(user.fName === "" ? "" : `${user.fName} ${user.lName}`);
+        setEIC(user.fName === "" ? "" : `${user.fName} ${user.lName}`);
+        setDateTime(moment(new Date(), 'MM-DD-YYYY HH:mm:ss'));
         setPhysLoc("");
         setLat("");
         setLng("");
@@ -379,7 +385,7 @@ function JobBriefingForm(props) {
     // Function that will handle changes to the date and time fields
     const onChangeDateTime = (newDateTime) => {
         // Setting the new form field value to local state
-        setDateTime(newDateTime);
+        setDateTime(newDateTime.format('YYYY-MM-DD HH:mm:ss').toString());
     };
 
     // Function that will handle changes to the eIC field
@@ -453,8 +459,8 @@ function JobBriefingForm(props) {
                 if (primaryExposure.name === exposure.name) {
                     return {
                         name: primaryExposure.name,
-                        riskExposure: primaryExposure.riskExposure,
-                        protMitigation: value,
+                        risk: primaryExposure.risk,
+                        mitigation: value,
                     };
                 }
 
@@ -479,8 +485,8 @@ function JobBriefingForm(props) {
                 if (primaryExposure.name === exposure.name) {
                     return {
                         name: primaryExposure.name,
-                        riskExposure: value,
-                        protMitigation: primaryExposure.protMitigation,
+                        risk: value,
+                        mitigation: primaryExposure.mitigation,
                     };
                 }
 
@@ -552,10 +558,11 @@ function JobBriefingForm(props) {
 
     // This function is used to call the actions to add a new redux
     // state for jobBriefing, general, and emergencyPlan
-    const onSaveBriefData = (name) => {
+    const onSaveBriefData = async (name) => {
         // Formatting the data needed to be used in the redux
         // onAdd method calls
         const jobBriefData = {
+            userId: user.userId,
             briefingName: name,
             eIC: eIC,
             conductedBy: conductedBy,
@@ -568,8 +575,8 @@ function JobBriefingForm(props) {
         const generalData = {
             dateTime: dateTime,
             physLoc: physLoc,
-            lat: lat,
-            lng: lng,
+            lat: typeof lat === "number" ? lat : null,
+            lng: typeof lng === "number" ? lng : null,
         };
         const emergencyPlanData = {
             nearestHospital: nearestHospital,
@@ -580,11 +587,22 @@ function JobBriefingForm(props) {
             evacRoute: evacRoute,
         };
 
+        // Add save THUNK here!!!!
+        const response = addJobBriefingThunk({
+            ...jobBriefData,
+            ...generalData,
+            ...emergencyPlanData,
+        });
+
+        if (response === 200) {
+            setSnackbarMessage("Briefing saved successfully");
+        }
+
         // Saving the formatted data to state by calling the onAdd
         // redux methods
-        onAddJobBriefing(jobBriefData);
-        onAddGeneral(generalData);
-        onAddEmergencyPlan(emergencyPlanData);
+        // onAddJobBriefing(jobBriefData);
+        // onAddGeneral(generalData);
+        // onAddEmergencyPlan(emergencyPlanData);
     };
 
     // This function will open the dialog that allows the user
@@ -716,6 +734,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+    addJobBriefingThunk: (jobBriefingData) => dispatch(addJobBriefingThunk(jobBriefingData)),
     onAddUser(userId, fName, lName, pNumber, email) {
         dispatch(addUser(userId, fName, lName, pNumber, email));
     },
@@ -723,6 +742,8 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(addGeneral(date, time, physLoc, lat, lng));
     },
     onAddJobBriefing(
+        briefingId,
+        briefingName,
         eIc,
         conductedBy,
         placeOfSafety,
@@ -733,6 +754,8 @@ const mapDispatchToProps = (dispatch) => ({
     ) {
         dispatch(
             addJobBriefing(
+                briefingId,
+                briefingName,
                 eIc,
                 conductedBy,
                 placeOfSafety,
