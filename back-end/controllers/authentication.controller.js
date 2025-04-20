@@ -46,6 +46,7 @@ exports.login = async (req, res) => {
                     pNum: data.pNum,
                     email: data.email,
                     permId: data.Authentication.permId,
+                    userId: data.userId,
                 });
             } else {
                 // If no user was found a 404 message is sent
