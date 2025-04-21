@@ -33,7 +33,7 @@ export const addJobBriefing = ({
     taskRules,
     primaryExposures,
     acknowledgements,
-    briefingName
+    briefingName,
 }) => ({
     type: C.ADD_JOB_BRIEFING,
     briefingId,
@@ -44,7 +44,7 @@ export const addJobBriefing = ({
     taskRules,
     primaryExposures,
     acknowledgements,
-    briefingName
+    briefingName,
 });
 
 /**
@@ -98,9 +98,9 @@ export const deleteJobBriefing = () => ({
 
 /**
  * React Redux action will add an acknowledgement to the list
- * 
- * @param {employeeName, employeePNum} param0 
- * @returns 
+ *
+ * @param {employeeName, employeePNum} param0
+ * @returns
  */
 export const addAcknowledgement = ({ employeeName, employeePNum }) => ({
     type: C.ADD_ACKNOWLEDGEMENT,
@@ -110,8 +110,8 @@ export const addAcknowledgement = ({ employeeName, employeePNum }) => ({
 
 /**
  * React Redux action will clear all entries on the acknowledgment list
- * 
- * @returns 
+ *
+ * @returns
  */
 export const deleteAllAcknowledgement = () => ({
     type: C.DELETE_ALL_ACKNOWLEDGEMENT,

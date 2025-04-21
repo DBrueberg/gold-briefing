@@ -5,6 +5,7 @@
 // Last Edited (Initials, Date, Edits):
 // (DAB, 4/11/2024, Added the update method to update the briefing data)
 // (DAB, 4/12/2024, Error checked new briefing controllers and added comments)
+// (DAB, 4/21/2025, Refactored the update method to use the new model structure)
 
 /**
  * Names for PrimaryExposures messed up
@@ -81,11 +82,11 @@ exports.create = async (req, res) => {
                                     `An error occurred while adding ${exposure.name}`,
                             });
                         });
-                    return { 
+                    return {
                         lifeSaveId: lifeSaveData.lifeSaveId,
                         name: LIFE_SAVING_NAME,
                         risk: lifeSaveData.risk,
-                        mitigation: lifeSaveData.mitigation, 
+                        mitigation: lifeSaveData.mitigation,
                     };
                     break;
                 case LINE_FIRE_NAME:
@@ -102,7 +103,7 @@ exports.create = async (req, res) => {
                                     `An error occurred while adding ${exposure.name}`,
                             });
                         });
-                    return { 
+                    return {
                         lineFireId: lineFireData.lineFireId,
                         name: LINE_FIRE_NAME,
                         risk: lineFireData.risk,
@@ -111,7 +112,7 @@ exports.create = async (req, res) => {
                     break;
                 case PINCH_POINT_NAME:
                     // Save to pinchPoints
-                    const pinchPointData= await PinchPoint.create(exposureData)
+                    const pinchPointData = await PinchPoint.create(exposureData)
                         .then((data) => {
                             // return data.pinchPointId;
                             return data.dataValues;
@@ -123,7 +124,7 @@ exports.create = async (req, res) => {
                                     `An error occurred while adding ${exposure.name}`,
                             });
                         });
-                    return { 
+                    return {
                         pinchPointId: pinchPointData.pinchPointId,
                         name: PINCH_POINT_NAME,
                         risk: pinchPointData.risk,
@@ -144,7 +145,7 @@ exports.create = async (req, res) => {
                                     `An error occurred while adding ${exposure.name}`,
                             });
                         });
-                    return { 
+                    return {
                         ascDescId: ascDescData.ascDescId,
                         name: ASC_DESC_NAME,
                         risk: ascDescData.risk,
@@ -165,7 +166,7 @@ exports.create = async (req, res) => {
                                     `An error occurred while adding ${exposure.name}`,
                             });
                         });
-                    return { 
+                    return {
                         pathTravelId: pathTravelData.pathTravelId,
                         name: PATH_TRAVEL_NAME,
                         risk: pathTravelData.risk,
@@ -181,7 +182,6 @@ exports.create = async (req, res) => {
             }
         },
     );
-
 
     // Resolving promises array. All the exposure data is returned
     const primaryExposures = await Promise.all(exposuresDataPromises);
@@ -209,7 +209,6 @@ exports.create = async (req, res) => {
                     "An error occurred while adding the exposure Id's.",
             });
         });
-
 
     // If a response was sent the method will terminate
     if (res.headersSent) {
@@ -321,12 +320,12 @@ exports.create = async (req, res) => {
         ...briefData,
         Location: locData,
         Emergency: emerData,
-        Exposure: {...exposureData, primaryExposures },
-    }
-    
+        Exposure: { ...exposureData, primaryExposures },
+    };
+
     res.status(200).send({
-        ...formattedReturnData
-    })
+        ...formattedReturnData,
+    });
 };
 
 /**
@@ -339,16 +338,17 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
     // Validate request
     if (
-        !req.body 
-        && !req.body.userId 
-        && !req.body.briefingId 
-        && !req.body.Emergency.emerId 
-        && !req.body.Location.locId
-        && !req.body.Exposure.lifeSaveId
-        && !req.body.Exposure.lineFireId
-        && !req.body.Exposure.pinchPointId
-        && !req.body.Exposure.ascDescId
-        && !req.body.Exposure.pathTravelId) {
+        !req.body &&
+        !req.body.userId &&
+        !req.body.briefingId &&
+        !req.body.Emergency.emerId &&
+        !req.body.Location.locId &&
+        !req.body.Exposure.lifeSaveId &&
+        !req.body.Exposure.lineFireId &&
+        !req.body.Exposure.pinchPointId &&
+        !req.body.Exposure.ascDescId &&
+        !req.body.Exposure.pathTravelId
+    ) {
         res.status(400).send({
             message: "Content can not be empty, needs required ids!",
         });

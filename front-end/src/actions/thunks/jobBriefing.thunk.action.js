@@ -9,20 +9,28 @@ import { addGeneral } from "../general.action";
 import { addEmergencyPlan } from "../emergencyPlan.action";
 import JobBriefingDataService from "../../services/jobBriefing.service";
 
+/**
+ * The addJobBriefingThunk function will handle the creation of a new job briefing
+ * and dispatch the action to add the job briefing to the redux state after successful
+ * database creation.
+ *
+ * @param {*} jobBriefingData
+ * @returns
+ */
 export const addJobBriefingThunk = (jobBriefingData) => {
     return async (dispatch) => {
         try {
             // Creating the job briefing in the database
             const response = await JobBriefingDataService.create(jobBriefingData);
 
-            console.log("Response from create job briefing: outside if", response.data);
-
             // If the job briefing is created, dispatch the action to add the job briefing to redux state
             if (response.status === 200) {
                 const updatedJobBriefingData = response.data;
 
-                console.log("Job Briefing Created:", updatedJobBriefingData);
+                // Debugg
+                // console.log("Job Briefing Created:", updatedJobBriefingData);
 
+                // Formatting the data to be saved into the redux state
                 const newJobBriefingData = {
                     briefingId: updatedJobBriefingData.briefingId,
                     briefingName: updatedJobBriefingData.briefingName,
@@ -33,19 +41,19 @@ export const addJobBriefingThunk = (jobBriefingData) => {
                     taskRules: updatedJobBriefingData.taskRules,
                     primaryExposures: updatedJobBriefingData.Exposure.primaryExposures,
                     acknowledgements: jobBriefingData.acknowledgements,
-                }
-
+                };
                 const newGeneralData = {
                     locId: updatedJobBriefingData.locId,
                     physLoc: jobBriefingData.physLoc,
                     lat: jobBriefingData.lat,
                     lng: jobBriefingData.lng,
-                }
+                };
 
-                console.log("Primary Exposures:", newJobBriefingData.primaryExposures);
-                console.log("Acknowledgements:", newJobBriefingData.acknowledgements);
-                console.log("General:", newGeneralData);
-                console.log("Emergency Plan:", updatedJobBriefingData);
+                // Debugging the data to be updated in the redux state
+                // console.log("Primary Exposures:", newJobBriefingData.primaryExposures);
+                // console.log("Acknowledgements:", newJobBriefingData.acknowledgements);
+                // console.log("General:", newGeneralData);
+                // console.log("Emergency Plan:", updatedJobBriefingData);
 
                 // Saving the new job briefing data to the redux state
                 dispatch(addJobBriefing(newJobBriefingData));
@@ -64,4 +72,77 @@ export const addJobBriefingThunk = (jobBriefingData) => {
             }
         }
     };
-}
+};
+
+/**
+ * The updateJobBriefingThunk function will handle the updating of an existing job briefing
+ * and dispatch the action to update the job briefing in the redux state after successful
+ * database update.
+ *
+ * @param {*} jobBriefingData
+ * @returns
+ */
+export const updateJobBriefingThunk = (jobBriefingData) => {
+    return async (dispatch) => {
+        try {
+            // Updating the job briefing in the database
+            const response = await JobBriefingDataService.update(jobBriefingData);
+
+            // If the job briefing is updated, dispatch the action to add the job briefing to redux state
+            if (response.status === 200) {
+                // Response data is just a number, now need to format data to be updated in
+                // the redux state
+                let reducedPrimaryExposures = [];
+
+                // Turning the primary exposures into an array
+                // for the redux state
+                for (const key in jobBriefingData.Exposure) {
+                    reducedPrimaryExposures.push({
+                        ...jobBriefingData.Exposure[key],
+                    });
+                }
+
+                // Formating the data to be updated in the redux state
+                const newJobBriefingData = {
+                    briefingId: jobBriefingData.briefingId,
+                    briefingName: jobBriefingData.briefingName,
+                    eIC: jobBriefingData.eIC,
+                    conductedBy: jobBriefingData.conductedBy,
+                    placeOfSafety: jobBriefingData.placeOfSafety,
+                    taskDetails: jobBriefingData.taskDetails,
+                    taskRules: jobBriefingData.taskRules,
+                    primaryExposures: reducedPrimaryExposures,
+                    acknowledgements: jobBriefingData.acknowledgements,
+                };
+                const newGeneralData = {
+                    locId: jobBriefingData.locId,
+                    physLoc: jobBriefingData.Location.physLoc,
+                    lat: jobBriefingData.Location.lat,
+                    lng: jobBriefingData.Location.lng,
+                };
+
+                // Debugging the data to be updated in the redux state
+                // console.log("Reduced Primary Exposures:", reducedPrimaryExposures);
+                // console.log("Primary Exposures:", newJobBriefingData.primaryExposures);
+                // console.log("Acknowledgements:", newJobBriefingData.acknowledgements);
+                // console.log("General:", newGeneralData);
+                // console.log("Emergency Plan:", jobBriefingData.Emergency);
+
+                // Saving the new job briefing data to the redux state
+                dispatch(addJobBriefing(newJobBriefingData));
+                dispatch(addGeneral(newGeneralData));
+                dispatch(addEmergencyPlan(jobBriefingData.Emergency));
+
+                // Returning the response status to the caller to indicate success
+                return 200;
+            }
+        } catch (error) {
+            // If there is an error, log it to the console
+            console.error("Error updating job briefing:", error);
+            // If there is an error, return a 400 status
+            if (error.response.status === 400) {
+                return 400;
+            }
+        }
+    };
+};
