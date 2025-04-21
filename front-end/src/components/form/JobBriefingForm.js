@@ -587,6 +587,9 @@ function JobBriefingForm(props) {
             evacRoute: evacRoute,
         };
 
+        console.log("Caller:", caller);
+        console.log("Nearest Hospital:", nearestHospital);
+
         // Add save THUNK here!!!!
         const response = addJobBriefingThunk({
             ...jobBriefData,

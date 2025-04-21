@@ -3,6 +3,7 @@
 // Gold-Briefing - emergency.model.js
 // November 26, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 04/21/2025, Refactored hospName to hospital and callerName to caller)
 
 // Sequelize model for the emergencies table
 module.exports = (sequelize, DataTypes) => {
@@ -14,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 autoIncrement: true,
             },
-            hospName: {
+            nearestHospital: {
                 type: DataTypes.STRING(50),
             },
             accessPoint: {
@@ -23,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             evacRoute: {
                 type: DataTypes.STRING,
             },
-            callerName: {
+            caller: {
                 type: DataTypes.STRING(80),
             },
             cPR: {

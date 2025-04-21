@@ -35,11 +35,21 @@ export const addJobBriefingThunk = (jobBriefingData) => {
                     acknowledgements: jobBriefingData.acknowledgements,
                 }
 
+                const newGeneralData = {
+                    locId: updatedJobBriefingData.locId,
+                    physLoc: jobBriefingData.physLoc,
+                    lat: jobBriefingData.lat,
+                    lng: jobBriefingData.lng,
+                }
+
                 console.log("Primary Exposures:", newJobBriefingData.primaryExposures);
+                console.log("Acknowledgements:", newJobBriefingData.acknowledgements);
+                console.log("General:", newGeneralData);
+                console.log("Emergency Plan:", updatedJobBriefingData);
 
                 // Saving the new job briefing data to the redux state
                 dispatch(addJobBriefing(newJobBriefingData));
-                dispatch(addGeneral(updatedJobBriefingData.General));
+                dispatch(addGeneral(newGeneralData));
                 dispatch(addEmergencyPlan(updatedJobBriefingData.Emergency));
 
                 // Returning the response status to the caller to indicate success

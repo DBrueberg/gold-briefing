@@ -218,10 +218,10 @@ exports.create = async (req, res) => {
 
     // Formatting the emergency data
     const emergencyData = {
-        hospName: req.body.hospName,
+        nearestHospital: req.body.nearestHospital,
         accessPoint: req.body.accessPoint,
         evacRoute: req.body.evacRoute,
-        callerName: req.body.callerName,
+        caller: req.body.caller,
         cPR: req.body.cPR,
         medInfo: req.body.medInfo,
     };
