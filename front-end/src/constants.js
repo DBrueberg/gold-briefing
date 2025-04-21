@@ -42,3 +42,11 @@ export const reduxAction = {
     DELETE_WEATHER: "DELETE_WEATHER",
     DELETE_ALL_WEATHER: "DELETE_ALL_WEATHER",
 };
+
+export const exposureConstants = {
+    LIFE_SAVING_NAME: "Life Saving Processes",
+    LINE_FIRE_NAME: "Line of Fire/Release of Energy",
+    PINCH_POINT_NAME: "Pinch Points",
+    ASC_DESC_NAME: "Ascending/Descending",
+    PATH_TRAVEL_NAME: "Walking/Path of Travel",
+}
