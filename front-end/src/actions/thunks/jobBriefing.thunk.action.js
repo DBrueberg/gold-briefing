@@ -8,6 +8,7 @@ import { addJobBriefing } from "../jobBriefing.action";
 import { addGeneral } from "../general.action";
 import { addEmergencyPlan } from "../emergencyPlan.action";
 import JobBriefingDataService from "../../services/jobBriefing.service";
+import { addAllBriefingList, deleteAllBriefingList, deleteBriefingList } from "../briefingList.action";
 
 /**
  * The addJobBriefingThunk function will handle the creation of a new job briefing
@@ -139,6 +140,66 @@ export const updateJobBriefingThunk = (jobBriefingData) => {
         } catch (error) {
             // If there is an error, log it to the console
             console.error("Error updating job briefing:", error);
+            // If there is an error, return a 400 status
+            if (error.response.status === 400) {
+                return 400;
+            }
+        }
+    };
+};
+
+// UNTESTED, forgot what I was doing for a minute and threw this together
+export const deleteJobBriefingThunk = (jobBriefingId) => {
+    return async (dispatch) => {
+        try {
+            // Deleting the job briefing in the database
+            const response = await JobBriefingDataService.delete(jobBriefingId);
+
+            // If the job briefing is deleted, dispatch the action to delete the job briefing from redux state
+            if (response.status === 200) {
+                // Need a dispatch that can both delete the briefing from the briefing list redux state and the
+                // database
+                dispatch(deleteBriefingList(jobBriefingId));
+                return 200;
+            }
+        } catch (error) {
+            // If there is an error, log it to the console
+            console.error("Error deleting job briefing:", error);
+            // If there is an error, return a 400 status
+            if (error.response.status === 400) {
+                return 400;
+            }
+        }
+    };
+};
+
+export const getAllJobBriefingsThunk = (userId) => {
+    return async (dispatch) => {
+        try {
+            // Getting all the job briefings in the database
+            const response = await JobBriefingDataService.getAllByUserId(userId);
+
+            console.log("IS GET ALL JOB BRIEFINGS THUNK WORKING?");
+
+            // If the job briefings are retrieved, dispatch the action to add the job briefings to redux state
+            if (response.status === 200) {
+                const jobBriefings = response.data;
+                dispatch(deleteAllBriefingList());
+                console.log("Job Briefings:", jobBriefings);
+
+                // Debugging the data to be updated in the redux state
+                // console.log("Job Briefings:", jobBriefings);
+
+                // Saving the new job briefing data to the redux state
+                dispatch(addAllBriefingList(jobBriefings));
+
+                return jobBriefings;
+                // Returning the response status to the caller to indicate success
+                return 200;
+            }
+        } catch (error) {
+            // If there is an error, log it to the console
+            console.error("Error getting all job briefings:", error);
             // If there is an error, return a 400 status
             if (error.response.status === 400) {
                 return 400;
