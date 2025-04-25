@@ -4,10 +4,16 @@
 // April 19, 2025
 // Last Edited (Initials, Date, Edits):
 
-import { addJobBriefing } from "../jobBriefing.action";
+import { addJobBriefing, deleteAllAcknowledgement } from "../jobBriefing.action";
 import { addGeneral } from "../general.action";
 import { addEmergencyPlan } from "../emergencyPlan.action";
 import JobBriefingDataService from "../../services/jobBriefing.service";
+import {
+    addAllBriefingList,
+    deleteAllBriefingList,
+    deleteBriefingList,
+} from "../briefingList.action";
+import { exposureConstants as C } from "../../constants";
 
 /**
  * The addJobBriefingThunk function will handle the creation of a new job briefing
@@ -141,6 +147,129 @@ export const updateJobBriefingThunk = (jobBriefingData) => {
             console.error("Error updating job briefing:", error);
             // If there is an error, return a 400 status
             if (error.response.status === 400) {
+                return 400;
+            }
+        }
+    };
+};
+
+// UNTESTED, forgot what I was doing for a minute and threw this together
+export const deleteJobBriefingThunk = (jobBriefingId) => {
+    return async (dispatch) => {
+        try {
+            // Deleting the job briefing in the database
+            const response = await JobBriefingDataService.delete(jobBriefingId);
+
+            // If the job briefing is deleted, dispatch the action to delete the job briefing from redux state
+            if (response.status === 200) {
+                // Need a dispatch that can both delete the briefing from the briefing list redux state and the
+                // database
+                dispatch(deleteBriefingList(jobBriefingId));
+                return 200;
+            }
+        } catch (error) {
+            // If there is an error, log it to the console
+            console.error("Error deleting job briefing:", error);
+            // If there is an error, return a 400 status
+            if (error.response.status === 400) {
+                return 400;
+            }
+        }
+    };
+};
+
+/**
+ * The getAllJobBriefingsThunk will request all the job briefings written by
+ * a single userId. The data will then be formatted
+ *
+ * @param {number} userId
+ * @returns @param {number} jobBriefing - data if it was found and 400 if data was not found
+ */
+export const getAllJobBriefingsThunk = (userId) => {
+    return async (dispatch) => {
+        try {
+            // Getting all the job briefings in the database
+            const response = await JobBriefingDataService.getAllByUserId(userId);
+
+            // If the job briefings are retrieved, dispatch the action to add the job briefings to redux state
+            if (response.status === 200) {
+                const jobBriefings = response.data;
+                dispatch(deleteAllBriefingList());
+                // console.log("Job Briefings:", jobBriefings);
+
+                // Debugging the data to be updated in the redux state
+                // console.log("Job Briefings:", jobBriefings);
+
+                // Saving the new job briefing data to the redux state
+                dispatch(addAllBriefingList(jobBriefings));
+
+                return jobBriefings;
+                // Returning the response status to the caller to indicate success
+                return 200;
+            }
+        } catch (error) {
+            // If there is an error, log it to the console
+            console.error("Error getting all job briefings:", error);
+            // If there is an error, return a 400 status
+            if (error.response.status === 400) {
+                return 400;
+            }
+        }
+    };
+};
+
+/**
+ * The getOneJobBriefingThunk will request a single job briefing from the database
+ * based off the job briefingId. It will retrieve and format the data.
+ *
+ * @param {number} briefingId
+ * @returns @param {number} 200 if data was found and 400 if data was not found
+ */
+export const getOneJobBriefingThunk = (briefingId) => {
+    return async (dispatch) => {
+        try {
+            // Requesting the job briefing data from the database
+            const response = await JobBriefingDataService.get(briefingId);
+
+            // If there is a briefing found, the data will be formatted and added to state
+            if (response.status === 200) {
+                const jobBriefingData = response.data;
+
+                // Exposure string names are not saved to the database, adding them in
+                const rawExposure = [
+                    { ...jobBriefingData.Exposure.AscDesc, name: C.ASC_DESC_NAME },
+                    { ...jobBriefingData.Exposure.LifeSaving, name: C.LIFE_SAVING_NAME },
+                    { ...jobBriefingData.Exposure.LineFire, name: C.LINE_FIRE_NAME },
+                    { ...jobBriefingData.Exposure.PathTravel, name: C.PATH_TRAVEL_NAME },
+                    { ...jobBriefingData.Exposure.PinchPoint, name: C.PINCH_POINT_NAME },
+                ];
+
+                // Formating the data to be updated in the redux state
+                const newJobBriefingData = {
+                    briefingId: jobBriefingData.briefingId,
+                    briefingName: jobBriefingData.briefingName,
+                    eIC: jobBriefingData.eIC,
+                    conductedBy: jobBriefingData.conductedBy,
+                    placeOfSafety: jobBriefingData.placeOfSafety,
+                    taskDetails: jobBriefingData.taskDetails,
+                    taskRules: jobBriefingData.taskRules,
+                    primaryExposures: rawExposure,
+                };
+
+                // Dispatching the redux actions to save the new data to state
+                dispatch(addGeneral(response.data.Location));
+                dispatch(addEmergencyPlan(response.data.Emergency));
+                dispatch(addJobBriefing(newJobBriefingData));
+
+                // Successful retrieval returns 200
+                return 200;
+            }
+        } catch (error) {
+            // If there is an error, log it to the console
+            console.error("Error getting job briefing:", error);
+            // If there is an error, return a 400 status
+            if (error.response.status === 400) {
+                // Error returns 400
                 return 400;
             }
         }

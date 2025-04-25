@@ -4,7 +4,7 @@
 // November 17, 2023
 // Last Edited (Initials, Date, Edits):
 
-// The constants.js page will allow error free use of 
+// The constants.js page will allow error free use of
 // commonly used and connected key functionality
 export const reduxAction = {
     ADD_ACKNOWLEDGEMENT: "ADD_ACKNOWLEDGMENT",
@@ -12,6 +12,7 @@ export const reduxAction = {
     DELETE_ACKNOWLEDGEMENT: "DELETE_ACKNOWLEDGMENT",
     DELETE_ALL_ACKNOWLEDGEMENTS: "DELETE_ALL_ACKNOWLEDGMENTS",
 
+    ADD_ALL_BRIEFING_LIST: "ADD_ALL_BRIEFING_LIST",
     ADD_BRIEFING_LIST: "ADD_BRIEFING_LIST",
     UPDATE_BRIEFING_LIST: "UPDATE_BRIEFING_LIST",
     DELETE_BRIEFING_LIST: "DELETE_BRIEFING_LIST",
@@ -24,7 +25,7 @@ export const reduxAction = {
 
     ADD_USER: "ADD_USER",
     UPDATE_USER: "UPDATE_USER",
-    DELETE_USER:"DELETE_USER",
+    DELETE_USER: "DELETE_USER",
     DELETE_ALL_USER: "DELETE_ALL_USER",
 
     ADD_JOB_BRIEFING: "ADD_JOB_BRIEFING",
@@ -49,4 +50,4 @@ export const exposureConstants = {
     PINCH_POINT_NAME: "Pinch Points",
     ASC_DESC_NAME: "Ascending/Descending",
     PATH_TRAVEL_NAME: "Walking/Path of Travel",
-}
+};

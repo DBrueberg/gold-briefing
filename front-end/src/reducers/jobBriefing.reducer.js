@@ -22,8 +22,6 @@ import { reduxAction as C, exposureConstants } from "../constants";
 export const jobBriefing = (state = {}, action) => {
     switch (action.type) {
         case C.ADD_JOB_BRIEFING:
-            console.log(action);
-            console.log("action", action);
             return {
                 briefingId: action.briefingId,
                 briefingName: action.briefingName,
@@ -33,7 +31,7 @@ export const jobBriefing = (state = {}, action) => {
                 taskDetails: action.taskDetails,
                 taskRules: action.taskRules,
                 primaryExposures: primaryExposures([], action),
-                acknowledgements: acknowledgements([], action),
+                acknowledgements: [],
             };
         case C.ADD_ACKNOWLEDGEMENT:
             return [...state, acknowledgements(state.acknowledgements, action)];
