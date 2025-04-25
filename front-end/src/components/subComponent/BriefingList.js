@@ -7,9 +7,13 @@
 // Using React library in order to build components
 // for the app and importing needed components
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { Box, Button, List, ListItem, ListItemText, Typography } from "@mui/material";
-import { getAllJobBriefingsThunk } from "../../actions/thunks/jobBriefing.thunk.action";
+import {
+    getAllJobBriefingsThunk,
+    getOneJobBriefingThunk,
+} from "../../actions/thunks/jobBriefing.thunk.action";
 
 /**
  * The BriefingList Component will load in a list of saved
@@ -19,22 +23,21 @@ import { getAllJobBriefingsThunk } from "../../actions/thunks/jobBriefing.thunk.
  */
 function BriefingList(props) {
     // Destructuring the needed methods from props
-    const { getAllJobBriefingsThunk } = props;
+    const { getAllJobBriefingsThunk, getOneJobBriefingThunk } = props;
     // Destructuring the needed variable from props
     const { briefingList, user } = props;
+    const navigate = useNavigate();
 
     useEffect(() => {
         // This will be used to load in the briefing list
         // from the database
-        console.log("BriefingList page loaded");
+
+        // If there is a userId in state, that users briefins will load
         if (user.userId) {
-            loadBriefings();
+            console.log("BriefingList page loaded");
+            loadBriefings(user.userId);
         }
     }, []);
-
-    const loadBriefings = async () => {
-        await getAllJobBriefingsThunk(user.userId);
-    };
 
     // This function will will allow a user to delete a saved
     // job briefing using its id
@@ -45,13 +48,22 @@ function BriefingList(props) {
 
     // This function will allow a user to load in a new job
     // briefing based off its id
-    const handleLoadClick = (id) => {
-        console.log("Load was clicked on BriefingList page");
+    const handleLoadClick = async (briefingId) => {
         // Might need a new route that uses :id, will look into
         // options. May just load current into state
+        const response = await getOneJobBriefingThunk(briefingId);
+        if (response === 200) {
+            // Send the user to the briefing page
+            navigate("/");
+        }
     };
 
-    const isBrifingList = briefingList?.length > 0;
+    // The loadBriefings method will async request and load the job briefings if there are any
+    const loadBriefings = async () => {
+        await getAllJobBriefingsThunk(user.userId);
+    };
+
+    const isBriefingList = briefingList?.length > 0;
 
     // The Briefing Component contains a single briefing data
     // and allows the user to either choose delete or load
@@ -59,10 +71,18 @@ function BriefingList(props) {
         <List>
             <ListItem sx={{ width: { xs: "100%", sm: "50%", md: "40%" }, mx: "auto" }}>
                 <ListItemText primary={props.briefing?.briefingName} />
-                <Button variant="contained" sx={{ mx: ".25rem" }} onClick={() => handleDeleteClick(props.briefing.id)}>
+                <Button
+                    variant="contained"
+                    sx={{ mx: ".25rem" }}
+                    onClick={() => handleDeleteClick(props.briefing.briefingId)}
+                >
                     Delete
                 </Button>
-                <Button variant="contained" sx={{ mx: ".25rem" }} onClick={() => handleLoadClick(props.briefing.id)}>
+                <Button
+                    variant="contained"
+                    sx={{ mx: ".25rem" }}
+                    onClick={() => handleLoadClick(props.briefing.briefingId)}
+                >
                     Load
                 </Button>
             </ListItem>
@@ -79,8 +99,8 @@ function BriefingList(props) {
                     <Briefing
                         briefing={briefing}
                         key={index}
-                        handleDeleteClick={handleDeleteClick}
-                        handleLoadClick={handleLoadClick}
+                        handleDeleteClick={() => handleDeleteClick}
+                        handleLoadClick={() => handleLoadClick(briefing.briefingId)}
                     />
                 ))}
         </Box>
@@ -95,6 +115,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getAllJobBriefingsThunk: (id) => dispatch(getAllJobBriefingsThunk(id)),
+        getOneJobBriefingThunk: (id) => dispatch(getOneJobBriefingThunk(id)),
     };
 };
 

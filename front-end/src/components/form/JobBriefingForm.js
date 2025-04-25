@@ -39,7 +39,10 @@ import { addJobBriefing, deleteJobBriefing } from "../../actions/jobBriefing.act
 import { addEmergencyPlan, deleteEmergencyPlan } from "../../actions/emergencyPlan.action";
 import { addGeneral, deleteGeneral } from "../../actions/general.action";
 import { addBriefingList } from "../../actions/briefingList.action";
-import { addJobBriefingThunk, updateJobBriefingThunk } from "../../actions/thunks/jobBriefing.thunk.action";
+import {
+    addJobBriefingThunk,
+    updateJobBriefingThunk,
+} from "../../actions/thunks/jobBriefing.thunk.action";
 import { exposureConstants } from "../../constants";
 
 /**
@@ -66,11 +69,15 @@ function JobBriefingForm(props) {
     const navigate = useNavigate();
 
     // Defining default settings for the local state
-    const [accessPoint, setAccessPoint] = useState(emergencyPlan.accessPoint ? emergencyPlan.accessPoint : "");
+    const [accessPoint, setAccessPoint] = useState(
+        emergencyPlan.accessPoint ? emergencyPlan.accessPoint : ""
+    );
     const [acknowledgements, setAcknowledgments] = useState(
         jobBriefing.acknowledgements ? jobBriefing.acknowledgements : []
     );
-    const [briefingName, setBriefingName] = useState(jobBriefing.briefingName ? jobBriefing.briefingName : "");
+    const [briefingName, setBriefingName] = useState(
+        jobBriefing.briefingName ? jobBriefing.briefingName : ""
+    );
     const [caller, setCaller] = useState(emergencyPlan.caller ? emergencyPlan.caller : "");
     const [conductedBy, setConductedBy] = useState(
         jobBriefing.conductedBy ? jobBriefing.conductedBy : `${user.fName} ${user.lName}` || ""
@@ -79,8 +86,12 @@ function JobBriefingForm(props) {
     const [dateTime, setDateTime] = useState(
         general.dateTime ? general.dateTime : moment(new Date(), "MM-DD-YYYY HH:mm:ss")
     );
-    const [eIC, setEIC] = useState(jobBriefing.eIC ? jobBriefing.eIC : `${user.fName} ${user.lName}` || "");
-    const [evacRoute, setEvacRoute] = useState(emergencyPlan.evacRoute ? emergencyPlan.evacRoute : "");
+    const [eIC, setEIC] = useState(
+        jobBriefing.eIC ? jobBriefing.eIC : `${user.fName} ${user.lName}` || ""
+    );
+    const [evacRoute, setEvacRoute] = useState(
+        emergencyPlan.evacRoute ? emergencyPlan.evacRoute : ""
+    );
     const [lat, setLat] = useState(general.lat ? general.lat : "");
     const [lng, setLng] = useState(general.lng ? general.lng : "");
     const [medInfo, setMedInfo] = useState(emergencyPlan.medInfo ? emergencyPlan.medInfo : "");
@@ -90,9 +101,13 @@ function JobBriefingForm(props) {
     const [openBriefDialog, setOpenBriefDialog] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [physLoc, setPhysLoc] = useState(general.physLoc ? general.physLoc : "");
-    const [placeOfSafety, setPlaceOfSafety] = useState(jobBriefing.placeOfSafety ? jobBriefing.placeOfSafety : "");
+    const [placeOfSafety, setPlaceOfSafety] = useState(
+        jobBriefing.placeOfSafety ? jobBriefing.placeOfSafety : ""
+    );
     const [snackbarMessage, setSnackbarMessage] = useState(null);
-    const [taskDetails, setTaskDetails] = useState(jobBriefing.taskDetails ? jobBriefing.taskDetails : "");
+    const [taskDetails, setTaskDetails] = useState(
+        jobBriefing.taskDetails ? jobBriefing.taskDetails : ""
+    );
     const [taskRules, setTaskRules] = useState(jobBriefing.taskRules ? jobBriefing.taskRules : "");
     const [primaryExposures, setExposures] = useState(
         jobBriefing.primaryExposures
@@ -750,7 +765,10 @@ function JobBriefingForm(props) {
                     {briefingName}
                 </Typography>
 
-                <BriefingSpeedDial actions={speedDialActions} handleSpeedDialClick={handleSpeedDialClick} />
+                <BriefingSpeedDial
+                    actions={speedDialActions}
+                    handleSpeedDialClick={handleSpeedDialClick}
+                />
             </Box>
 
             <General
@@ -770,7 +788,12 @@ function JobBriefingForm(props) {
                 lng={lng}
                 placeOfSafety={placeOfSafety}
             />
-            <Widget weather={weather} onClickUpdateWeather={onClickUpdateWeather} lat={lat} lng={lng} />
+            <Widget
+                weather={weather}
+                onClickUpdateWeather={onClickUpdateWeather}
+                lat={lat}
+                lng={lng}
+            />
             <Task
                 onChangeTaskDetails={onChangeTaskDetails}
                 onChangeTaskRules={onChangeTaskRules}
@@ -796,7 +819,10 @@ function JobBriefingForm(props) {
                 evacRoute={evacRoute}
                 medInfo={medInfo}
             />
-            <Acknowledgement onClickAcknowledgement={onClickAcknowledgement} acknowledgements={acknowledgements} />
+            <Acknowledgement
+                onClickAcknowledgement={onClickAcknowledgement}
+                acknowledgements={acknowledgements}
+            />
             <GenerateBriefing />
             <Snackbar
                 open={openSnackbar}
@@ -854,7 +880,19 @@ const mapDispatchToProps = (dispatch) => ({
     onAddEmergencyPlan(nearestHospital, accessPoint, evacRoute, caller, cPR, medInfo) {
         dispatch(addEmergencyPlan(nearestHospital, accessPoint, evacRoute, caller, cPR, medInfo));
     },
-    onAddWeather(alerts, currentCondition, rain, snow, temp, realFeel, wind, gust, weatherLocation, windDirection, uV) {
+    onAddWeather(
+        alerts,
+        currentCondition,
+        rain,
+        snow,
+        temp,
+        realFeel,
+        wind,
+        gust,
+        weatherLocation,
+        windDirection,
+        uV
+    ) {
         dispatch(
             addWeather(
                 alerts,

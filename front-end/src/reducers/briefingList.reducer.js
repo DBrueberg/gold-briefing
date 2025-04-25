@@ -17,8 +17,6 @@ export const briefingList = (state = [], action) => {
     switch (action.type) {
         case C.ADD_ALL_BRIEFING_LIST:
             return action.briefingList?.map((currentBriefing) => {
-                console.log("In all briefing", currentBriefing);
-                console.log("state", state);
                 return briefing(currentBriefing, action);
             });
         case C.ADD_BRIEFING_LIST:
