@@ -23,7 +23,7 @@
         }
     ],
     "general": {
-        "dateTime": "12/12/2022 0700",
+        "dateTime": "2025-04-20 12:00:00",
         "physLoc": "3138 3rd Ave NE, Minneapolis, MN 55418",
         "lat": "testLat",
         "lng": "testLong"
@@ -38,28 +38,28 @@
         "primaryExposures": [
             {
                 "name": "Life Saving Processes",
-                "riskExposure": "Trains",
-                "protMitigation": "Watch for trains in the area"
+                "risk": "Trains",
+                "mitigation": "Watch for trains in the area"
             },
             {
                 "name": "Line of Fire/Release of Energy",
-                "riskExposure": "Hit by a train",
-                "protMitigation": "Expect a train any direction any time"
+                "risk": "Hit by a train",
+                "mitigation": "Expect a train any direction any time"
             },
             {
                 "name": "Pinch Points",
-                "riskExposure": "Appendage Pinched",
-                "protMitigation": "Watch for throwing switches, truck doors, and tape measures"
+                "risk": "Appendage Pinched",
+                "mitigation": "Watch for throwing switches, truck doors, and tape measures"
             },
             {
                 "name": "Ascending/Descending",
-                "riskExposure": "Falling when getting in and out of vehicles/work locations",
-                "protMitigation": "Stay alert when getting in/out of trucks and climbing the crest"
+                "risk": "Falling when getting in and out of vehicles/work locations",
+                "mitigation": "Stay alert when getting in/out of trucks and climbing the crest"
             },
             {
                 "name": "Walking/Path of Travel",
-                "riskExposure": "Sprained ankles",
-                "protMitigation": "Watch footing at all times. Cribbed out switches can't be seen under snow"
+                "risk": "Sprained ankles",
+                "mitigation": "Watch footing at all times. Cribbed out switches can't be seen under snow"
             }
         ],
         "acknowledgements": [

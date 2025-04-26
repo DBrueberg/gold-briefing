@@ -38,9 +38,9 @@ function Exposure(props) {
                         size="small"
                         multiline
                         rows={2}
-                        id={`riskExposure${index}`}
+                        id={`risk${index}`}
                         label="Risk/Exposure"
-                        value={exposure?.riskExposure}
+                        value={exposure?.risk}
                         onChange={(e) => onChangeRiskExposure(e, exposure)}
                     />
                 </Grid>
@@ -50,9 +50,9 @@ function Exposure(props) {
                         size="small"
                         multiline
                         rows={2}
-                        id={`protMitigation${index}`}
+                        id={`mitigation${index}`}
                         label="Protection/Mitigation"
-                        value={exposure?.protMitigation}
+                        value={exposure?.mitigation}
                         onChange={(e) => onChangeProtMitigation(e, exposure)}
                     />
                 </Grid>

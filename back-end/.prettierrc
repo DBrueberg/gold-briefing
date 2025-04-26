@@ -2,5 +2,6 @@
     "editor.tabSize": 4,
     "editor.formatOnSave": true,
     "indent": 4,
-    "tabWidth": 4
+    "tabWidth": 4,
+    "printWidth": 100
 }

@@ -5,6 +5,7 @@
 // Last Edited (Initials, Date, Edits):
 // (DAB, 4/11/2024, Added the update method to update the briefing data)
 // (DAB, 4/12/2024, Error checked new briefing controllers and added comments)
+// (DAB, 4/21/2025, Refactored the update method to use the new model structure)
 
 /**
  * Names for PrimaryExposures messed up
@@ -50,120 +51,153 @@ exports.create = async (req, res) => {
 
     // Iterating through primary exposures and creating a promise array
     // of exposure ids based on the specific entry
-    const exposuresIdPromises = await req.body.primaryExposures.map(
-        async (exposure) => {
-            // Formatting the exposure data to be used in record creation
-            const exposureData = {
-                risk: exposure.riskExposure,
-                mitigation: exposure.protMitigation,
-            };
+    const exposuresDataPromises = await req.body.primaryExposures.map(async (exposure) => {
+        // Formatting the exposure data to be used in record creation
+        const exposureData = {
+            risk: exposure.risk,
+            mitigation: exposure.mitigation,
+        };
 
-            // The exposure will be added to its correct table by using the exposure.name
-            switch (exposure.name) {
-                case "Life Saving Processes":
-                    // Save to lifeSaving
-                    const lifeSaveId = await LifeSaving.create(exposureData)
-                        .then((data) => {
-                            return data.lifeSaveId;
-                        })
-                        .catch((err) => {
-                            res.status(500).send({
-                                message:
-                                    err.message ||
-                                    `An error occurred while adding ${exposure.name}`,
-                            });
-                        });
-                    return { lifeSaveId: lifeSaveId };
-                    break;
-                case "Line of Fire/Release of Energy":
-                    // Save to lineFire
-                    const lineFireId = await LineFire.create(exposureData)
-                        .then((data) => {
-                            return data.lineFireId;
-                        })
-                        .catch((err) => {
-                            res.status(500).send({
-                                message:
-                                    err.message ||
-                                    `An error occurred while adding ${exposure.name}`,
-                            });
-                        });
-                    return { lineFireId: lineFireId };
-                    break;
-                case "Pinch Points":
-                    // Save to pinchPoints
-                    const pinchPointId = await PinchPoint.create(exposureData)
-                        .then((data) => {
-                            return data.pinchPointId;
-                        })
-                        .catch((err) => {
-                            res.status(500).send({
-                                message:
-                                    err.message ||
-                                    `An error occurred while adding ${exposure.name}`,
-                            });
-                        });
-                    return { pinchPointId: pinchPointId };
-                    break;
-                case "Ascending/Descending":
-                    // Save to ascDesc
-                    const ascDescId = await AscDesc.create(exposureData)
-                        .then((data) => {
-                            return data.ascDescId;
-                        })
-                        .catch((err) => {
-                            res.status(500).send({
-                                message:
-                                    err.message ||
-                                    `An error occurred while adding ${exposure.name}`,
-                            });
-                        });
-                    return { ascDescId: ascDescId };
-                    break;
-                case "Walking/Path of Travel":
-                    // Save to pathTravel
-                    const pathTravelId = await PathTravel.create(exposureData)
-                        .then((data) => {
-                            return data.pathTravelId;
-                        })
-                        .catch((err) => {
-                            res.status(500).send({
-                                message:
-                                    err.message ||
-                                    `An error occurred while adding ${exposure.name}`,
-                            });
-                        });
-                    return { pathTravelId: pathTravelId };
-                    break;
-                default:
-            }
+        // Using constants to define the exposure string names
+        const LIFE_SAVING_NAME = "Life Saving Processes";
+        const LINE_FIRE_NAME = "Line of Fire/Release of Energy";
+        const PINCH_POINT_NAME = "Pinch Points";
+        const ASC_DESC_NAME = "Ascending/Descending";
+        const PATH_TRAVEL_NAME = "Walking/Path of Travel";
 
-            // If a response was sent the method will terminate
-            if (res.headersSent) {
-                return;
-            }
-        },
-    );
+        // The exposure will be added to its correct table by using the exposure.name
+        switch (exposure.name) {
+            case LIFE_SAVING_NAME:
+                // Save to lifeSaving
+                const lifeSaveData = await LifeSaving.create(exposureData)
+                    .then((data) => {
+                        // return data.lifeSaveId;
+                        return data.dataValues;
+                    })
+                    .catch((err) => {
+                        res.status(500).send({
+                            message:
+                                err.message || `An error occurred while adding ${exposure.name}`,
+                        });
+                    });
+                return {
+                    lifeSaveId: lifeSaveData.lifeSaveId,
+                    name: LIFE_SAVING_NAME,
+                    risk: lifeSaveData.risk,
+                    mitigation: lifeSaveData.mitigation,
+                };
+                break;
+            case LINE_FIRE_NAME:
+                // Save to lineFire
+                const lineFireData = await LineFire.create(exposureData)
+                    .then((data) => {
+                        // return data.lineFireId;
+                        return data.dataValues;
+                    })
+                    .catch((err) => {
+                        res.status(500).send({
+                            message:
+                                err.message || `An error occurred while adding ${exposure.name}`,
+                        });
+                    });
+                return {
+                    lineFireId: lineFireData.lineFireId,
+                    name: LINE_FIRE_NAME,
+                    risk: lineFireData.risk,
+                    mitigation: lineFireData.mitigation,
+                };
+                break;
+            case PINCH_POINT_NAME:
+                // Save to pinchPoints
+                const pinchPointData = await PinchPoint.create(exposureData)
+                    .then((data) => {
+                        // return data.pinchPointId;
+                        return data.dataValues;
+                    })
+                    .catch((err) => {
+                        res.status(500).send({
+                            message:
+                                err.message || `An error occurred while adding ${exposure.name}`,
+                        });
+                    });
+                return {
+                    pinchPointId: pinchPointData.pinchPointId,
+                    name: PINCH_POINT_NAME,
+                    risk: pinchPointData.risk,
+                    mitigation: pinchPointData.mitigation,
+                };
+                break;
+            case ASC_DESC_NAME:
+                // Save to ascDesc
+                const ascDescData = await AscDesc.create(exposureData)
+                    .then((data) => {
+                        // return data.ascDescId;
+                        return data.dataValues;
+                    })
+                    .catch((err) => {
+                        res.status(500).send({
+                            message:
+                                err.message || `An error occurred while adding ${exposure.name}`,
+                        });
+                    });
+                return {
+                    ascDescId: ascDescData.ascDescId,
+                    name: ASC_DESC_NAME,
+                    risk: ascDescData.risk,
+                    mitigation: ascDescData.mitigation,
+                };
+                break;
+            case PATH_TRAVEL_NAME:
+                // Save to pathTravel
+                const pathTravelData = await PathTravel.create(exposureData)
+                    .then((data) => {
+                        // return data.pathTravelId;
+                        return data.dataValues;
+                    })
+                    .catch((err) => {
+                        res.status(500).send({
+                            message:
+                                err.message || `An error occurred while adding ${exposure.name}`,
+                        });
+                    });
+                return {
+                    pathTravelId: pathTravelData.pathTravelId,
+                    name: PATH_TRAVEL_NAME,
+                    risk: pathTravelData.risk,
+                    mitigation: pathTravelData.mitigation,
+                };
+                break;
+            default:
+        }
 
-    // Resolving promises array
-    const exposureIdsArray = await Promise.all(exposuresIdPromises);
+        // If a response was sent the method will terminate
+        if (res.headersSent) {
+            return;
+        }
+    });
+
+    // Resolving promises array. All the exposure data is returned
+    const primaryExposures = await Promise.all(exposuresDataPromises);
+
+    // console.log("primary exposures", primaryExposures);
 
     // Converting exposure id array into a since object
-    const exposureIds = Object.assign({}, ...exposureIdsArray);
+    const exposureIds = Object.assign({}, ...primaryExposures);
+
+    // console.log("exposureIds", exposureIds);
 
     // Creating the exposer record using all the newly created exposure ids and
     // assigning the exposure id
-    const exposureId = await Exposure.create(exposureIds)
+    const exposureData = await Exposure.create(exposureIds)
         .then((data) => {
+            // console.log("data.values in exposure", data.dataValues);
             // The exposureId is returned
-            return data.exposureId;
+            return data.dataValues;
         })
         .catch((err) => {
             // If there is an error a response is sent
             res.status(500).send({
-                message:
-                    err.message ||
-                    "An error occurred while adding the exposure Id's.",
+                message: err.message || "An error occurred while adding the exposure Id's.",
             });
         });
 
@@ -174,26 +208,24 @@ exports.create = async (req, res) => {
 
     // Formatting the emergency data
     const emergencyData = {
-        hospName: req.body.hospName,
+        nearestHospital: req.body.nearestHospital,
         accessPoint: req.body.accessPoint,
         evacRoute: req.body.evacRoute,
-        callerName: req.body.callerName,
+        caller: req.body.caller,
         cPR: req.body.cPR,
         medInfo: req.body.medInfo,
     };
 
     // Creating an emergency record
-    const emerId = await Emergency.create(emergencyData)
+    const emerData = await Emergency.create(emergencyData)
         .then((data) => {
             // Then emergencyId is returned
-            return data.emerId;
+            return data.dataValues;
         })
         .catch((err) => {
             // If there is an error a response is sent
             res.status(500).send({
-                message:
-                    err.message ||
-                    "An error has occurred while creating the emergency table.",
+                message: err.message || "An error has occurred while creating the emergency table.",
             });
         });
 
@@ -210,18 +242,17 @@ exports.create = async (req, res) => {
     };
 
     // Adding the location data to record
-    const locId = await Location.create(locationData)
+    const locData = await Location.create(locationData)
         .then((data) => {
+            // console.log("in location then", data.dataValues);
             // The new locId is returned
-            return data.locId;
+            return data.dataValues;
         })
         .catch((err) => {
-            console.log("in location catch");
+            // console.log("in location catch");
             // If there is an error a response is sent
             res.status(500).send({
-                message:
-                    err.message ||
-                    "An error occurred while adding the location data.",
+                message: err.message || "An error occurred while adding the location data.",
             });
         });
 
@@ -239,25 +270,47 @@ exports.create = async (req, res) => {
         taskDetails: req.body.taskDetails,
         taskRules: req.body.taskRules,
         userId: req.body.userId,
-        locId: locId,
-        emerId: emerId,
-        exposureId: exposureId,
+        locId: locData.locId,
+        emerId: emerData.emerId,
+        exposureId: exposureData.exposureId,
     };
 
     // Adding a briefing to record
-    await Briefing.create(briefing)
+    const briefData = await Briefing.create(briefing)
         .then((data) => {
             // The new briefing data is returned
-            res.send({ data });
+            return data.dataValues;
         })
         .catch((err) => {
             // If there was an error a response is sent
             res.status(500).send({
-                message:
-                    err.message ||
-                    "An error occurred while creating the briefing",
+                message: err.message || "An error occurred while creating the briefing",
             });
         });
+
+    // If a response was sent the method will terminate
+    if (res.headersSent) {
+        return;
+    }
+
+    // If no response sent yet the data will be formatted and returned to the caller
+    // console.log("briefData", briefData);
+    // console.log("exposureData", exposureData);
+    // console.log("locData", locData);
+    // console.log("emerData", emerData);
+    // console.log("primary exposures", primaryExposures);
+
+    // Sending the formatted data back to the caller
+    const formattedReturnData = {
+        ...briefData,
+        Location: locData,
+        Emergency: emerData,
+        Exposure: { ...exposureData, primaryExposures },
+    };
+
+    res.status(200).send({
+        ...formattedReturnData,
+    });
 };
 
 /**
@@ -269,9 +322,20 @@ exports.create = async (req, res) => {
  */
 exports.update = async (req, res) => {
     // Validate request
-    if (!req.body && !req.body.userId) {
+    if (
+        !req.body &&
+        !req.body.userId &&
+        !req.body.briefingId &&
+        !req.body.Emergency.emerId &&
+        !req.body.Location.locId &&
+        !req.body.Exposure.lifeSaveId &&
+        !req.body.Exposure.lineFireId &&
+        !req.body.Exposure.pinchPointId &&
+        !req.body.Exposure.ascDescId &&
+        !req.body.Exposure.pathTravelId
+    ) {
         res.status(400).send({
-            message: "Content can not be empty, need a userId!",
+            message: "Content can not be empty, needs required ids!",
         });
     }
 
@@ -450,13 +514,7 @@ exports.findBriefingByPk = async (req, res) => {
             Emergency,
             {
                 model: Exposure,
-                include: [
-                    PinchPoint,
-                    LifeSaving,
-                    PathTravel,
-                    LineFire,
-                    AscDesc,
-                ],
+                include: [PinchPoint, LifeSaving, PathTravel, LineFire, AscDesc],
             },
         ],
     })
@@ -475,9 +533,7 @@ exports.findBriefingByPk = async (req, res) => {
             // An error message is sent in res if there was an error while making the
             // database call
             res.status(500).send({
-                message:
-                    err.message ||
-                    "An error occurred while retrieving the briefing",
+                message: err.message || "An error occurred while retrieving the briefing",
             });
         });
 };
@@ -502,9 +558,7 @@ exports.findAllByUserId = async (req, res) => {
         })
         .catch((err) => {
             res.status(500).send({
-                message:
-                    err.message ||
-                    "An error occurred while retrieving briefings.",
+                message: err.message || "An error occurred while retrieving briefings.",
             });
         });
 };
@@ -539,9 +593,7 @@ exports.delete = async (req, res) => {
         .catch((err) => {
             // An error sends a 500 response with the error message
             res.status(500).send({
-                message:
-                    err.message ||
-                    "An error occurred while deleting briefings.",
+                message: err.message || "An error occurred while deleting briefings.",
             });
         });
 
@@ -679,13 +731,13 @@ exports.delete = async (req, res) => {
                 // Delete was successful
             } else {
                 res.send({
-                    message: `Cannot delete Path Travel Exposure with id=${briefingData.Exposure.pathTravelId}`,
+                    message: `Cannot delete Path Travel Exposure with id=${briefingData?.Exposure?.pathTravelId}`,
                 });
             }
         })
         .catch((err) => {
             res.status(500).send({
-                message: `An error occurred and the Path Travel Exposure with id=${briefingData.Exposure.pathTravelId} could not be deleted`,
+                message: `An error occurred and the Path Travel Exposure with id=${briefingData?.Exposure?.pathTravelId} could not be deleted`,
             });
         });
 
@@ -709,7 +761,7 @@ exports.delete = async (req, res) => {
         })
         .catch((err) => {
             res.status(500).send({
-                message: `An error occurred and the Emergency with id=${briefingData.Emergency.emerId} could not be deleted`,
+                message: `An error occurred and the Emergency with id=${briefingData?.Emergency?.emerId} could not be deleted`,
             });
         });
 
@@ -733,7 +785,7 @@ exports.delete = async (req, res) => {
         })
         .catch((err) => {
             res.status(500).send({
-                message: `An error occurred and the Location with id=${briefingData.Location.locId} could not be deleted`,
+                message: `An error occurred and the Location with id=${briefingData?.Location?.locId} could not be deleted`,
             });
         });
 

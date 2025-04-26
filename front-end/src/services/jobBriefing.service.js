@@ -6,7 +6,7 @@
 
 import http from "../httpCommon";
 
-export class BriefingDataService {
+export default new (class JobBriefingDataService {
     /**
      * Creates a new briefing and saves it to the database.
      *
@@ -48,7 +48,7 @@ export class BriefingDataService {
      * @param {string} data.createdAt - The date and time when the briefing was created.
      */
     create(data) {
-        return http.post(`/api/briefings/`, data);
+        return http.post(`/api/briefing/`, data);
     }
 
     /**
@@ -80,7 +80,7 @@ export class BriefingDataService {
      * @returns @param {Array<Object>} - Array of JSON objects containing the briefing data.
      */
     getAllByUserId(id) {
-        return http.get(`/api/briefing/allByUserId/${id}`);
+        return http.get(`/api/briefings/${id}`);
     }
 
     /**
@@ -92,4 +92,4 @@ export class BriefingDataService {
     delete(id) {
         return http.delete(`/api/briefing/${id}`);
     }
-}
+})();
