@@ -318,7 +318,6 @@ function JobBriefingForm(props) {
                 // "Saved" toast pops up on screen if saved
                 break;
             case "Load":
-                console.log("Load was selected");
                 // Take the user to the Briefings view where
                 // they can choose to load or delete a briefing
                 navigate("/briefings");

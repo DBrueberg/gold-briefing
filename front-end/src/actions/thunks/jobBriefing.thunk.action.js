@@ -3,10 +3,11 @@
 // Gold-Briefing - jobBriefing.thunk.action.js
 // April 19, 2025
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 04/26/2025, Added in delete, getAll, and getOne JobBriefingThunks)
 
-import { addJobBriefing, deleteAllAcknowledgement } from "../jobBriefing.action";
-import { addGeneral } from "../general.action";
-import { addEmergencyPlan } from "../emergencyPlan.action";
+import { addJobBriefing, deleteJobBriefing } from "../jobBriefing.action";
+import { addGeneral, deleteGeneral } from "../general.action";
+import { addEmergencyPlan, deleteEmergencyPlan } from "../emergencyPlan.action";
 import JobBriefingDataService from "../../services/jobBriefing.service";
 import {
     addAllBriefingList,
@@ -29,7 +30,8 @@ export const addJobBriefingThunk = (jobBriefingData) => {
             // Creating the job briefing in the database
             const response = await JobBriefingDataService.create(jobBriefingData);
 
-            // If the job briefing is created, dispatch the action to add the job briefing to redux state
+            // If the job briefing is created, dispatch the action to add the job
+            // briefing to redux state
             if (response.status === 200) {
                 const updatedJobBriefingData = response.data;
 
@@ -94,7 +96,8 @@ export const updateJobBriefingThunk = (jobBriefingData) => {
             // Updating the job briefing in the database
             const response = await JobBriefingDataService.update(jobBriefingData);
 
-            // If the job briefing is updated, dispatch the action to add the job briefing to redux state
+            // If the job briefing is updated, dispatch the action to add the job
+            // briefing to redux state
             if (response.status === 200) {
                 // Response data is just a number, now need to format data to be updated in
                 // the redux state
@@ -153,18 +156,34 @@ export const updateJobBriefingThunk = (jobBriefingData) => {
     };
 };
 
-// UNTESTED, forgot what I was doing for a minute and threw this together
+/**
+ * The deleteJobBriefingThunk will send a request to the database to delete
+ * the job briefing with the paramter provided briefingId. It will then handle
+ * the redux state accordingly.
+ *
+ * @param {number} jobBriefingId - The id of the job briefing to delete
+ * @returns @param {number} response - 200 if successful 400 if not found
+ */
 export const deleteJobBriefingThunk = (jobBriefingId) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         try {
             // Deleting the job briefing in the database
             const response = await JobBriefingDataService.delete(jobBriefingId);
 
-            // If the job briefing is deleted, dispatch the action to delete the job briefing from redux state
+            // If the job briefing is deleted, dispatch the action to delete the
+            // job briefing from redux state
             if (response.status === 200) {
-                // Need a dispatch that can both delete the briefing from the briefing list redux state and the
+                // Need a dispatch that can both delete the briefing from the
+                // briefing list redux state and the
                 // database
                 dispatch(deleteBriefingList(jobBriefingId));
+                // Deleting the job briefing from state if it is the active one
+                if (jobBriefingId === getState().jobBriefing?.briefingId) {
+                    dispatch(deleteJobBriefing());
+                    dispatch(deleteEmergencyPlan());
+                    dispatch(deleteGeneral());
+                }
+                // Good delete, return 200
                 return 200;
             }
         } catch (error) {
@@ -183,7 +202,8 @@ export const deleteJobBriefingThunk = (jobBriefingId) => {
  * a single userId. The data will then be formatted
  *
  * @param {number} userId
- * @returns @param {number} jobBriefing - data if it was found and 400 if data was not found
+ * @returns @param {number} jobBriefing - data if it was found and 400 if data
+ * was not found
  */
 export const getAllJobBriefingsThunk = (userId) => {
     return async (dispatch) => {
@@ -191,7 +211,8 @@ export const getAllJobBriefingsThunk = (userId) => {
             // Getting all the job briefings in the database
             const response = await JobBriefingDataService.getAllByUserId(userId);
 
-            // If the job briefings are retrieved, dispatch the action to add the job briefings to redux state
+            // If the job briefings are retrieved, dispatch the action to add the
+            // job briefings to redux state
             if (response.status === 200) {
                 const jobBriefings = response.data;
                 dispatch(deleteAllBriefingList());
