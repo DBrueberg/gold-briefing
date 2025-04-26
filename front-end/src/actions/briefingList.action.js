@@ -7,6 +7,17 @@
 import { reduxAction as C } from "../constants";
 
 /**
+ * React Redux action will add all briefing items from the
+ * briefing list
+ * @param {array} briefingList
+ * @returns
+ */
+export const addAllBriefingList = (briefingList) => ({
+    type: C.ADD_ALL_BRIEFING_LIST,
+    briefingList: briefingList,
+});
+
+/**
  * React Redux action will add a briefing item to the briefing
  * list
  *
@@ -36,6 +47,10 @@ export const updateBriefingList = ({ briefingId, briefingName }) => ({
     type: C.UPDATE_BRIEFING_LIST,
     briefingId: briefingId,
     briefingName: briefingName,
+});
+
+export const deleteAllBriefingList = () => ({
+    type: C.DELETE_ALL_BRIEFING_LIST,
 });
 
 /**

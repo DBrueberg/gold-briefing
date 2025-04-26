@@ -1,0 +1,13 @@
+{
+    "editor.tabSize": 4,
+    "formatOnSave": true,
+    "indent": 4,
+    "tabWidth": 4,
+    "printWidth": 100,
+    "useTabs": false,
+    "trailingComma": "es5",
+    "semi": true,
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "bracketSameLine": false
+}

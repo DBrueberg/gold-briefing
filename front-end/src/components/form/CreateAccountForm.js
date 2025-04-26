@@ -3,14 +3,18 @@
 // Gold-Briefing - CreateAccountForm.js
 // November 2, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 04/17/2025, Added in redux state and connect)
+//  (DAB, 04/19/2025, Added in thunk action to add user)
 
 // Using React library in order to build components
 // for the app and importing needed components
 import React, { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import sampleData from "../../redux/sampleData.json";
-import { Link } from "react-router-dom";
 import { formatPhoneNumber } from "../../helperFunction/FormatString";
+import { connect } from "react-redux";
+import { addUserThunk } from "../../actions/thunks/user.thunk.action";
+import { unformatPhoneNumber } from "../../helperFunction/FormatString";
+import { useNavigate } from "react-router-dom";
 
 /**
  * The CreateAccountForm View will handle the form needed for
@@ -21,7 +25,12 @@ import { formatPhoneNumber } from "../../helperFunction/FormatString";
  */
 function CreateAccountForm(props) {
     // Loading in the sample data, this is only temporary
-    const {} = sampleData;
+    // const {} = sampleData;
+    // Using the useNavigate hook to navigate to different routes
+    const navigate = useNavigate();
+
+    // Loading in the redux thunk that will save to the database and state
+    const { addUserThunk } = props;
 
     // Local state to keep track of the user name and password
     const [fName, setFName] = useState("");
@@ -31,17 +40,46 @@ function CreateAccountForm(props) {
     const [password, setPassword] = useState("");
 
     // This function will handle the actions for the Create Account button
-    const handleCreateAccount = () => {
-        console.log(
-            `Fields are ${fName}, ${lName}, ${phone}, and ${email} with password ${password}`
-        );
+    const handleCreateAccount = async () => {
+        // DEBUG: comment out when not needed
+        // console.log(
+        //     `Fields are ${fName}, ${lName}, ${phone}, and ${email} with password ${password}`,
+        // );
 
-        // Clearing password entries
-        setFName("");
-        setLName("");
-        setPhone("");
-        setEmail("");
-        setPassword("");
+        // Checking if the required form fields are filled out
+        if (fName && lName && phone && email && password) {
+            // DEBUG: can be left in but also can be removed
+            console.log("Creating account...");
+
+            // Formating form data to be sent to state and backend
+            const createAccountData = {
+                fName: fName,
+                lName: lName,
+                pNum: unformatPhoneNumber(phone),
+                email: email,
+                permId: 1,
+                password: password,
+            };
+
+            // Adding the user to the redux state
+            const response = await addUserThunk(createAccountData);
+
+            // If a successful account is created the user is added to state and
+            // redirected to the briefing page
+            if (response === 200) {
+                console.log("User created successfully.");
+
+                // Redirect to the briefing page on successful account creation
+                navigate("/");
+            }
+            // Else if the user name is already taken, the user is notified through 
+            // form validation
+            if (response === 400) {
+                console.log("User already exists.");
+            }
+
+            
+        }
     };
 
     // This function will set the form fields contents to local state
@@ -152,5 +190,10 @@ function CreateAccountForm(props) {
     );
 }
 
+// Mapping the redux store states to props
+const mapDispatchToProps = (dispatch) => ({
+    addUserThunk: (userData) => dispatch(addUserThunk(userData)),
+});
+
 // Exporting the component
-export default CreateAccountForm;
+export default connect(null, mapDispatchToProps)(CreateAccountForm);

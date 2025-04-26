@@ -11,8 +11,8 @@ module.exports = (app) => {
     let router = require("express").Router();
 
     // Create a new user
-    router.post("/", users.create);
+    router.post("/user/", users.create);
 
     // Defining route
-    app.use("/api/users", router);
+    app.use("/api", router);
 };

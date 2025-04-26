@@ -83,27 +83,21 @@ function SaveJobBriefing(props) {
             </DialogTitle>
             <Divider />
             <DialogActions>
-                <FormControl required error={error} component="fieldset" sx={{width:"100%"}}>
+                <FormControl required error={error} component="fieldset" sx={{ width: "100%" }}>
                     <Stack spacing={1}>
-                            <TextField
-                                id="briefingName"
-                                label="Briefing Name"
-                                autoComplete="briefing-name"
-                                required
-                                value={briefingName}
-                                onChange={onChangeBriefingName}
-                                size="small"
-                            />
-                            <Button
-                                sx={{ minWidth: "7rem" }}
-                                variant="contained"
-                                onClick={(e) => handleSaveName()}
-                            >
-                                Save
-                            </Button>
-                        <FormHelperText sx={{ textAlign:"center" }}>
-                            Enter a name.
-                        </FormHelperText>
+                        <TextField
+                            id="briefingName"
+                            label="Briefing Name"
+                            autoComplete="briefing-name"
+                            required
+                            value={briefingName}
+                            onChange={onChangeBriefingName}
+                            size="small"
+                        />
+                        <Button sx={{ minWidth: "7rem" }} variant="contained" onClick={(e) => handleSaveName()}>
+                            Save
+                        </Button>
+                        <FormHelperText sx={{ textAlign: "center" }}>Enter a name.</FormHelperText>
                     </Stack>
                 </FormControl>
             </DialogActions>

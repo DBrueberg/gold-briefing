@@ -11,7 +11,7 @@ import React from "react";
 import LoginForm from "../form/LoginForm";
 
 /**
- * The Login View will display a Login page where the user 
+ * The Login View will display a Login page where the user
  * can either login or link to the CreateAccount page.
  *
  * @param {*} props
@@ -31,7 +31,7 @@ function Login(props) {
             >
                 <img
                     sx={{ display: "flex", flexShrink: "1" }}
-                    src="bnsflogo.gif"
+                    src={window.location.origin + "/images/bnsfLogo.gif"}
                     alt="Briefing Logo"
                 />
                 <Typography variant="h3">Login</Typography>

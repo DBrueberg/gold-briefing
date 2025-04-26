@@ -3,6 +3,7 @@
 // Gold-Briefing - emergencyPlan.reducer.js
 // November 17, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 04/21/2025, Added in the emerId field)
 
 import { reduxAction as C } from "../constants";
 
@@ -18,6 +19,7 @@ export const emergencyPlan = (state = {}, action) => {
     switch (action.type) {
         case C.ADD_EMERGENCY_PLAN:
             return {
+                emerId: action.emerId,
                 nearestHospital: action.nearestHospital,
                 accessPoint: action.accessPoint,
                 evacRoute: action.evacRoute,
@@ -27,6 +29,7 @@ export const emergencyPlan = (state = {}, action) => {
             };
         case C.UPDATE_EMERGENCY_PLAN:
             return {
+                emerId: action.emerId,
                 nearestHospital: action.nearestHospital,
                 accessPoint: action.accessPoint,
                 evacRoute: action.evacRoute,

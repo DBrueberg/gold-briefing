@@ -3,6 +3,7 @@
 // Gold-Briefing - general.reducer.js
 // November 17, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 04/20/2025, Added in the locId field)
 
 import { reduxAction as C } from "../constants";
 
@@ -18,17 +19,21 @@ export const general = (state = {}, action) => {
     switch (action.type) {
         case C.ADD_GENERAL:
             return {
+                locId: action.locId,
                 dateTime: action.dateTime,
                 physLoc: action.physLoc,
                 lat: action.lat,
                 lng: action.lng,
+                ...state,
             };
         case C.UPDATE_GENERAL:
             return {
+                locId: action.locId,
                 dateTime: action.dateTime,
                 physLoc: action.physLoc,
                 lat: action.lat,
                 lng: action.lng,
+                ...state,
             };
         case C.DELETE_GENERAL:
             return {};
