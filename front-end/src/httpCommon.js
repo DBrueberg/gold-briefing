@@ -10,9 +10,12 @@ import checkEnv from "./helperFunction/checkEnvironment";
 // Check if we are on the prod environment
 const isProd = checkEnv();
 
+// NOTE: isProd does not work because it is a local environment in the railway.app server. Need to
+// figure out the correct path/port. Using gold-briefing.railway.internal doubles the route, so need
+// to figure out the correct way to write this
 // Creating the axios instance with the base URL and headers
 export default axios.create({
-    baseURL: "gold-briefing.railway.internal",
+    baseURL: "http://localhost:3000",
     headers: {
         "Content-type": "application/json",
     },
