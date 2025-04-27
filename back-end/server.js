@@ -21,6 +21,9 @@ const isProd = checkEnv();
 // Setting cors options
 var corsOptions = {
     origin: isProd ? process.env.MYSQL_URL : "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
 };
 
 app.use(cors(corsOptions));
