@@ -47,7 +47,7 @@ const testConnection = (async () => {
 const prodSequelizeDBLoad = () => {
     // Standard database sync for production
     db.sequelize
-        .sync()
+        .sync({ force: true })
         .then(() => {
             console.log("DB Synced");
             // Load default data into database
