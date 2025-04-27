@@ -13,7 +13,7 @@ import axios from "axios";
 export default axios.create({
     // baseURL: isProd ? "gold-briefingback-end-production.up.railway.app" : "http://localhost:5000",
     // baseURL: "https://gold-briefingback-end-production.up.railway.app",
-    baseURL: process.env.BACKEND_URL || "http://localhost:5000",
+    baseURL: process.env.REACT_APP_BACKEND_URL,
     headers: {
         "Content-type": "application/json",
     },
