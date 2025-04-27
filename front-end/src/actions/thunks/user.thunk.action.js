@@ -8,11 +8,11 @@
 import { addUser, updateUser, deleteUser } from "../user.action";
 import UserDataService from "../../services/user.service";
 
-/** 
+/**
  * The addUserThunk function will handle the actions needed to add a user to the database
  * and redux state. It will use the UserDataService to send the data to the backend and
  * then dispatch the action to update the redux state.
- * 
+ *
  * @param {Object} userData - The data for the user to be added
  * @returns {Promise} - A promise that resolves to the response status
  */
@@ -31,13 +31,18 @@ export const addUserThunk = (userData) => {
                 // Saving the new user data to the redux state
                 dispatch(addUser(updatedUserData));
 
-                // Returning the response status to the caller to 
+                // Returning the response status to the caller to
                 // indicate success
                 return 200;
             }
         } catch (error) {
+            console.log("Error message status:", error.message);
             // If there is an error, log it to the console
             console.error("Error creating user:", error);
+            // If there is a network error the return is 503
+            if (error.message === "Network Error") {
+                return 503;
+            }
             // If the user already exists, return a 400 status
             if (error.response.status === 400) {
                 return 400;

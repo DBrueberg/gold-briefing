@@ -53,7 +53,6 @@ import { exposureConstants } from "../../constants";
  * @returns
  */
 function JobBriefingForm(props) {
-    //***********USER AND WEATHER LOCAL STATE HAS BEEN DISABLED TEMP TO ALLOW FOR REDUX IMPLEMENTATION */
     // Loading in the sample data, this is only temporary
     const { user, general, jobBriefing, weather, emergencyPlan } = props;
     const {
@@ -704,6 +703,7 @@ function JobBriefingForm(props) {
         // Debug for formatted data
         // console.log("Formatted Update Data:", formattedUpdateData);
 
+        // Calling the Thunk that will update the database with the formatted data
         const response = await updateJobBriefingThunk(formattedUpdateData);
 
         // If the briefing was updated successfully the snackbar message is sent
@@ -711,12 +711,6 @@ function JobBriefingForm(props) {
             setSnackbarMessage("Briefing updated successfully");
             handleSnackbarClick();
         }
-
-        // Saving the formatted data to state by calling the onAdd
-        // redux methods
-        // onAddJobBriefing(jobBriefData);
-        // onAddGeneral(generalData);
-        // onAddEmergencyPlan(emergencyPlanData);
     };
 
     // This function will open the dialog that allows the user
