@@ -8,7 +8,7 @@ import axios from "axios";
 import checkEnv from "./helperFunction/checkEnvironment";
 
 // Check if we are on the prod environment
-const isProd = checkEnv();
+const isProd = process.env.NODE_ENV === "production";
 
 // NOTE: isProd does not work because it is a local environment in the railway.app server. Need to
 // figure out the correct path/port. Using gold-briefing.railway.internal doubles the route, so need
