@@ -25,8 +25,6 @@ import { useNavigate } from "react-router-dom";
  * @returns
  */
 function CreateAccountForm(props) {
-    // Loading in the sample data, this is only temporary
-    // const {} = sampleData;
     // Using the useNavigate hook to navigate to different routes
     const navigate = useNavigate();
 

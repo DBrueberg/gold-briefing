@@ -36,7 +36,6 @@ export const addUserThunk = (userData) => {
                 return 200;
             }
         } catch (error) {
-            console.log("Error message status:", error.message);
             // If there is an error, log it to the console
             console.error("Error creating user:", error);
             // If there is a network error the return is 503

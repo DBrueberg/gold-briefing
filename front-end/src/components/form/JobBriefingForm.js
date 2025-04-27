@@ -6,12 +6,14 @@
 //  (DAB, 12/28/2022, Added in the Task Component)
 //  (DAB, 12/31/2022, Added in the Exposures Component)
 //  (DAB, 01/01/2023, Added the Emergency and Acknowledge
-//  Components)
+//      Components)
 //  (DAB, 11/09/2023, Added in BriefingSpeedDial Component)
 //  (DAB, 11/12/2023, Added in SaveJobBriefing Component. Also
-//  updated comments to current)
+//      updated comments to current)
 //  (DAB, 11/23/2023, Linked redux state with local state and
-//  all milestone1 redux state functionality working correctly)
+//      all milestone1 redux state functionality working correctly)
+//  (DAB, 04/19/2025, Added in the thunk actions needed to create,
+//      fetch, and update this page)
 
 // Using React library in order to build components
 // for the app and importing needed components
