@@ -82,6 +82,11 @@ const devSequelizeDBLoad = () => {
 // Checking if production or development environment before loading database
 isProd ? prodSequelizeDBLoad() : devSequelizeDBLoad();
 
+// // Set welcome message for application
+app.get("/", (req, res) => {
+    res.json({ message: "Welcome to the Gold Briefing backend application." });
+});
+
 // Routes
 require("./routes/tutorial.routes")(app);
 require("./routes/user.routes")(app);
@@ -92,6 +97,11 @@ require("./routes/briefing.routes")(app);
 const port = process.env.PORT || 5000;
 
 // Listening for requests
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+// app.listen(port, () => {
+//     console.log(`Example app listening on port ${port}`);
+// });
+const server = app.listen(port, () => {
+    var host = server.address().address;
+    var port = server.address().port;
+    console.log(`server is listening at http://${host}:${port}`);
 });
