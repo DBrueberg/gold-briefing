@@ -47,14 +47,14 @@ const testConnection = (async () => {
 const prodSequelizeDBLoad = () => {
     // Standard database sync for production
     db.sequelize
-        .sync({ force: true })
+        .sync()
         .then(() => {
             console.log("DB Synced");
             // Load default data into database
         })
         .then(() => {
             // Load default data into database. Turn on for new depoloyment****
-            // defaultDBData.loadTestDBData();
+            defaultDBData.loadTestDBData();
         })
         .catch((err) => {
             console.log("Failed to sync db: " + err.message);
