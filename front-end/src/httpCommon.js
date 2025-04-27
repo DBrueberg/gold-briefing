@@ -16,7 +16,8 @@ const isProd = checkEnv();
 // Creating the axios instance with the base URL and headers
 export default axios.create({
     // baseURL: isProd ? "gold-briefingback-end-production.up.railway.app" : "http://localhost:5000",
-    baseURL: "https://gold-briefingback-end-production.up.railway.app",
+    // baseURL: "https://gold-briefingback-end-production.up.railway.app",
+    baseURL: isProd ? process.env.REACT_APP_BACKEND_URL : "http://localhost:5000",
     headers: {
         "Content-type": "application/json",
     },
