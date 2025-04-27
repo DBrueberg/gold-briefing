@@ -21,9 +21,6 @@ const isProd = checkEnv();
 // Setting cors options
 var corsOptions = {
     origin: isProd ? process.env.MYSQL_URL : "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -56,8 +53,8 @@ const prodSequelizeDBLoad = () => {
             // Load default data into database
         })
         .then(() => {
-            // Load default data into database
-            defaultDBData.loadTestDBData();
+            // Load default data into database. Turn on for new depoloyment****
+            // defaultDBData.loadTestDBData();
         })
         .catch((err) => {
             console.log("Failed to sync db: " + err.message);
