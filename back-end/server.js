@@ -4,6 +4,7 @@
 // November 24, 2023
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 1/15/2024, Added briefings route)
+//  (DAB, 4/26/2025, Added in a landing page for backend to verify it is running)
 
 // Importing express and cors modules
 const express = require("express");
@@ -53,8 +54,8 @@ const prodSequelizeDBLoad = () => {
             // Load default data into database
         })
         .then(() => {
-            // Load default data into database. Turn on for new depoloyment****
-            defaultDBData.loadTestDBData();
+            // Load default data into database. Turn on for new deployment****
+            // defaultDBData.loadTestDBData();
         })
         .catch((err) => {
             console.log("Failed to sync db: " + err.message);
@@ -97,11 +98,8 @@ require("./routes/briefing.routes")(app);
 const port = process.env.PORT || 5000;
 
 // Listening for requests
-// app.listen(port, () => {
-//     console.log(`Example app listening on port ${port}`);
-// });
 const server = app.listen(port, () => {
     var host = server.address().address;
     var port = server.address().port;
-    console.log(`server is listening at http://${host}:${port}`);
+    console.log(`Server is listening at https://${host}:${port}`);
 });
