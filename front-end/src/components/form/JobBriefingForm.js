@@ -14,6 +14,7 @@
 //      all milestone1 redux state functionality working correctly)
 //  (DAB, 04/19/2025, Added in the thunk actions needed to create,
 //      fetch, and update this page)
+//  (DAB, 05/03/2025, Updated form to onSubmit instead of onClick)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -589,7 +590,8 @@ function JobBriefingForm(props) {
         }
     };
 
-    // This function will format the exposure data to match the database
+    // This function will format the exposure data to match what the format the
+    // database returns
     const formatExposureData = async () => {
         // Formatting the exposure data to match the database
         const structureExposure = await primaryExposures.map((exposure, index) => {
@@ -737,9 +739,15 @@ function JobBriefingForm(props) {
         }
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("form submitted");
+    };
+
     return (
         <Box
             component="form"
+            onSubmit={handleSubmit}
             sx={{
                 "& .MuiTextField-root": { m: 1 },
             }}
