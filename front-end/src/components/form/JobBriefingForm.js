@@ -18,7 +18,7 @@
 
 // Using React library in order to build components
 // for the app and importing needed components
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -519,14 +519,21 @@ function JobBriefingForm(props) {
     // Function will update the current weather based off location data
     // in state
     const onClickUpdateWeather = async () => {
-        // Requesting data from the weather data service
-        const response = await WeatherDataService.forecast(physLoc || `${lat},${lng}`);
+        if (physLoc || (lat && lng)) {
+            // Requesting data from the weather data service
+            const response = await WeatherDataService.forecast(physLoc || `${lat},${lng}`);
 
-        // Formatting the data to match state
-        const tempWeather = await formatWeatherData(response.data);
+            // Formatting the data to match state
+            const tempWeather = await formatWeatherData(response.data);
 
-        // Dispatching to redux store
-        onAddWeather(tempWeather);
+            // Dispatching to redux store
+            onAddWeather(tempWeather);
+        } else {
+            // Form validation for weather location. A snackbar is used since
+            // weather is not a required field
+            setSnackbarMessage("Provide a location to update weather");
+            handleSnackbarClick();
+        }
     };
 
     // This function closes the SaveJobBriefing dialog
@@ -546,6 +553,8 @@ function JobBriefingForm(props) {
         location();
     };
 
+    // The onCreateBriefData will create a new job briefing entry in the
+    // database and add it to state
     const onCreateBriefData = async (name) => {
         // Formatting the data needed to be used in the redux
         // onAdd method calls
@@ -587,6 +596,15 @@ function JobBriefingForm(props) {
         if (response === 200) {
             setSnackbarMessage("Briefing saved successfully");
             handleSnackbarClick();
+        }
+        if (response === 503) {
+            setSnackbarMessage("Briefing not saved, network error");
+            handleSnackbarClick();
+
+            // Setting briefing name to an empty string. This is how
+            // the app knows to create or update and it needs to
+            // create the new briefing the first time
+            setBriefingName("");
         }
     };
 
@@ -715,6 +733,10 @@ function JobBriefingForm(props) {
             setSnackbarMessage("Briefing updated successfully");
             handleSnackbarClick();
         }
+        if (response === 503) {
+            setSnackbarMessage("Briefing not saved, network error");
+            handleSnackbarClick();
+        }
     };
 
     // This function will open the dialog that allows the user
@@ -739,9 +761,32 @@ function JobBriefingForm(props) {
         }
     };
 
+    // The handleSubmit method will handle the actions needed after a
+    // user submits the job briefing form
     const handleSubmit = (e) => {
+        // Preventing default form actions
         e.preventDefault();
         console.log("form submitted");
+        // Saving the briefing
+        saveBriefing();
+
+        // Load the briefing into a fixed easy to read template that
+        // can be sent/linked over SMS
+    };
+
+    // The handleDebriefed method will handle the actions needed after
+    // a successful job briefing debrief
+    const handleDebriefed = () => {
+        // Clear form and send user back to the top of the briefing
+        clearForm();
+        // scrolling to the top of the page after it loads
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 0);
+
+        // Should send an SMS alerting everyone on the briefing that the
+        // briefing was closed. Should have briefing name, EIC, time closed,
+        // and phone number
     };
 
     return (
@@ -773,7 +818,6 @@ function JobBriefingForm(props) {
                     handleSpeedDialClick={handleSpeedDialClick}
                 />
             </Box>
-
             <General
                 onChangeConductedBy={onChangeConductedBy}
                 onChangeEIC={onChangeEIC}
@@ -826,7 +870,7 @@ function JobBriefingForm(props) {
                 onClickAcknowledgement={onClickAcknowledgement}
                 acknowledgements={acknowledgements}
             />
-            <GenerateBriefing />
+            <GenerateBriefing handleDebriefed={handleDebriefed} />
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={2000}

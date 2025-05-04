@@ -29,7 +29,7 @@ import Debrief from "../modal/Debrief";
  */
 function GenerateBriefing(props) {
     // Destructuring the needed methods from props
-    const {} = props;
+    const { handleDebriefed } = props;
     // Destructuring the needed variable from props
     const {} = props;
 
@@ -69,6 +69,9 @@ function GenerateBriefing(props) {
     const handleDebriefClose = (isDebrief) => {
         setOpen(false);
         setIsDebriefed(isDebrief);
+        if (isDebrief) {
+            handleDebriefed();
+        }
     };
 
     // Function that will handle the changes to the debrief Dialog open
