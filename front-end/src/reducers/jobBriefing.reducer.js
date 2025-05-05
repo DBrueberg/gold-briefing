@@ -8,6 +8,8 @@
 //      exposure id fields, and refactored the exposures to match the database)
 //  (DAB, 04/21/2025, Refactored the exposure reducer to
 //      add the correct exposure id fields)
+//  (DAB, 05/04/2025, Repaired acknowldements. It was not saving state
+//      correctly)
 
 import { reduxAction as C, exposureConstants } from "../constants";
 
@@ -34,7 +36,7 @@ export const jobBriefing = (state = {}, action) => {
                 acknowledgements: [],
             };
         case C.ADD_ACKNOWLEDGEMENT:
-            return [...state, acknowledgements(state.acknowledgements, action)];
+            return { ...state, acknowledgements: acknowledgements(state.acknowledgements, action) };
         case C.UPDATE_JOB_BRIEFING:
             return {
                 briefingId: action.briefingId,
@@ -48,7 +50,10 @@ export const jobBriefing = (state = {}, action) => {
                 acknowledgements: acknowledgements([], action),
             };
         case C.DELETE_JOB_BRIEFING:
-            return {};
+            return {
+                primaryExposures: [],
+                acknowledgements: [],
+            };
         case C.DELETE_ALL_ACKNOWLEDGEMENTS:
             return [...state, acknowledgements([], action)];
         default:
@@ -192,8 +197,8 @@ export const acknowledgement = (state = {}, action) => {
             };
         case C.ADD_ACKNOWLEDGEMENT:
             return {
-                employeeName: state.employeeName,
-                employeePNum: state.employeePNum,
+                employeeName: action.employeeName,
+                employeePNum: action.employeePNum,
             };
         case C.UPDATE_JOB_BRIEFING:
             return {

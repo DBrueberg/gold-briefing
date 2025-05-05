@@ -3,7 +3,7 @@
 // Gold-Briefing - Acknowledgement.js
 // January 1, 2023
 // Last Edited (Initials, Date, Edits):
-//  (DAB, 11/23/2023, Changed the name and number variable names to 
+//  (DAB, 11/23/2023, Changed the name and number variable names to
 //  align better with state for clarity)
 
 // Using React library in order to build components
@@ -20,9 +20,10 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
+import { formatPhoneNumber } from "../../helperFunction/FormatString";
 
 /**
- * The Acknowledgement Component will display the form field that 
+ * The Acknowledgement Component will display the form field that
  * allows and displays those who have signed on to the briefing
  *
  * @returns
@@ -37,7 +38,7 @@ function Acknowledgement(props) {
     const [employeeName, setEmployeeName] = useState("");
     const [employeePNum, setEmployeePNum] = useState("");
 
-    // The handleClick method will handle the button click that 
+    // The handleClick method will handle the button click that
     // adds a new member to acknowledgment state
     const handleClick = () => {
         // Verifying the name has a name in it
@@ -62,8 +63,9 @@ function Acknowledgement(props) {
     const onChangePhone = (e) => {
         // Destructuring the form field value to a variable
         const { value } = e.target;
+        const rawNumber = formatPhoneNumber(value);
         // Setting the new form field value to local state
-        setEmployeePNum(value);
+        setEmployeePNum(rawNumber);
     };
 
     return (
@@ -147,5 +149,7 @@ function Acknowledgement(props) {
         </Box>
     );
 }
+
+// export default connect(null, mapDispatchToProps)(Acknowledgement);
 
 export default Acknowledgement;
