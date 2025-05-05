@@ -9,21 +9,18 @@ import { reduxAction as C } from "../constants";
 
 /**
  * React Redux action will add the general state
- * 
+ *
  * @param {
  * locId,
- * date,
- * time,
  * physLoc,
  * lat,
  * lng
- * } param0 
- * @returns 
+ * } param0
+ * @returns
  */
-export const addGeneral = ({ locId, dateTime, physLoc, lat, lng}) => ({
+export const addGeneral = ({ locId, physLoc, lat, lng }) => ({
     type: C.ADD_GENERAL,
     locId: locId,
-    dateTime: dateTime,
     physLoc: physLoc,
     lat: lat,
     lng: lng,
@@ -31,22 +28,18 @@ export const addGeneral = ({ locId, dateTime, physLoc, lat, lng}) => ({
 
 /**
  * React Redux action will update the general state
- * 
+ *
  * @param {
  * locId,
- * date,
- * time,
  * physLoc,
  * lat,
  * lng
- * } param0 
- * @returns 
+ * } param0
+ * @returns
  */
-export const updateGeneral = ({ locId, date, time, physLoc, lat, lng }) => ({
+export const updateGeneral = ({ locId, physLoc, lat, lng }) => ({
     type: C.UPDATE_GENERAL,
     locId: locId,
-    date: date,
-    time: time,
     physLoc: physLoc,
     lat: lat,
     lng: lng,
@@ -54,7 +47,7 @@ export const updateGeneral = ({ locId, date, time, physLoc, lat, lng }) => ({
 
 /**
  * React Redux action will delete the general data
- * @returns 
+ * @returns
  */
 export const deleteGeneral = () => ({
     type: C.DELETE_GENERAL,

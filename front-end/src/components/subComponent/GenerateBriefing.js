@@ -5,6 +5,7 @@
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 11/01/2023, Changed formfield error message to snackbar
 //      and refactored some variables)
+//  (DAB, 05/03/2025, Converted create briefing to form button)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -28,7 +29,7 @@ import Debrief from "../modal/Debrief";
  */
 function GenerateBriefing(props) {
     // Destructuring the needed methods from props
-    const {} = props;
+    const { handleDebriefed } = props;
     // Destructuring the needed variable from props
     const {} = props;
 
@@ -45,11 +46,6 @@ function GenerateBriefing(props) {
         } else {
             handleBriefSnackbarOpen();
         }
-    };
-
-    // Function that will handle the create briefing actions
-    const handleCreateBriefing = (e) => {
-        console.log("createBrief");
     };
 
     // Function that will handle the change briefing actions
@@ -73,6 +69,9 @@ function GenerateBriefing(props) {
     const handleDebriefClose = (isDebrief) => {
         setOpen(false);
         setIsDebriefed(isDebrief);
+        if (isDebrief) {
+            handleDebriefed();
+        }
     };
 
     // Function that will handle the changes to the debrief Dialog open
@@ -106,11 +105,7 @@ function GenerateBriefing(props) {
                     }}
                 />
             </FormGroup>
-            <Button
-                sx={{ minWidth: "7rem" }}
-                variant="contained"
-                onClick={(e) => handleCreateBriefing()}
-            >
+            <Button type="submit" sx={{ minWidth: "7rem" }} variant="contained">
                 Create Briefing
             </Button>
             <Button

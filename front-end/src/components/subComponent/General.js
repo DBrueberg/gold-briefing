@@ -3,6 +3,8 @@
 // Gold-Briefing - General.js
 // December 23, 2022
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 05/04/2025, Fixed input range for lat/lng to accept
+//      only valid numbers)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -31,8 +33,7 @@ function General(props) {
         onLocFindClick,
     } = props;
     // Destructuring the needed variable from props
-    const { conductedBy, eIC, dateTime, physLoc, lat, lng, placeOfSafety } =
-        props;
+    const { conductedBy, eIC, dateTime, physLoc, lat, lng, placeOfSafety } = props;
 
     return (
         <Box>
@@ -62,15 +63,9 @@ function General(props) {
                         id="time"
                         label="Time"
                         value={dateTime}
-                        onChange={(newDateTime) =>
-                            onChangeDateTime(newDateTime)
-                        }
+                        onChange={(newDateTime) => onChangeDateTime(newDateTime)}
                         renderInput={(params) => (
-                            <TextField
-                                sx={{ display: "flex" }}
-                                size="small"
-                                {...params}
-                            />
+                            <TextField sx={{ display: "flex" }} size="small" {...params} />
                         )}
                         ampm={false}
                     />
@@ -81,15 +76,9 @@ function General(props) {
                         label="Date"
                         inputFormat="MM/DD/YYYY"
                         value={dateTime}
-                        onChange={(newDateTime) =>
-                            onChangeDateTime(newDateTime)
-                        }
+                        onChange={(newDateTime) => onChangeDateTime(newDateTime)}
                         renderInput={(params) => (
-                            <TextField
-                                sx={{ display: "flex" }}
-                                size="small"
-                                {...params}
-                            />
+                            <TextField sx={{ display: "flex" }} size="small" {...params} />
                         )}
                     />
                 </Grid>
@@ -126,6 +115,12 @@ function General(props) {
                                 }}
                                 size="small"
                                 id="lat"
+                                InputProps={{
+                                    inputProps: {
+                                        min: -90,
+                                        max: 90,
+                                    },
+                                }}
                                 label="Lat"
                                 value={lat}
                                 onChange={onChangeLat}
@@ -140,6 +135,12 @@ function General(props) {
                                 }}
                                 size="small"
                                 id="lng"
+                                InputProps={{
+                                    inputProps: {
+                                        min: -180,
+                                        max: 180,
+                                    },
+                                }}
                                 label="Long"
                                 value={lng}
                                 onChange={onChangeLng}
