@@ -647,8 +647,8 @@ function JobBriefingForm(props) {
             const generalData = {
                 dateTime: dateTime,
                 physLoc: physLoc,
-                lat: lat,
-                lng: lng,
+                lat: lat === "" ? null : parseFloat(lat),
+                lng: lng === "" ? null : parseFloat(lng),
             };
             const emergencyPlanData = {
                 nearestHospital: nearestHospital,
@@ -783,8 +783,8 @@ function JobBriefingForm(props) {
                 Location: {
                     locId: general.locId,
                     physLoc: physLoc,
-                    lat: lat,
-                    lng: lng,
+                    lat: lat === "" ? null : parseFloat(lat),
+                    lng: lng === "" ? null : parseFloat(lng),
                 },
                 Emergency: {
                     emerId: emergencyPlan.emerId,
