@@ -14,6 +14,8 @@
 //      all milestone1 redux state functionality working correctly)
 //  (DAB, 04/19/2025, Added in the thunk actions needed to create,
 //      fetch, and update this page)
+//  (DAB, 05/03/2025, Updated form to onSubmit instead of onClick)
+//  (DAB, 05/04/2025, Added in form specific error handling)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -37,7 +39,11 @@ import BriefingSpeedDial from "../subComponent/BriefingSpeedDial";
 import SaveJobBriefing from "../modal/SaveJobBriefing";
 import { addUser } from "../../actions/user.action";
 import { addWeather, deleteWeather } from "../../actions/weather.action";
-import { addJobBriefing, deleteJobBriefing } from "../../actions/jobBriefing.action";
+import {
+    addAcknowledgement,
+    addJobBriefing,
+    deleteJobBriefing,
+} from "../../actions/jobBriefing.action";
 import { addEmergencyPlan, deleteEmergencyPlan } from "../../actions/emergencyPlan.action";
 import { addGeneral, deleteGeneral } from "../../actions/general.action";
 import { addBriefingList } from "../../actions/briefingList.action";
@@ -60,6 +66,7 @@ function JobBriefingForm(props) {
     const {
         addJobBriefingThunk,
         updateJobBriefingThunk,
+        addAcknowledgement,
         onAddWeather,
         onDeleteWeather,
         onDeleteGeneral,
@@ -81,20 +88,24 @@ function JobBriefingForm(props) {
     );
     const [caller, setCaller] = useState(emergencyPlan.caller ? emergencyPlan.caller : "");
     const [conductedBy, setConductedBy] = useState(
-        jobBriefing.conductedBy ? jobBriefing.conductedBy : `${user.fName} ${user.lName}` || ""
+        jobBriefing.conductedBy
+            ? jobBriefing.conductedBy
+            : user.fName
+              ? `${user.fName} ${user.lName}`
+              : ""
     );
     const [cPR, setCPR] = useState(emergencyPlan.cPR ? emergencyPlan.cPR : "");
     const [dateTime, setDateTime] = useState(
         general.dateTime ? general.dateTime : moment(new Date(), "MM-DD-YYYY HH:mm:ss")
     );
     const [eIC, setEIC] = useState(
-        jobBriefing.eIC ? jobBriefing.eIC : `${user.fName} ${user.lName}` || ""
+        jobBriefing.eIC ? jobBriefing.eIC : user.fName ? `${user.fName} ${user.lName}` : ""
     );
     const [evacRoute, setEvacRoute] = useState(
         emergencyPlan.evacRoute ? emergencyPlan.evacRoute : ""
     );
-    const [lat, setLat] = useState(general.lat ? general.lat : "");
-    const [lng, setLng] = useState(general.lng ? general.lng : "");
+    const [lat, setLat] = useState(general.lat ? general.lat || "" : "");
+    const [lng, setLng] = useState(general.lng ? general.lng || "" : "");
     const [medInfo, setMedInfo] = useState(emergencyPlan.medInfo ? emergencyPlan.medInfo : "");
     const [nearestHospital, setNearestHospital] = useState(
         emergencyPlan.nearestHospital ? emergencyPlan.nearestHospital : ""
@@ -111,7 +122,7 @@ function JobBriefingForm(props) {
     );
     const [taskRules, setTaskRules] = useState(jobBriefing.taskRules ? jobBriefing.taskRules : "");
     const [primaryExposures, setExposures] = useState(
-        jobBriefing.primaryExposures
+        jobBriefing.primaryExposures.length > 0
             ? jobBriefing.primaryExposures
             : [
                   {
@@ -199,12 +210,18 @@ function JobBriefingForm(props) {
     // The clearForm method will wipe out all the data currently
     // held in the form
     const clearForm = () => {
-        setConductedBy(user.fName === "" ? "" : `${user.fName} ${user.lName}`);
-        setEIC(user.fName === "" ? "" : `${user.fName} ${user.lName}`);
+        setConductedBy(
+            jobBriefing.conductedBy
+                ? jobBriefing.conductedBy
+                : user.fName
+                  ? `${user.fName} ${user.lName}`
+                  : ""
+        );
+        setEIC(jobBriefing.eIC ? jobBriefing.eIC : user.fName ? `${user.fName} ${user.lName}` : "");
         setDateTime(moment(new Date(), "MM-DD-YYYY HH:mm:ss"));
         setPhysLoc("");
-        setLat(0);
-        setLng(0);
+        setLat("");
+        setLng("");
         setPlaceOfSafety("");
         setTaskDetails("");
         setTaskRules("");
@@ -293,6 +310,21 @@ function JobBriefingForm(props) {
         }
     };
 
+    // The handleDebriefed method will handle the actions needed after
+    // a successful job briefing debrief
+    const handleDebriefed = () => {
+        // Clear form and send user back to the top of the briefing
+        clearForm();
+        // scrolling to the top of the page after it loads
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 0);
+
+        // Should send an SMS alerting everyone on the briefing that the
+        // briefing was closed. Should have briefing name, EIC, time closed,
+        // and phone number
+    };
+
     // Function will open the snackbar
     const handleSnackbarClick = () => {
         // Setting the snackbar open variable to true
@@ -330,6 +362,20 @@ function JobBriefingForm(props) {
             default:
                 break;
         }
+    };
+
+    // The handleSubmit method will handle the actions needed after a
+    // user submits the job briefing form
+    const handleSubmit = (e) => {
+        // Preventing default form actions
+        e.preventDefault();
+        if (user.userId) {
+            // Saving the briefing
+            saveBriefing();
+        }
+
+        // Load the briefing into a fixed easy to read template that
+        // can be sent/linked over SMS
     };
 
     // Function that will handle changes to the accessPoint field
@@ -390,16 +436,22 @@ function JobBriefingForm(props) {
     const onChangeLat = (e) => {
         // Destructuring the form field value to a variable
         const { value } = e.target;
-        // Setting the new form field value to local state
-        setLat(value);
+        // Only allowing real lat values to be inputted
+        if (value >= -90 && value <= 90) {
+            // Setting the new form field value to local state
+            setLat(value);
+        }
     };
 
     // Function that will handle changes to the lng field
     const onChangeLng = (e) => {
         // Destructuring the form field value to a variable
         const { value } = e.target;
-        // Setting the new form field value to local state
-        setLng(value);
+        // Only allowing real lng values to be inputed
+        if (value >= -180 && value <= 180) {
+            // Setting the new form field value to local state
+            setLng(value);
+        }
     };
 
     // Function that will handle changes to the medInfo field
@@ -505,32 +557,52 @@ function JobBriefingForm(props) {
     // Function that will handle changes to the acknowledgement
     // field
     const onClickAcknowledgement = (name, phone) => {
+        const acknowledgementData = {
+            employeeName: name,
+            employeePNum: phone,
+        };
         // Setting the acknowledgement array to include the
-        // new member
-        setAcknowledgments(
-            [...acknowledgements].concat({
-                employeeName: name,
-                employeePNum: phone,
-            })
-        );
+        // new member in local state
+        setAcknowledgments([...acknowledgements].concat(acknowledgementData));
+
+        // Adding the new acknowledgment to redux state
+        addAcknowledgement(acknowledgementData);
     };
 
     // Function will update the current weather based off location data
     // in state
     const onClickUpdateWeather = async () => {
-        // Requesting data from the weather data service
-        const response = await WeatherDataService.forecast(physLoc || `${lat},${lng}`);
+        // lat and lng will be used first since they are the most accurate
+        if ((lat !== "" && lng !== "") || physLoc) {
+            // Requesting data from the weather data service
+            const response = await WeatherDataService.forecast(
+                lat !== "" && lng !== "" ? `${lat},${lng}` : physLoc
+            );
 
-        // Formatting the data to match state
-        const tempWeather = await formatWeatherData(response.data);
+            // Formatting the data to match state
+            const tempWeather = await formatWeatherData(response.data);
 
-        // Dispatching to redux store
-        onAddWeather(tempWeather);
+            // Dispatching to redux store
+            onAddWeather(tempWeather);
+        } else {
+            // Form validation for weather location. A snackbar is used since
+            // weather is not a required field
+            setSnackbarMessage("Provide a location to update weather");
+            handleSnackbarClick();
+        }
     };
 
     // This function closes the SaveJobBriefing dialog
     const onCloseSaveBrief = (name) => {
-        setBriefingName(name);
+        // In order to set a name and create a briefing, the user must be
+        // logged in
+        if (user?.userId) {
+            setBriefingName(name);
+        } else {
+            setSnackbarMessage("You must be logged in to save a briefing");
+            handleSnackbarClick();
+        }
+
         setOpenBriefDialog(false);
         // If a name has been inputted the briefing is CREATED
         if (name) {
@@ -545,51 +617,65 @@ function JobBriefingForm(props) {
         location();
     };
 
+    // The onCreateBriefData will create a new job briefing entry in the
+    // database and add it to state
     const onCreateBriefData = async (name) => {
-        // Formatting the data needed to be used in the redux
-        // onAdd method calls
-        const jobBriefData = {
-            userId: user.userId,
-            briefingName: name,
-            eIC: eIC,
-            conductedBy: conductedBy,
-            placeOfSafety: placeOfSafety,
-            taskDetails: taskDetails,
-            taskRules: taskRules,
-            primaryExposures: primaryExposures,
-            acknowledgements: acknowledgements,
-        };
-        const generalData = {
-            dateTime: dateTime,
-            physLoc: physLoc,
-            lat: typeof lat === "number" ? lat : null,
-            lng: typeof lng === "number" ? lng : null,
-        };
-        const emergencyPlanData = {
-            nearestHospital: nearestHospital,
-            accessPoint: accessPoint,
-            caller: caller,
-            cPR: cPR,
-            medInfo: medInfo,
-            evacRoute: evacRoute,
-        };
+        if (user?.userId) {
+            // Formatting the data needed to be used in the redux
+            // onAdd method calls
+            const jobBriefData = {
+                userId: user.userId,
+                briefingName: name,
+                eIC: eIC,
+                conductedBy: conductedBy,
+                placeOfSafety: placeOfSafety,
+                taskDetails: taskDetails,
+                taskRules: taskRules,
+                primaryExposures: primaryExposures,
+                acknowledgements: acknowledgements,
+            };
+            const generalData = {
+                dateTime: dateTime,
+                physLoc: physLoc,
+                lat: typeof lat === "number" ? lat : null,
+                lng: typeof lng === "number" ? lng : null,
+            };
+            const emergencyPlanData = {
+                nearestHospital: nearestHospital,
+                accessPoint: accessPoint,
+                caller: caller,
+                cPR: cPR,
+                medInfo: medInfo,
+                evacRoute: evacRoute,
+            };
 
-        // Adding the job briefing to the database and dispatching
-        // the action for redux state
-        const response = await addJobBriefingThunk({
-            ...jobBriefData,
-            ...generalData,
-            ...emergencyPlanData,
-        });
+            // Adding the job briefing to the database and dispatching
+            // the action for redux state
+            const response = await addJobBriefingThunk({
+                ...jobBriefData,
+                ...generalData,
+                ...emergencyPlanData,
+            });
 
-        // If the briefing was saved successfully the snackbar message is set
-        if (response === 200) {
-            setSnackbarMessage("Briefing saved successfully");
-            handleSnackbarClick();
+            // If the briefing was saved successfully the snackbar message is set
+            if (response === 200) {
+                setSnackbarMessage("Briefing saved successfully");
+                handleSnackbarClick();
+            }
+            if (response === 503) {
+                setSnackbarMessage("Briefing not saved, network error");
+                handleSnackbarClick();
+
+                // Setting briefing name to an empty string. This is how
+                // the app knows to create or update and it needs to
+                // create the new briefing the first time
+                setBriefingName("");
+            }
         }
     };
 
-    // This function will format the exposure data to match the database
+    // This function will format the exposure data to match what the format the
+    // database returns
     const formatExposureData = async () => {
         // Formatting the exposure data to match the database
         const structureExposure = await primaryExposures.map((exposure, index) => {
@@ -667,51 +753,57 @@ function JobBriefingForm(props) {
     // This function is used to call the actions to add a new redux
     // state for jobBriefing, general, and emergencyPlan
     const onUpdateBriefData = async () => {
-        // Formatting the data needed to be used in the redux
-        // onAdd method calls
-        const Exposure = await formatExposureData();
+        if (user.userId) {
+            // Formatting the data needed to be used in the redux
+            // onAdd method calls
+            const Exposure = await formatExposureData();
 
-        const formattedUpdateData = {
-            briefingId: jobBriefing.briefingId,
-            briefingName: briefingName,
-            conductedBy: conductedBy,
-            eIC: eIC,
-            placeOfSafety: placeOfSafety,
-            taskDetails: taskDetails,
-            taskRules: taskRules,
-            userId: user.userId,
-            locId: general.locId,
-            emerId: emergencyPlan.emerId,
-            exposureId: jobBriefing.exposureId,
-            Location: {
+            const formattedUpdateData = {
+                briefingId: jobBriefing.briefingId,
+                briefingName: briefingName,
+                conductedBy: conductedBy,
+                eIC: eIC,
+                placeOfSafety: placeOfSafety,
+                taskDetails: taskDetails,
+                taskRules: taskRules,
+                userId: user.userId,
                 locId: general.locId,
-                physLoc: physLoc,
-                lat: typeof lat === "number" ? lat : null,
-                lng: typeof lng === "number" ? lng : null,
-            },
-            Emergency: {
                 emerId: emergencyPlan.emerId,
-                nearestHospital: nearestHospital,
-                accessPoint: accessPoint,
-                caller: caller,
-                cPR: cPR,
-                medInfo: medInfo,
-                evacRoute: evacRoute,
-            },
-            Exposure: Exposure,
-            acknowledgements: acknowledgements,
-        };
+                exposureId: jobBriefing.exposureId,
+                Location: {
+                    locId: general.locId,
+                    physLoc: physLoc,
+                    lat: typeof lat === "number" ? lat : null,
+                    lng: typeof lng === "number" ? lng : null,
+                },
+                Emergency: {
+                    emerId: emergencyPlan.emerId,
+                    nearestHospital: nearestHospital,
+                    accessPoint: accessPoint,
+                    caller: caller,
+                    cPR: cPR,
+                    medInfo: medInfo,
+                    evacRoute: evacRoute,
+                },
+                Exposure: Exposure,
+                acknowledgements: acknowledgements,
+            };
 
-        // Debug for formatted data
-        // console.log("Formatted Update Data:", formattedUpdateData);
+            // Debug for formatted data
+            // console.log("Formatted Update Data:", formattedUpdateData);
 
-        // Calling the Thunk that will update the database with the formatted data
-        const response = await updateJobBriefingThunk(formattedUpdateData);
+            // Calling the Thunk that will update the database with the formatted data
+            const response = await updateJobBriefingThunk(formattedUpdateData);
 
-        // If the briefing was updated successfully the snackbar message is sent
-        if (response === 200) {
-            setSnackbarMessage("Briefing updated successfully");
-            handleSnackbarClick();
+            // If the briefing was updated successfully the snackbar message is sent
+            if (response === 200) {
+                setSnackbarMessage("Briefing updated successfully");
+                handleSnackbarClick();
+            }
+            if (response === 503) {
+                setSnackbarMessage("Briefing not saved, network error");
+                handleSnackbarClick();
+            }
         }
     };
 
@@ -740,6 +832,7 @@ function JobBriefingForm(props) {
     return (
         <Box
             component="form"
+            onSubmit={handleSubmit}
             sx={{
                 "& .MuiTextField-root": { m: 1 },
             }}
@@ -765,7 +858,6 @@ function JobBriefingForm(props) {
                     handleSpeedDialClick={handleSpeedDialClick}
                 />
             </Box>
-
             <General
                 onChangeConductedBy={onChangeConductedBy}
                 onChangeEIC={onChangeEIC}
@@ -818,7 +910,7 @@ function JobBriefingForm(props) {
                 onClickAcknowledgement={onClickAcknowledgement}
                 acknowledgements={acknowledgements}
             />
-            <GenerateBriefing />
+            <GenerateBriefing handleDebriefed={handleDebriefed} />
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={2000}
@@ -847,6 +939,7 @@ const mapDispatchToProps = (dispatch) => ({
     onAddGeneral(date, time, physLoc, lat, lng) {
         dispatch(addGeneral(date, time, physLoc, lat, lng));
     },
+    addAcknowledgement: (acknowledgementData) => dispatch(addAcknowledgement(acknowledgementData)),
     onAddJobBriefing(
         briefingId,
         briefingName,

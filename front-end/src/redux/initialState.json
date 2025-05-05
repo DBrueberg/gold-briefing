@@ -1,7 +1,10 @@
 {
     "user": {},
     "general": {},
-    "jobBriefing": {},
+    "jobBriefing": {
+        "primaryExposures": [],
+        "acknowledgements": []
+    },
     "weather": {},
     "emergencyPlan": {},
     "briefingList": []

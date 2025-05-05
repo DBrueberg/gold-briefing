@@ -102,10 +102,11 @@ function CreateAccountForm(props) {
         // Checking that the phone number is 10 digits
         const isValidPhone = () => {
             const rawNumber = unformatPhoneNumber(phone);
-            console.log("Raw number", rawNumber);
+
+            // The phone number needs to be the proper number of
+            // digits
             if (rawNumber.length === 10) {
                 setPhoneError(false);
-                console.log(rawNumber);
                 return true;
             }
             setPhoneError(true);

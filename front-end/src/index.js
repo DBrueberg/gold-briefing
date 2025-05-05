@@ -4,14 +4,15 @@
 // December 22, 2022
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 11/02/2023, Added in MainTemplate for BrowserRouter)
+//  (DAB, 05/04/2025, Loading in launch initialState)
 
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import storeFactory from "./redux/store";
-import stateData from "./redux/initialState.json";
-import testState from './redux/sampleData.json';
+import initialState from "./redux/initialState.json";
+import testState from "./redux/sampleData.json";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import MainTemplate from "./components/template/MainTemplate";
@@ -20,7 +21,8 @@ import MainTemplate from "./components/template/MainTemplate";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 // Using the storeFactory to create a store with default
 // stateData
-const store = storeFactory(testState);
+// const store = storeFactory(testState);
+const store = storeFactory(initialState);
 
 // const store = storeFactory(testState);
 

@@ -75,8 +75,11 @@ export const addJobBriefingThunk = (jobBriefingData) => {
             // If there is an error, log it to the console
             console.error("Error creating job briefing:", error);
             // If there is an error, return a 400 status
-            if (error.response.status === 400) {
+            if (error.response?.status === 400) {
                 return 400;
+            }
+            if (error?.message === "Network Error") {
+                return 503;
             }
         }
     };
@@ -149,8 +152,11 @@ export const updateJobBriefingThunk = (jobBriefingData) => {
             // If there is an error, log it to the console
             console.error("Error updating job briefing:", error);
             // If there is an error, return a 400 status
-            if (error.response.status === 400) {
+            if (error.response?.status === 400) {
                 return 400;
+            }
+            if (error?.message === "Network Error") {
+                return 503;
             }
         }
     };
