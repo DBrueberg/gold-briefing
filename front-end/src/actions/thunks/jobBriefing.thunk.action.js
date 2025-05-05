@@ -4,10 +4,15 @@
 // April 19, 2025
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 04/26/2025, Added in delete, getAll, and getOne JobBriefingThunks)
+//  (DAB, 05/04/2025, Changed over add dispatch in update thunk to update dispatch)
 
-import { addJobBriefing, deleteJobBriefing } from "../jobBriefing.action";
-import { addGeneral, deleteGeneral } from "../general.action";
-import { addEmergencyPlan, deleteEmergencyPlan } from "../emergencyPlan.action";
+import { addJobBriefing, deleteJobBriefing, updateJobBriefing } from "../jobBriefing.action";
+import { addGeneral, deleteGeneral, updateGeneral } from "../general.action";
+import {
+    addEmergencyPlan,
+    deleteEmergencyPlan,
+    updateEmergencyPlan,
+} from "../emergencyPlan.action";
 import JobBriefingDataService from "../../services/jobBriefing.service";
 import {
     addAllBriefingList,
@@ -141,9 +146,9 @@ export const updateJobBriefingThunk = (jobBriefingData) => {
                 // console.log("Emergency Plan:", jobBriefingData.Emergency);
 
                 // Saving the new job briefing data to the redux state
-                dispatch(addJobBriefing(newJobBriefingData));
-                dispatch(addGeneral(newGeneralData));
-                dispatch(addEmergencyPlan(jobBriefingData.Emergency));
+                dispatch(updateJobBriefing(newJobBriefingData));
+                dispatch(updateGeneral(newGeneralData));
+                dispatch(updateEmergencyPlan(jobBriefingData.Emergency));
 
                 // Returning the response status to the caller to indicate success
                 return 200;

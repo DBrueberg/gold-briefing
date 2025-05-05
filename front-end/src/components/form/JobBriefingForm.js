@@ -104,8 +104,8 @@ function JobBriefingForm(props) {
     const [evacRoute, setEvacRoute] = useState(
         emergencyPlan.evacRoute ? emergencyPlan.evacRoute : ""
     );
-    const [lat, setLat] = useState(general.lat ? general.lat || "" : "");
-    const [lng, setLng] = useState(general.lng ? general.lng || "" : "");
+    const [lat, setLat] = useState(general.lat ? general.lat : "");
+    const [lng, setLng] = useState(general.lng ? general.lng : "");
     const [medInfo, setMedInfo] = useState(emergencyPlan.medInfo ? emergencyPlan.medInfo : "");
     const [nearestHospital, setNearestHospital] = useState(
         emergencyPlan.nearestHospital ? emergencyPlan.nearestHospital : ""
@@ -372,6 +372,9 @@ function JobBriefingForm(props) {
         if (user.userId) {
             // Saving the briefing
             saveBriefing();
+        } else {
+            setSnackbarMessage("You must be logged in to save briefing");
+            handleSnackbarClick();
         }
 
         // Load the briefing into a fixed easy to read template that
@@ -574,16 +577,23 @@ function JobBriefingForm(props) {
     const onClickUpdateWeather = async () => {
         // lat and lng will be used first since they are the most accurate
         if ((lat !== "" && lng !== "") || physLoc) {
-            // Requesting data from the weather data service
-            const response = await WeatherDataService.forecast(
-                lat !== "" && lng !== "" ? `${lat},${lng}` : physLoc
-            );
+            try {
+                // Requesting data from the weather data service
+                const response = await WeatherDataService.forecast(
+                    lat !== "" && lng !== "" ? `${lat},${lng}` : physLoc
+                );
 
-            // Formatting the data to match state
-            const tempWeather = await formatWeatherData(response.data);
+                // Formatting the data to match state
+                const tempWeather = await formatWeatherData(response.data);
 
-            // Dispatching to redux store
-            onAddWeather(tempWeather);
+                // Dispatching to redux store
+                onAddWeather(tempWeather);
+            } catch (error) {
+                if (error.response?.status === 400) {
+                    setSnackbarMessage("No matching location found");
+                    handleSnackbarClick();
+                }
+            }
         } else {
             // Form validation for weather location. A snackbar is used since
             // weather is not a required field
@@ -637,8 +647,8 @@ function JobBriefingForm(props) {
             const generalData = {
                 dateTime: dateTime,
                 physLoc: physLoc,
-                lat: typeof lat === "number" ? lat : null,
-                lng: typeof lng === "number" ? lng : null,
+                lat: lat,
+                lng: lng,
             };
             const emergencyPlanData = {
                 nearestHospital: nearestHospital,
@@ -773,8 +783,8 @@ function JobBriefingForm(props) {
                 Location: {
                     locId: general.locId,
                     physLoc: physLoc,
-                    lat: typeof lat === "number" ? lat : null,
-                    lng: typeof lng === "number" ? lng : null,
+                    lat: lat,
+                    lng: lng,
                 },
                 Emergency: {
                     emerId: emergencyPlan.emerId,

@@ -8,8 +8,8 @@
 //      exposure id fields, and refactored the exposures to match the database)
 //  (DAB, 04/21/2025, Refactored the exposure reducer to
 //      add the correct exposure id fields)
-//  (DAB, 05/04/2025, Repaired acknowldements. It was not saving state
-//      correctly)
+//  (DAB, 05/04/2025, Repaired acknowlegements. It was not saving state
+//      correctly. Repaired UPDATE_JOB_BRIEFING)
 
 import { reduxAction as C, exposureConstants } from "../constants";
 
@@ -138,12 +138,45 @@ export const primaryExposure = (state = {}, action) => {
             }
         }
         case C.UPDATE_JOB_BRIEFING:
-            return {
-                name: state.primaryExposure.name,
-                risk: state.primaryExposure.risk,
-                mitigation: state.primaryExposure.mitigation,
-                ...state,
-            };
+            switch (state.name) {
+                case exposureConstants.LIFE_SAVING_NAME:
+                    return {
+                        lifeSaveId: state.lifeSaveId,
+                        name: state.name,
+                        risk: state.risk,
+                        mitigation: state.mitigation,
+                    };
+                case exposureConstants.LINE_FIRE_NAME:
+                    return {
+                        lineFireId: state.lineFireId,
+                        name: state.name,
+                        risk: state.risk,
+                        mitigation: state.mitigation,
+                    };
+                case exposureConstants.PINCH_POINT_NAME:
+                    return {
+                        pinchPointId: state.pinchPointId,
+                        name: state.name,
+                        risk: state.risk,
+                        mitigation: state.mitigation,
+                    };
+                case exposureConstants.ASC_DESC_NAME:
+                    return {
+                        ascDescId: state.ascDescId,
+                        name: state.name,
+                        risk: state.risk,
+                        mitigation: state.mitigation,
+                    };
+                case exposureConstants.PATH_TRAVEL_NAME:
+                    return {
+                        pathTravelId: state.pathTravelId,
+                        name: state.name,
+                        risk: state.risk,
+                        mitigation: state.mitigation,
+                    };
+                default:
+                    return state;
+            }
         case C.DELETE_JOB_BRIEFING:
             return {};
         default:
