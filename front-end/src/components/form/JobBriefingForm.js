@@ -439,13 +439,16 @@ function JobBriefingForm(props) {
     const onChangeLat = (e) => {
         // Destructuring the form field value to a variable
         const { value } = e.target;
-        // Only allowing real lat values to be inputted
-        if (value === "-" || (value >= -90 && value <= 90)) {
-            if (value.length > 11) {
-                setLat(value.slice(0, 11));
-            } else {
-                // Setting the new form field value to local state
-                setLat(value);
+
+        // Validating correct lat format. 2 digits 7 decimals max
+        if (value.length <= 2) {
+            setLat(value);
+        }
+        const [digit, decimal] = value.split(".");
+
+        if (digit === "-" || (digit >= -90 && digit <= 90)) {
+            if (decimal?.length <= 7) {
+                setLat(digit + "." + decimal);
             }
         }
     };
@@ -454,6 +457,19 @@ function JobBriefingForm(props) {
     const onChangeLng = (e) => {
         // Destructuring the form field value to a variable
         const { value } = e.target;
+
+        // Validating correct lng format. 3 digits 7 decimals max
+        if (value.length <= 2) {
+            setLng(value);
+        }
+        const [digit, decimal] = value.split(".");
+
+        if (digit === "-" || (digit >= -180 && digit <= 180)) {
+            if (decimal?.length <= 7) {
+                setLng(digit + "." + decimal);
+            }
+        }
+
         // Only allowing real lng values to be inputed
         if (value === "-" || (value >= -180 && value <= 180)) {
             if (value.length > 11) {
