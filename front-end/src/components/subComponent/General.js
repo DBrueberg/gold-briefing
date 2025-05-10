@@ -122,6 +122,7 @@ function General(props) {
                                 id="lat"
                                 InputProps={{
                                     inputProps: {
+                                        type: "number",
                                         min: -90,
                                         max: 90,
                                         maxLength: 11,
