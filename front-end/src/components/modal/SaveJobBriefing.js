@@ -5,6 +5,7 @@
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 10/31/2023, Added limited functionality and error handling)
 //  (DAB, 11/01/2023, Added comments and sorted out functionality)
+//  (DAB, 05/09/2025, Added maxLength to briefingName to match database restraints)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -87,6 +88,7 @@ function SaveJobBriefing(props) {
                     <Stack spacing={1}>
                         <TextField
                             id="briefingName"
+                            inputProps={{ maxLength: 50 }}
                             label="Briefing Name"
                             autoComplete="briefing-name"
                             required
@@ -94,7 +96,11 @@ function SaveJobBriefing(props) {
                             onChange={onChangeBriefingName}
                             size="small"
                         />
-                        <Button sx={{ minWidth: "7rem" }} variant="contained" onClick={(e) => handleSaveName()}>
+                        <Button
+                            sx={{ minWidth: "7rem" }}
+                            variant="contained"
+                            onClick={(e) => handleSaveName()}
+                        >
                             Save
                         </Button>
                         <FormHelperText sx={{ textAlign: "center" }}>Enter a name.</FormHelperText>

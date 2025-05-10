@@ -10,7 +10,7 @@ import React from "react";
 import { Box, Grid, TextField, Typography } from "@mui/material";
 
 /**
- * The Emergency Component will display the form fields required 
+ * The Emergency Component will display the form fields required
  * in an emergency situation
  *
  * @returns
@@ -26,8 +26,7 @@ function Emergency(props) {
         onChangeMedInfo,
     } = props;
     // Destructuring the needed variable from props
-    const { nearestHospital, cPR, accessPoint, caller, evacRoute, medInfo } =
-        props;
+    const { nearestHospital, cPR, accessPoint, caller, evacRoute, medInfo } = props;
 
     return (
         <Box>
@@ -50,6 +49,7 @@ function Emergency(props) {
                         sx={{ display: "flex" }}
                         size="small"
                         id="cPR"
+                        inputProps={{ maxLength: 50 }}
                         label="CPR/First Aid"
                         value={cPR}
                         onChange={onChangeCPR}
@@ -70,6 +70,7 @@ function Emergency(props) {
                         sx={{ display: "flex" }}
                         size="small"
                         id="caller"
+                        inputProps={{ maxLength: 50 }}
                         label="Caller"
                         value={caller}
                         onChange={onChangeCaller}
