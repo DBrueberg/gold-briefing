@@ -55,7 +55,7 @@ const prodSequelizeDBLoad = () => {
         })
         .then(() => {
             // Load default data into database. Turn on for new deployment****
-            // defaultDBData.loadTestDBData();
+            defaultDBData.loadTestDBData();
         })
         .catch((err) => {
             console.log("Failed to sync db: " + err.message);
