@@ -123,6 +123,7 @@ function General(props) {
                                 InputProps={{
                                     inputProps: {
                                         type: "number",
+                                        step: "any",
                                         min: -90,
                                         max: 90,
                                         maxLength: 11,
@@ -145,6 +146,7 @@ function General(props) {
                                 InputProps={{
                                     inputProps: {
                                         type: "number",
+                                        step: "any",
                                         min: -180,
                                         max: 180,
                                         maxLength: 11,
