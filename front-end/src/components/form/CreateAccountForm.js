@@ -6,6 +6,7 @@
 //  (DAB, 04/17/2025, Added in redux state and connect)
 //  (DAB, 04/19/2025, Added in thunk action to add user)
 //  (DAB, 04/27/2025, Added in form validation)
+//  (DAB, 05/09/2025, maxLength added to match database restraints)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -180,6 +181,8 @@ function CreateAccountForm(props) {
             <Stack justifyContent="center" sx={{ minWidth: "50%" }}>
                 <TextField
                     id="fName"
+                    type="text"
+                    inputProps={{ maxLength: 50 }}
                     label="First Name"
                     size="small"
                     sx={{ minWidth: "50%" }}
@@ -190,6 +193,8 @@ function CreateAccountForm(props) {
                 />
                 <TextField
                     id="lName"
+                    type="text"
+                    inputProps={{ maxLength: 50 }}
                     label="Last Name"
                     size="small"
                     sx={{ minWidth: "50%" }}
@@ -213,10 +218,11 @@ function CreateAccountForm(props) {
                 />
                 <TextField
                     id="email"
+                    type="email"
+                    inputProps={{ maxLength: 50 }}
                     label="Email"
                     size="small"
                     sx={{ minWidth: "50%" }}
-                    type="email"
                     autoComplete="email"
                     required
                     error={emailError}
@@ -226,10 +232,11 @@ function CreateAccountForm(props) {
                 />
                 <TextField
                     id="password"
+                    type="password"
+                    inputProps={{ maxLength: 50 }}
                     label="Password"
                     size="small"
                     sx={{ minWidth: "50%" }}
-                    type="password"
                     autoComplete="current-password"
                     required
                     value={password}

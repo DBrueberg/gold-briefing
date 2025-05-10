@@ -5,6 +5,7 @@
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 05/04/2025, Fixed input range for lat/lng to accept
 //      only valid numbers)
+//  (DAB, 05/09/2025, maxLength added to match database restraints)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -43,6 +44,8 @@ function General(props) {
                         sx={{ display: "flex" }}
                         size="small"
                         id="conductedBy"
+                        type="text"
+                        inputProps={{ maxLength: 80 }}
                         label="Conducted By"
                         value={conductedBy}
                         onChange={onChangeConductedBy}
@@ -53,6 +56,8 @@ function General(props) {
                         sx={{ display: "flex" }}
                         size="small"
                         id="eic"
+                        type="text"
+                        inputProps={{ maxLength: 80 }}
                         label="EIC"
                         value={eIC}
                         onChange={onChangeEIC}
@@ -119,6 +124,7 @@ function General(props) {
                                     inputProps: {
                                         min: -90,
                                         max: 90,
+                                        maxLength: 11,
                                     },
                                 }}
                                 label="Lat"
@@ -137,8 +143,10 @@ function General(props) {
                                 id="lng"
                                 InputProps={{
                                     inputProps: {
+                                        type: "number",
                                         min: -180,
                                         max: 180,
+                                        maxLength: 11,
                                     },
                                 }}
                                 label="Long"

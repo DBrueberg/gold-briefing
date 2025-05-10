@@ -3,6 +3,7 @@
 // Gold-Briefing - location.model.js
 // November 26, 2023
 // Last Edited (Initials, Date, Edits):
+//  (DAB, 05/09/2025, Updated lat and lng lengths)
 
 // Sequelize model for the locations table
 module.exports = (sequelize, DataTypes) => {
@@ -18,15 +19,15 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
             },
             lat: {
-                type: DataTypes.FLOAT(10, 6),
+                type: DataTypes.FLOAT(11, 10),
             },
             lng: {
-                type: DataTypes.FLOAT(10, 6),
+                type: DataTypes.FLOAT(11, 10),
             },
         },
         {
             timestamps: false,
-        }
+        },
     );
 
     return Location;

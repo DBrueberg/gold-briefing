@@ -440,9 +440,13 @@ function JobBriefingForm(props) {
         // Destructuring the form field value to a variable
         const { value } = e.target;
         // Only allowing real lat values to be inputted
-        if (value >= -90 && value <= 90) {
-            // Setting the new form field value to local state
-            setLat(value);
+        if (value === "-" || (value >= -90 && value <= 90)) {
+            if (value.length > 11) {
+                setLat(value.slice(0, 11));
+            } else {
+                // Setting the new form field value to local state
+                setLat(value);
+            }
         }
     };
 
@@ -451,9 +455,14 @@ function JobBriefingForm(props) {
         // Destructuring the form field value to a variable
         const { value } = e.target;
         // Only allowing real lng values to be inputed
-        if (value >= -180 && value <= 180) {
-            // Setting the new form field value to local state
-            setLng(value);
+        if (value === "-" || (value >= -180 && value <= 180)) {
+            if (value.length > 11) {
+                // Setting the new form field value to local state
+                setLng(value.slice(0, 11));
+            } else {
+                // Setting the new form field value to local state
+                setLng(value);
+            }
         }
     };
 

@@ -4,6 +4,7 @@
 // November 26, 2023
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 04/21/2025, Refactored hospName to hospital and callerName to caller)
+//  (DAB, 05/09/2025, updated max character lengths for nearestHospital)
 
 // Sequelize model for the emergencies table
 module.exports = (sequelize, DataTypes) => {
@@ -16,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
                 autoIncrement: true,
             },
             nearestHospital: {
-                type: DataTypes.STRING(50),
+                type: DataTypes.STRING,
             },
             accessPoint: {
                 type: DataTypes.STRING,
