@@ -113,6 +113,16 @@ function CreateAccountForm(props) {
         setSnackbarMessage(null);
     };
 
+    // This method will handle the actions after submitting the form
+    const handleSubmit = (e) => {
+        // Preventing default actions
+        e.preventDefault();
+
+        // The handleCreateAccount method will handle the methods needed to
+        // create an account in the database
+        handleCreateAccount();
+    };
+
     // A compact form validation check, add any extra form validations here and
     // return the result as boolean
     const isValidForm = () => {
@@ -171,16 +181,6 @@ function CreateAccountForm(props) {
     const onChangePassword = (e) => {
         const { value } = e.target;
         setPassword(value);
-    };
-
-    // This method will handle the actions after submitting the form
-    const handleSubmit = (e) => {
-        // Preventing default actions
-        e.preventDefault();
-
-        // The handleCreateAccount method will handle the methods needed to
-        // create an account in the database
-        handleCreateAccount();
     };
 
     return (

@@ -16,6 +16,7 @@
 //      fetch, and update this page)
 //  (DAB, 05/03/2025, Updated form to onSubmit instead of onClick)
 //  (DAB, 05/04/2025, Added in form specific error handling)
+//  (DAB, 05/11/2025, Added in spinners for database requests)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -321,6 +322,11 @@ function JobBriefingForm(props) {
         }
     };
 
+    // Will handle logic for closing the backdrop
+    const handleCloseBackdrop = () => {
+        setOpenBackdrop(false);
+    };
+
     // The handleDebriefed method will handle the actions needed after
     // a successful job briefing debrief
     const handleDebriefed = () => {
@@ -334,6 +340,11 @@ function JobBriefingForm(props) {
         // Should send an SMS alerting everyone on the briefing that the
         // briefing was closed. Should have briefing name, EIC, time closed,
         // and phone number
+    };
+
+    // Will handle logic for opening the backdrop
+    const handleOpenBackdrop = () => {
+        setOpenBackdrop(true);
     };
 
     // Function will open the snackbar
@@ -916,13 +927,6 @@ function JobBriefingForm(props) {
                 openSaveBrief();
             }
         }
-    };
-
-    const handleOpenBackdrop = () => {
-        setOpenBackdrop(true);
-    };
-    const handleCloseBackdrop = () => {
-        setOpenBackdrop(false);
     };
 
     return (
