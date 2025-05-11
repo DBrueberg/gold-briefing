@@ -7,16 +7,18 @@
 //  (DAB, 04/19/2025, Added in thunk action to add user)
 //  (DAB, 04/27/2025, Added in form validation)
 //  (DAB, 05/09/2025, maxLength added to match database restraints)
+//  (DAB, 05/10/2025, added isLoading to prevent multiple database calls)
 
 // Using React library in order to build components
 // for the app and importing needed components
 import React, { useState } from "react";
-import { Box, Button, Snackbar, Stack, TextField } from "@mui/material";
+import { Box, Button, CircularProgress, Snackbar, Stack, TextField } from "@mui/material";
 import { formatPhoneNumber } from "../../helperFunction/FormatString";
 import { connect } from "react-redux";
 import { addUserThunk } from "../../actions/thunks/user.thunk.action";
 import { unformatPhoneNumber } from "../../helperFunction/FormatString";
 import { useNavigate } from "react-router-dom";
+import { endLoadingCreateAccount, startLoadingCreateAccount } from "../../actions/isLoading.action";
 
 /**
  * The CreateAccountForm View will handle the form needed for
@@ -28,9 +30,11 @@ import { useNavigate } from "react-router-dom";
 function CreateAccountForm(props) {
     // Using the useNavigate hook to navigate to different routes
     const navigate = useNavigate();
+    // Loading in state from redux connect
+    const { isLoading } = props;
 
     // Loading in the redux thunk that will save to the database and state
-    const { addUserThunk } = props;
+    const { addUserThunk, startLoadingCreateAccount, endLoadingCreateAccount } = props;
 
     // Local state to keep track of the form fields
     const [fName, setFName] = useState("");
@@ -62,8 +66,20 @@ function CreateAccountForm(props) {
                 password: password,
             };
 
+            // Setting isLoading state to true
+            startLoadingCreateAccount();
+
             // Adding the user to the redux state
-            const response = await addUserThunk(createAccountData);
+            const response = await addUserThunk(createAccountData)
+                .then((response) => {
+                    endLoadingCreateAccount();
+                    return response;
+                })
+                .catch((response) => {
+                    endLoadingCreateAccount();
+                    return response;
+                });
+
             // If a successful account is created the user is added to state and
             // redirected to the briefing page
             if (response === 200) {
@@ -242,9 +258,15 @@ function CreateAccountForm(props) {
                     value={password}
                     onChange={onChangePassword}
                 />
-                <Button type="submit" sx={{ mx: ".5rem" }} variant="contained">
-                    Create Account
-                </Button>
+
+                {!isLoading.createAccount ? (
+                    <Button type="submit" sx={{ mx: ".5rem" }} variant="contained">
+                        Create Account
+                    </Button>
+                ) : (
+                    <CircularProgress sx={{ mx: "auto" }} />
+                )}
+
                 <Snackbar
                     open={openSnackbar}
                     autoHideDuration={2000}
@@ -256,10 +278,17 @@ function CreateAccountForm(props) {
     );
 }
 
+// Mapping state to props
+const mapStateToProps = (state) => ({
+    isLoading: { ...state.isLoading },
+});
+
 // Mapping the redux store states to props
 const mapDispatchToProps = (dispatch) => ({
     addUserThunk: (userData) => dispatch(addUserThunk(userData)),
+    startLoadingCreateAccount: () => dispatch(startLoadingCreateAccount()),
+    endLoadingCreateAccount: () => dispatch(endLoadingCreateAccount()),
 });
 
 // Exporting the component
-export default connect(null, mapDispatchToProps)(CreateAccountForm);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateAccountForm);

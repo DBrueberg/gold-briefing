@@ -5,15 +5,25 @@
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 04/20/2025, Added needed Thunks to log a user into the database)
 //  (DAB, 04/27/2025, Added in form validation)
+//  (DAB, 05/11/2025, Added in spinner for login database queries)
 
 // Using React library in order to build components
 // for the app and importing needed components
 import React, { useState } from "react";
-import { Box, Button, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    CircularProgress,
+    Snackbar,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUserThunk } from "../../actions/thunks/authentication.thunk.action";
 import { useNavigate } from "react-router-dom";
+import { endLoadingLoggingIn, startLoadingLoggingIn } from "../../actions/isLoading.action";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -23,8 +33,11 @@ import { useNavigate } from "react-router-dom";
  * @returns
  */
 function LoginForm(props) {
-    // Loading in the needed methods and state from props
-    const { loginUserThunk } = props;
+    // Loading in state from props
+    const { isLoading } = props;
+
+    // Loading in the needed methods from props
+    const { loginUserThunk, startLoadingLoggingIn, endLoadingLoggingIn } = props;
 
     // Navigate will be used for SPA directs
     const navigate = useNavigate();
@@ -55,11 +68,27 @@ function LoginForm(props) {
                 password: password,
             };
 
-            // DEBUG: can be left in but also can be removed
-            console.log("Logging in...");
+            // dispatching database request state to true
+            startLoadingLoggingIn();
 
             // Calling the thunk action to save the data to the database and redux state
-            const response = await loginUserThunk(loginData);
+            const response = await loginUserThunk(loginData)
+                .then((response) => {
+                    // dispatching database req state to false
+                    endLoadingLoggingIn();
+
+                    // returning response
+                    return response;
+                })
+                .catch((response) => {
+                    // dispatching database req state to false
+                    endLoadingLoggingIn();
+
+                    // returning response
+                    return response;
+                });
+
+            // dispatching logging in to false
 
             // If the user validation passes the user is navigated to the briefing page
             if (response === 200) {
@@ -153,9 +182,14 @@ function LoginForm(props) {
                     value={password}
                     onChange={onChangePassword}
                 />
-                <Button type="submit" sx={{ mx: ".5rem" }} variant="contained">
-                    Login
-                </Button>
+                {!isLoading.loggingIn ? (
+                    <Button type="submit" sx={{ mx: ".5rem" }} variant="contained">
+                        Login
+                    </Button>
+                ) : (
+                    <CircularProgress sx={{ mx: "auto" }} />
+                )}
+
                 <Typography component={Link} to="/createAccount" fontSize="small" mt={1}>
                     Create an account.
                 </Typography>
@@ -170,12 +204,19 @@ function LoginForm(props) {
     );
 }
 
+// Map state to props
+const mapStateToProps = (state) => ({
+    isLoading: { ...state.isLoading },
+});
+
 // Map the dispatch to props
 const mapDispatchToProps = (dispatch) => {
     return {
         loginUserThunk: (userData) => dispatch(loginUserThunk(userData)),
+        startLoadingLoggingIn: () => dispatch(startLoadingLoggingIn()),
+        endLoadingLoggingIn: () => dispatch(endLoadingLoggingIn()),
     };
 };
 
 // Exporting the component
-export default connect(null, mapDispatchToProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

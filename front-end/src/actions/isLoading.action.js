@@ -47,7 +47,7 @@ export const startLoadingDeleteBriefing = () => ({
  * Sets referenced state to loading true
  * @returns
  */
-export const startLoadingLogginIn = () => ({
+export const startLoadingLoggingIn = () => ({
     type: C.START_LOADING_LOGGING_IN,
     loggingIn: true,
 });
@@ -101,7 +101,7 @@ export const endLoadingDeleteBriefing = () => ({
  * Sets referenced state to loading false
  * @returns
  */
-export const endLoadingLogginIn = () => ({
+export const endLoadingLoggingIn = () => ({
     type: C.END_LOADING_LOGGING_IN,
     loggingIn: false,
 });
