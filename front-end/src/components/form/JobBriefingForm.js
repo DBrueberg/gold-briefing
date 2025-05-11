@@ -16,6 +16,7 @@
 //      fetch, and update this page)
 //  (DAB, 05/03/2025, Updated form to onSubmit instead of onClick)
 //  (DAB, 05/04/2025, Added in form specific error handling)
+//  (DAB, 05/11/2025, Added in spinners for database requests)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -24,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import moment from "moment";
 import WeatherDataService from "../../services/weather.service";
-import { Box, Snackbar, Typography } from "@mui/material";
+import { Backdrop, Box, CircularProgress, Snackbar, Typography } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -52,6 +53,12 @@ import {
     updateJobBriefingThunk,
 } from "../../actions/thunks/jobBriefing.thunk.action";
 import { exposureConstants } from "../../constants";
+import {
+    endLoadingBriefingCreate,
+    endLoadingBriefingUpdate,
+    startLoadingBriefingCreate,
+    startLoadingBriefingUpdate,
+} from "../../actions/isLoading.action";
 
 /**
  * The JobBriefingForm View will display a completed job briefing form
@@ -62,7 +69,7 @@ import { exposureConstants } from "../../constants";
  */
 function JobBriefingForm(props) {
     // Loading in the sample data, this is only temporary
-    const { user, general, jobBriefing, weather, emergencyPlan } = props;
+    const { user, general, jobBriefing, weather, emergencyPlan, isLoading } = props;
     const {
         addJobBriefingThunk,
         updateJobBriefingThunk,
@@ -72,6 +79,10 @@ function JobBriefingForm(props) {
         onDeleteGeneral,
         onDeleteEmergencyPlan,
         onDeleteJobBriefing,
+        startLoadingBriefingUpdate,
+        endLoadingBriefingUpdate,
+        startLoadingBriefingCreate,
+        endLoadingBriefingCreate,
     } = props;
     // const { user } = sampleData;
     const navigate = useNavigate();
@@ -110,6 +121,7 @@ function JobBriefingForm(props) {
     const [nearestHospital, setNearestHospital] = useState(
         emergencyPlan.nearestHospital ? emergencyPlan.nearestHospital : ""
     );
+    const [openBackdrop, setOpenBackdrop] = useState(false);
     const [openBriefDialog, setOpenBriefDialog] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [physLoc, setPhysLoc] = useState(general.physLoc ? general.physLoc : "");
@@ -310,6 +322,11 @@ function JobBriefingForm(props) {
         }
     };
 
+    // Will handle logic for closing the backdrop
+    const handleCloseBackdrop = () => {
+        setOpenBackdrop(false);
+    };
+
     // The handleDebriefed method will handle the actions needed after
     // a successful job briefing debrief
     const handleDebriefed = () => {
@@ -323,6 +340,11 @@ function JobBriefingForm(props) {
         // Should send an SMS alerting everyone on the briefing that the
         // briefing was closed. Should have briefing name, EIC, time closed,
         // and phone number
+    };
+
+    // Will handle logic for opening the backdrop
+    const handleOpenBackdrop = () => {
+        setOpenBackdrop(true);
     };
 
     // Function will open the snackbar
@@ -344,6 +366,7 @@ function JobBriefingForm(props) {
     const handleSpeedDialClick = (actName) => {
         switch (actName) {
             case "Save":
+                // Calling the function that will save the briefing to the database
                 saveBriefing();
                 // Let user type a name before saving, name
                 // must have at least one character
@@ -684,13 +707,32 @@ function JobBriefingForm(props) {
                 evacRoute: evacRoute,
             };
 
+            // Requesting from the database, isLoading set to true
+            startLoadingBriefingCreate();
+            // Opening spinner backdrop
+            handleOpenBackdrop();
+
             // Adding the job briefing to the database and dispatching
             // the action for redux state
             const response = await addJobBriefingThunk({
                 ...jobBriefData,
                 ...generalData,
                 ...emergencyPlanData,
-            });
+            })
+                .then((response) => {
+                    // setting the isLoading state to false, database req complete
+                    endLoadingBriefingCreate();
+                    // Closing spinner backdrop
+                    handleCloseBackdrop();
+                    return response;
+                })
+                .catch((response) => {
+                    // setting the isLoading state to false, database req complete
+                    endLoadingBriefingCreate();
+                    // Closing spinner backdrop
+                    handleCloseBackdrop();
+                    return response;
+                });
 
             // If the briefing was saved successfully the snackbar message is set
             if (response === 200) {
@@ -827,8 +869,27 @@ function JobBriefingForm(props) {
             // Debug for formatted data
             // console.log("Formatted Update Data:", formattedUpdateData);
 
+            // setting the isLoading state to true for database req
+            startLoadingBriefingUpdate();
+            // Opening spinner backdrop
+            handleOpenBackdrop();
+
             // Calling the Thunk that will update the database with the formatted data
-            const response = await updateJobBriefingThunk(formattedUpdateData);
+            const response = await updateJobBriefingThunk(formattedUpdateData)
+                .then((response) => {
+                    // setting the isLoading state to false, database req complete
+                    endLoadingBriefingUpdate();
+                    // Closing spinner backdrop
+                    handleCloseBackdrop();
+                    return response;
+                })
+                .catch((response) => {
+                    // setting the isLoading state to false, database req complete
+                    endLoadingBriefingUpdate();
+                    // Closing spinner backdrop
+                    handleCloseBackdrop();
+                    return response;
+                });
 
             // If the briefing was updated successfully the snackbar message is sent
             if (response === 200) {
@@ -851,16 +912,20 @@ function JobBriefingForm(props) {
     // This function will allow the user to save the current
     // briefing and name it
     const saveBriefing = () => {
-        // If there is already a name the briefing is updated
-        if (briefingName) {
-            // The method to update an existing briefing in the database
-            onUpdateBriefData(briefingName);
-        }
-        // Else the use is prompted to choose a name and then
-        // briefing is saved
-        else {
-            // The method to create a new briefing in the database
-            openSaveBrief();
+        // If there is not already a database req in, the database will
+        // be queried
+        if (!isLoading?.briefingUpdate && !isLoading?.briefingCreate) {
+            // If there is already a name the briefing is updated
+            if (briefingName) {
+                // The method to update an existing briefing in the database
+                onUpdateBriefData(briefingName);
+            }
+            // Else the use is prompted to choose a name and then
+            // briefing is saved
+            else {
+                // The method to create a new briefing in the database
+                openSaveBrief();
+            }
         }
     };
 
@@ -953,16 +1018,20 @@ function JobBriefingForm(props) {
                 onClose={handleSnackbarClose}
             />
             <SaveJobBriefing open={openBriefDialog} onClose={onCloseSaveBrief} />
+            <Backdrop open={openBackdrop} onClick={handleCloseBackdrop}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Box>
     );
 }
 const mapStateToProps = (state) => ({
-    user: { ...state.user },
-    general: { ...state.general },
-    jobBriefing: { ...state.jobBriefing },
-    weather: { ...state.weather },
-    emergencyPlan: { ...state.emergencyPlan },
-    briefingList: [...state.briefingList],
+    user: state.user,
+    general: state.general,
+    jobBriefing: state.jobBriefing,
+    weather: state.weather,
+    emergencyPlan: state.emergencyPlan,
+    briefingList: state.briefingList,
+    isLoading: state.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -1047,6 +1116,10 @@ const mapDispatchToProps = (dispatch) => ({
     onDeleteEmergencyPlan() {
         dispatch(deleteEmergencyPlan());
     },
+    startLoadingBriefingCreate: () => dispatch(startLoadingBriefingCreate()),
+    endLoadingBriefingCreate: () => dispatch(endLoadingBriefingCreate()),
+    startLoadingBriefingUpdate: () => dispatch(startLoadingBriefingUpdate()),
+    endLoadingBriefingUpdate: () => dispatch(endLoadingBriefingUpdate()),
 });
 
 // Exporting the component

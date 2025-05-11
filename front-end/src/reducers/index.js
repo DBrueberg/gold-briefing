@@ -4,6 +4,7 @@
 // December 24, 2022
 // Last Edited (Initials, Date, Edits):
 //  (DAB, 11/18/2023, Added in all reducers)
+//  (DAB, 05/10/2025, Added in isLoading reducer)
 
 // Using React library in order to build components
 // for the app and importing needed components
@@ -14,6 +15,7 @@ import { general } from "./general.reducer";
 import { jobBriefing } from "./jobBriefing.reducer";
 import { user } from "./user.reducer";
 import { weather } from "./weather.reducer";
+import { isLoading } from "./isLoading.reducer";
 
 // Combining all reducers
 const reducers = combineReducers({
@@ -23,6 +25,7 @@ const reducers = combineReducers({
     general,
     jobBriefing,
     weather,
+    isLoading,
 });
 
 // Exporting combined reducers

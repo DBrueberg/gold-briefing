@@ -6,18 +6,34 @@
 //  (DAB, 04/26/2025, Added in the getAll, getOne, and delete JobBriefing Thunks
 //      Also added in basic component functionality to use these state and database
 //      calls)
+//  (DAB, 05/11/2025, Added in spinners and backdrop for database loads)
 
 // Using React library in order to build components
 // for the app and importing needed components
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { Box, Button, List, ListItem, ListItemText, Typography } from "@mui/material";
+import {
+    Backdrop,
+    Box,
+    Button,
+    CircularProgress,
+    List,
+    ListItem,
+    ListItemText,
+    Typography,
+} from "@mui/material";
 import {
     deleteJobBriefingThunk,
     getAllJobBriefingsThunk,
     getOneJobBriefingThunk,
 } from "../../actions/thunks/jobBriefing.thunk.action";
+import {
+    endLoadingDeleteBriefing,
+    endLoadingLoadBriefing,
+    startLoadingDeleteBriefing,
+    startLoadingLoadBriefing,
+} from "../../actions/isLoading.action";
 
 /**
  * The BriefingList Component will load in a list of saved
@@ -27,10 +43,21 @@ import {
  */
 function BriefingList(props) {
     // Destructuring the needed methods from props
-    const { getAllJobBriefingsThunk, getOneJobBriefingThunk, deleteJobBriefingThunk } = props;
+    const {
+        getAllJobBriefingsThunk,
+        getOneJobBriefingThunk,
+        deleteJobBriefingThunk,
+        startLoadingDeleteBriefing,
+        endLoadingDeleteBriefing,
+        startLoadingLoadBriefing,
+        endLoadingLoadBriefing,
+    } = props;
     // Destructuring the needed variable from props
-    const { briefingList, user } = props;
+    const { briefingList, user, isLoading } = props;
     const navigate = useNavigate();
+
+    // State will open and close the backdrop spinner
+    const [openBackdrop, setOpenBackdrop] = useState(false);
 
     // useEffect will make needed calls when state changes
     useEffect(() => {
@@ -47,8 +74,23 @@ function BriefingList(props) {
     // This function will will allow a user to delete a saved
     // job briefing using its id
     const handleDeleteClick = async (briefingId) => {
+        // isLoading state for delete briefing is set to true
+        startLoadingDeleteBriefing();
+        handleOpenBackdrop();
         // Deleting the job briefing from both state and the database
-        const response = await deleteJobBriefingThunk(briefingId);
+        const response = await deleteJobBriefingThunk(briefingId)
+            .then((response) => {
+                // isLoading state for delete briefing is set to false
+                endLoadingDeleteBriefing();
+                handleCloseBackdrop();
+                return response;
+            })
+            .catch((response) => {
+                // isLoading state for delete briefing is set to false
+                endLoadingDeleteBriefing();
+                handleCloseBackdrop();
+                return response;
+            });
 
         // If successful the job briefing is deleted
         if (response === 200) {
@@ -57,12 +99,32 @@ function BriefingList(props) {
         }
     };
 
+    // Will handle what happens when the backdrop closes
+    const handleCloseBackdrop = () => {
+        setOpenBackdrop(false);
+    };
+
     // This function will allow a user to load in a new job
     // briefing based off its id
     const handleLoadClick = async (briefingId) => {
+        // isLoading state for load briefing is set to true
+        startLoadingLoadBriefing();
+        handleOpenBackdrop();
         // Might need a new route that uses :id, will look into
         // options. May just load current into state
-        const response = await getOneJobBriefingThunk(briefingId);
+        const response = await getOneJobBriefingThunk(briefingId)
+            .then((response) => {
+                // isLoading state for load briefing is set to false
+                endLoadingLoadBriefing();
+                handleCloseBackdrop();
+                return response;
+            })
+            .catch((response) => {
+                // isLoading state for load briefing is set to false
+                endLoadingLoadBriefing();
+                handleCloseBackdrop();
+                return response;
+            });
 
         // If successful the user is sent to the job briefing page
         if (response === 200) {
@@ -71,12 +133,18 @@ function BriefingList(props) {
         }
     };
 
+    // Will handle what happens when the backdrop opens
+    const handleOpenBackdrop = () => {
+        setOpenBackdrop(true);
+    };
+
     // The loadBriefings method will async request and load the job briefings if there are any
     const loadBriefings = async () => {
         // Async loading all job briefings for the user
         await getAllJobBriefingsThunk(user.userId);
     };
 
+    // Checking if there are brieifings in briefingList
     const isBriefingList = briefingList?.length > 0;
 
     // The Briefing Component contains a single briefing data
@@ -117,22 +185,32 @@ function BriefingList(props) {
                         handleLoadClick={() => handleLoadClick(briefing.briefingId)}
                     />
                 ))}
+            <Backdrop open={openBackdrop} onClick={handleCloseBackdrop}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Box>
     );
 }
 
-// Maping state and dispactch to props
+// Maping state and dispatch to props
 const mapStateToProps = (state) => {
     return {
         briefingList: state.briefingList,
         user: state.user,
+        isLoading: state.isLoading,
     };
 };
+
+// Maping and loading dispatch to props
 const mapDispatchToProps = (dispatch) => {
     return {
         getAllJobBriefingsThunk: (id) => dispatch(getAllJobBriefingsThunk(id)),
         getOneJobBriefingThunk: (id) => dispatch(getOneJobBriefingThunk(id)),
         deleteJobBriefingThunk: (id) => dispatch(deleteJobBriefingThunk(id)),
+        startLoadingDeleteBriefing: () => dispatch(startLoadingDeleteBriefing()),
+        endLoadingDeleteBriefing: () => dispatch(endLoadingDeleteBriefing()),
+        startLoadingLoadBriefing: () => dispatch(startLoadingLoadBriefing()),
+        endLoadingLoadBriefing: () => dispatch(endLoadingLoadBriefing()),
     };
 };
 
